@@ -118,7 +118,7 @@ class ExecuteController implements ExecuteInterface
     private function callImg2img(string $prompt, array $initImages): void
     {
         new EchoController(sprintf(
-            self::ERROR_GENERATE_IMAGE_WITH_PROMPT_AND_IMAGES,
+            self::ECHO_GENERATE_IMAGE_WITH_PROMPT_AND_IMAGES,
             $prompt,
             count($initImages)
         ));
