@@ -1,0 +1,19 @@
+2025-08-15 10:32:06 Initialize configuration
+2025-08-15 10:32:06 Successfully initialized configuration
+2025-08-15 10:32:06 Initialize options
+2025-08-15 10:32:06 Successfully initialized options and saved to file "options.json"
+2025-08-15 10:32:06 Initialize models
+2025-08-15 10:32:06 Successfully initialized models and saved to file "models.json"
+2025-08-15 10:32:06 Get start model
+2025-08-15 10:32:06 Successfully get model "cyberrealisticXL_v60.safetensors [f166e3d6dd]"
+2025-08-15 10:32:06 2025-08-15 10:32:06 Prompt data successfully loaded
+2025-08-15 10:32:06 2025-08-15 10:32:06 Initialize init images data
+2025-08-15 10:32:06 2025-08-15 10:32:06 Successfully initialized init images data
+2025-08-15 10:32:06 2025-08-15 10:32:06 Generate image 1 of 1
+2025-08-15 10:32:06 2025-08-15 10:32:06 Set options "{"sd_model_checkpoint":"cyberillustrious_v50"}"
+2025-08-15 10:32:07 2025-08-15 10:32:07 Successfully set options
+2025-08-15 10:32:07 2025-08-15 10:32:07 ERROR: PHP GD extension is missing
+2025-08-15 10:32:07 2025-08-15 10:32:07 Restore start model "cyberrealisticXL_v60.safetensors [f166e3d6dd]"
+2025-08-15 10:32:07 2025-08-15 10:32:07 Set options "{"sd_model_checkpoint":"cyberrealisticXL_v60.safetensors [f166e3d6dd]"}"
+2025-08-15 10:32:09 2025-08-15 10:32:09 Successfully set options
+2025-08-15 10:32:09 2025-08-15 10:32:09 Successfully restore model "cyberrealisticXL_v60.safetensors [f166e3d6dd]"

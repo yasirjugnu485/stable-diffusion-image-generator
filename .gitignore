@@ -1,0 +1,5 @@
+.idea/
+vendor/
+models.json
+options.json
+config.local.php
