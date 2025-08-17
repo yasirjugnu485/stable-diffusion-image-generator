@@ -39,11 +39,11 @@ class StableDiffusionService
         }
 
         $models = json_decode($response, true);
-        if (file_exists(__DIR__ . '/../../models.json')) {
-            unlink(__DIR__ . '/../../models.json');
+        if (file_exists(__DIR__ . '/../../checkpoints.json')) {
+            unlink(__DIR__ . '/../../checkpoints.json');
         }
         file_put_contents(
-            __DIR__ . '/../../models.json',
+            __DIR__ . '/../../checkpoints.json',
             json_encode($models,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)
         );
 

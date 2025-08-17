@@ -37,22 +37,6 @@ class OptionController implements OptionInterface
         return self::$options;
     }
 
-    public function setOptions(array $options): void
-    {
-        new EchoController(sprintf(self::ECHO_SET_OPTIONS, json_encode($options)));
-
-        $stableDiffusionService = new StableDiffusionService();
-        $stableDiffusionService->setOptions($options);
-        $this->initOptions(true);
-
-        new EchoController(self::SUCCESS_SET_OPTIONS);
-    }
-
-    public function getOptions(): array
-    {
-        return $this->initOptions();
-    }
-
     public function getOption(string $name): mixed
     {
         return $this->initOptions()[$name] ?? null;

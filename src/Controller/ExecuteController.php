@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Controller;
 
 use Interface\ExecuteInterface;
-use Model\img2imgModel;
-use Model\txt2imgModel;
+use Model\Img2ImgModel;
+use Model\Txt2ImgModel;
 use Service\StableDiffusionService;
 
 class ExecuteController implements ExecuteInterface
@@ -27,9 +27,6 @@ class ExecuteController implements ExecuteInterface
             } else {
                 new EchoController(sprintf(self::ECHO_GENERATE_IMAGE, ($numberOfGeneratedImages + 1)));
             }
-
-            $modelController = new ModelController();
-            $modelController->setNextModel();
 
             if ($config['mode'] === 'txt2img') {
                 $promptController = new PromptController();
@@ -61,15 +58,15 @@ class ExecuteController implements ExecuteInterface
     {
         new EchoController(sprintf(self::ECHO_GENERATE_IMAGE_WITH_PROMPT, $prompt));
 
-        $modelController = new ModelController();
-        $model = $modelController->getCurrentModel();
+        $checkpointController = new CheckpointController();
+        $checkpoint = $checkpointController->getCurrentCheckpoint();
 
         $promptController = new PromptController();
         $lastPrompt = $promptController->getLastPrompt();
         $configController = new ConfigController();
         $config = $configController->getConfig();
 
-        $txt2imgModel = new txt2imgModel();
+        $txt2imgModel = new Txt2ImgModel();
         $txt2imgModel->setPrompt($prompt);
         $payload = $txt2imgModel->toJson();
 
@@ -86,23 +83,23 @@ class ExecuteController implements ExecuteInterface
                         $file = base64_decode($image);
                         if (!is_dir('outputs/txt2img/' .
                             $config['dateTime'] . '/' .
-                            $model . '/' .
+                            $checkpoint . '/' .
                             $lastPrompt)) {
                             mkdir('outputs/txt2img/' .
                                 $config['dateTime'] . '/' .
-                                $model . '/' .
+                                $checkpoint . '/' .
                                 $lastPrompt, 0777, true);
                         }
                         file_put_contents('outputs/txt2img/' .
                             $config['dateTime'] . '/' .
-                            $model . '/' .
+                            $checkpoint . '/' .
                             $lastPrompt . '/' .
                             $name . '.png', $file);
                         new EchoController(sprintf(
                             self::SUCCESS_SAVE_IMAGE_WITH_PROMPT,
                             'outputs/txt2img/' .
                             $config['dateTime'] . '/' .
-                            $model . '/' .
+                            $checkpoint . '/' .
                             $lastPrompt . '/' .
                             $name . '.png',
                             $prompt
@@ -112,6 +109,8 @@ class ExecuteController implements ExecuteInterface
             } else {
                 new EchoController(sprintf(self::ERROR_GENERATE_IMAGE_WITH_PROMPT, $prompt));
             }
+        } else {
+            $this->addPayloadToDryRun($payload);
         }
     }
 
@@ -123,15 +122,15 @@ class ExecuteController implements ExecuteInterface
             count($initImages)
         ));
 
-        $modelController = new ModelController();
-        $model = $modelController->getCurrentModel();
+        $checkpointController = new CheckpointController();
+        $checkpoint = $checkpointController->getCurrentCheckpoint();
 
         $promptController = new PromptController();
         $lastPrompt = $promptController->getLastPrompt();
         $configController = new ConfigController();
         $config = $configController->getConfig();
 
-        $img2imgModel = new img2imgModel();
+        $img2imgModel = new Img2ImgModel();
         $img2imgModel->setPrompt($prompt);
         $img2imgModel->setInitImages($initImages);
         $payload = $img2imgModel->toJson();
@@ -149,23 +148,23 @@ class ExecuteController implements ExecuteInterface
                         $file = base64_decode($image);
                         if (!is_dir('outputs/img2img/' . 
                             $config['dateTime'] . '/' . 
-                            $model . '/' .
+                            $checkpoint . '/' .
                             $lastPrompt)) {
                             mkdir('outputs/img2img/' . 
                                 $config['dateTime'] . '/' . 
-                                $model . '/' .
+                                $checkpoint . '/' .
                                 $lastPrompt);
                         }
                         file_put_contents('outputs/img2img/' . 
                             $config['dateTime'] . '/' . 
-                            $model . '/' . 
+                            $checkpoint . '/' .
                             $lastPrompt . '/' . 
                             $name . '.png', $file);
                         new EchoController(sprintf(
                             self::SUCCESS_SAVE_IMAGE_WITH_PROMPT,
                             'outputs/img2img/' . 
                             $config['dateTime'] . '/' . 
-                            $model . '/' . 
+                            $checkpoint . '/' .
                             $lastPrompt . '/' . 
                             $name . '.png',
                             $prompt
@@ -179,12 +178,22 @@ class ExecuteController implements ExecuteInterface
                     count($initImages)
                 ));
             }
+        } else {
+            $this->addPayloadToDryRun($payload);
         }
+    }
+
+    private function addPayloadToDryRun(string $payload): void
+    {
+        $dryRunController = new DryRunController();
+        $dryRunController->addPayload($payload);
     }
 
     private function exit(): void
     {
-        $modelController = new ModelController();
-        $modelController->restoreStartModel();
+        $dryRunController = new DryRunController();
+        $dryRunController->exit();
+
+        exit();
     }
 }

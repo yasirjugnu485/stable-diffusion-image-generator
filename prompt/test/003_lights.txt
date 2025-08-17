@@ -1,6 +1,6 @@
-with blue front lights
-with green front lights
-with white front lights
-with orange front lights
-with pink front lights
-with purple front lights
+with blue lights
+with green lights
+with white lights
+with orange lights
+with pink lights
+with purple lights

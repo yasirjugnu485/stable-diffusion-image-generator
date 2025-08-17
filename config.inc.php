@@ -44,16 +44,6 @@ $this->dryRun = false;
 // Stable Diffusion default settings
 //----------------------------------------------------------------------------------------------------------------------
 /**
- * Model
- *
- * @description String of the model name, array from multiple models, false for selected model, null for all models are
- *              used in turn.
- *
- * @var string|array|false|null
- */
-$this->model = null;
-
-/**
  * Mode
  *
  * @description The mode to use. Can be txt2img or img2img. If img2img is selected, the Stable Diffusion img2img
@@ -62,6 +52,16 @@ $this->model = null;
  * @var string
  */
 $this->mode = 'txt2img';
+
+/**
+ * Checkpoint
+ *
+ * @description String of the checkpoint name, array from multiple checkpoints, null for all checkpoints are used in
+ *              turn, false for selected checkpoint.
+ *
+ * @var string|array|false|null
+ */
+$this->checkpoint = null;
 
 /**
  * String of prompt generator directory to merge prompt or set null to random select prompt directory
@@ -100,6 +100,26 @@ $this->height = 512;
  * @var int
  */
 $this->steps = 20;
+
+/**
+ * Refiner checkpoint
+ *
+ * @description String of the refiner checkpoint name, array from multiple refiner checkpoints, null for all checkpoints
+ *              are used in turn, false for deactivate refiner checkpoint.
+ *
+ * @var string|array|false|null
+ */
+$this->refinerCheckpoint = false;
+
+/**
+ * Refiner switch at
+ *
+ * @description Float 0.0 - 1.0 when checkpoint switch to refiner checkpoint. Set 0.5 to set checkpoint should switch to
+ *              refiner checkpoint at 50% of image creation.
+ *
+ * @var float
+ */
+$this->refinerSwitchAt = 0.8;
 //----------------------------------------------------------------------------------------------------------------------
 
 

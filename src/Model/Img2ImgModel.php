@@ -6,24 +6,14 @@ namespace Model;
 
 use Controller\ConfigController;
 
-class img2imgModel
+class Img2ImgModel extends BaseModel
 {
-    private string|null $prompt = null;
-
-    private string|null $negativePrompt = null;
-
     private array|null $initImages = null;
-
-    private int $width;
-
-    private int $height;
-
-    private int $steps;
-
-    private $restoreFaces = true;
 
     public function __construct()
     {
+        parent::__construct();
+
         $configController = new ConfigController();
         $config = $configController->getConfig();
         $this->height = $config['height'];
@@ -45,27 +35,18 @@ class img2imgModel
 
     public function setInitImages(array $initImages): static
     {
-        $this->initImages = [$initImages[rand(0, count($initImages) - 1)]];
+        $random = rand(0, count($initImages) - 1);
+        $this->initImages = [$initImages[$random]];
         return $this;
     }
 
     public function toJson(): string
     {
-        $toJson = [
-            'width' => $this->width,
-            'height' => $this->height,
-            'steps' => $this->steps,
-            'restore_faces' => $this->restoreFaces,
-        ];
-        if ($this->prompt) {
-            $toJson['prompt'] = $this->prompt;
-        }
-        if ($this->negativePrompt) {
-            $toJson['negative_prompt'] = $this->negativePrompt;
-        }
+        $toJson = json_decode(parent::toJson(), true);
         if ($this->initImages) {
             $toJson['init_images'] = $this->initImages;
         }
+
         return json_encode($toJson);
     }
 }

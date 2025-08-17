@@ -18,7 +18,7 @@ class ConfigController implements ConfigInterface
 
     private bool $saveImages = true;
 
-    private string|array|false|null $model = null;
+    private string|array|false|null $checkpoint = null;
 
     private string $mode = 'txt2img';
 
@@ -30,7 +30,11 @@ class ConfigController implements ConfigInterface
 
     private int $height = 512;
 
-    private int $steps = 25;
+    private int $steps = 20;
+
+    private string|array|false|null $refinerCheckpoint = false;
+
+    private float $refinerSwitchAt = 0.8;
 
     private string|null $initImages = null;
 
@@ -48,7 +52,8 @@ class ConfigController implements ConfigInterface
 
         $this->initConfigData();
         $this->getOptions();
-        $this->getModels();
+        $this->initCheckpoints();
+        $this->initRefiner();
 
         self::$initialized = true;
     }
@@ -99,9 +104,14 @@ class ConfigController implements ConfigInterface
         }
     }
 
-    public function getModels(): void
+    private function initCheckpoints(): void
     {
-        new ModelController();
+        new CheckpointController();
+    }
+
+    private function initRefiner(): void
+    {
+        new RefinerController();
     }
 
     public function getOptions(): void
