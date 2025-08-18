@@ -75,6 +75,16 @@ $this->checkpoint = null;
 $this->prompt = null;
 
 /**
+ * String of img2img init image directory or set null to random select init image directory
+ *
+ * @description The directory where the images to be initialized are located. A subdirectory in init_images directory
+ *              where initialize images are stored. Only available if mode is img2img.
+ *
+ * @var string|null
+ */
+$this->initImages = null;
+
+/**
  * Image width
  *
  * @description The width of the generated images.
@@ -120,19 +130,83 @@ $this->refinerCheckpoint = false;
  * @var float
  */
 $this->refinerSwitchAt = 0.8;
+
+/**
+ * Restore faces
+ *
+ * @description Option restore faces and remove artifacts.
+ *
+ * @var bool
+ */
+$this->restoreFaces = true;
+
+/**
+ * Tiling
+ *
+ * @description Tiling to generate seamless textures.
+ *
+ * @var bool
+ */
+$this->tiling = false;
 //----------------------------------------------------------------------------------------------------------------------
 
 
 
-// Stable Diffusion img2img settings
+// Hires fix
 //----------------------------------------------------------------------------------------------------------------------
 /**
- * String of img2img init image directory or set null to random select init image directory
+ * Enable hires fix
  *
- * @description The directory where the images to be initialized are located. A subdirectory in init_images directory
- *              where initialize images are stored.
+ * @description Enable or disable hires fix.
+ *
+ * @var bool
+ */
+$this->enableHr = false;
+
+/**
+ * Hr upscaler
+ *
+ * @description Upscaler type string for specified upscaler, null for default upscaler (Latent). Only available if hires
+ *              fix is enabled.
  *
  * @var string|null
  */
-$this->initImages = null;
+$this->hrUpscaler = null;
+
+/**
+ * Hr resize width
+ *
+ * @description Width of the resized image. Only available if hires fix is enabled and hr scale is null.
+ *
+ * @var int|null
+ */
+$this->hrResizeX = null;
+
+/**
+ * Hr resize height
+ *
+ * @description Height of the resized image. Only available if hires fix is enabled and hr scale is null.
+ *
+ * @var int|null
+ */
+$this->hrResizeY = null;
+
+/**
+ * Hr scale
+ *
+ * @description Scale of the resized image. Only available if hires fix is enabled. Overrides hr resize width and
+ *              height if not null.
+ *
+ * @var int|null
+ */
+$this->hrScayle = 2;
+
+/**
+ * Hr sampler
+ *
+ * @description Sampler type for hires. Only available if hires fix is enabled. Default sampler if null (Euler).
+ *
+ * @var string|null
+ */
+$this->hrSamplerName = null;
 //----------------------------------------------------------------------------------------------------------------------

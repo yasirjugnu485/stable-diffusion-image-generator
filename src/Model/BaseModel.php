@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Model;
 
 use Controller\CheckpointController;
+use Controller\ConfigController;
 use Controller\RefinerController;
 
 class BaseModel
@@ -27,8 +28,44 @@ class BaseModel
 
     protected bool $restoreFaces = true;
 
+    protected bool $tiling = false;
+
+    protected bool $enableHr = false;
+
+    protected string|null $hrUpscaler = null;
+
+    protected int|null $hrResizeX = null;
+
+    protected int|null $hrResizeY = null;
+
+    protected int|null $hrScale = null;
+
+    protected string|null $hrSamplerName = null;
+
     public function __construct()
-    {}
+    {
+        $configController = new ConfigController();
+        $config = $configController->getConfig();
+        $this->height = $config['height'];
+        $this->width = $config['width'];
+        $this->steps = $config['steps'];
+        $this->restoreFaces = $config['restoreFaces'];
+        $this->tiling = $config['tiling'];
+        if ($config['enableHr']) {
+            if ($config['hrScale'] !== null) {
+                $this->enableHr = true;
+                $this->hrUpscaler = $config['hrUpscaler'] ?? 'Latent';
+                $this->hrScale = $config['hrScale'];
+                $this->hrSamplerName = $config['hrSamplerName'] ?? 'Euler';
+            } elseif ($config['hrResizeX'] !== null && $config['hrResizeY'] !== null) {
+                $this->enableHr = true;
+                $this->hrUpscaler = $config['hrUpscaler'] ?? 'Latent';
+                $this->hrResizeX = $config['hrResizeX'];
+                $this->hrResizeY = $config['hrResizeY'];
+                $this->hrSamplerName = $config['hrSamplerName'] ?? 'Euler';
+            }
+        }
+    }
 
     public function toJson(): string
     {
@@ -50,6 +87,17 @@ class BaseModel
         if ($this->refinerCheckpoint) {
             $toJson['refiner_checkpoint'] = $this->refinerCheckpoint;
             $toJson['refiner_switch_at'] = $this->refinerSwitchAt;
+        }
+        if ($this->enableHr) {
+            $toJson['enable_hr'] = $this->enableHr;
+            $toJson['hr_upscaler'] = $this->hrUpscaler;
+            $toJson['hr_sampler_name'] = $this->hrSamplerName;
+            if ($this->hrScale !== null) {
+                $toJson['hr_scale'] = $this->hrScale;
+            } else {
+                $toJson['hr_resize_x'] = $this->hrResizeX;
+                $toJson['hr_resize_y'] = $this->hrResizeY;
+            }
         }
         if (count($this->overrideSettings)) {
             $toJson['override_settings'] = $this->overrideSettings;

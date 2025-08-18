@@ -36,11 +36,27 @@ class ConfigController implements ConfigInterface
 
     private float $refinerSwitchAt = 0.8;
 
+    private bool $restoreFaces = true;
+
+    private bool $tiling = false;
+
     private string|null $initImages = null;
 
-    private string|null $dateTime = null;
+    private bool $enableHr = false;
+
+    private string|null $hrUpscaler = null;
+
+    private int|null $hrResizeX = null;
+
+    private int|null $hrResizeY = null;
+
+    private int|null $hrScale = null;
+
+    private string|null $hrSamplerName = null;
 
     private bool $dryRun = false;
+
+    private string|null $dateTime = null;
 
     public function __construct()
     {

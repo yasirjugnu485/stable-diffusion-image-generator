@@ -14,9 +14,7 @@ class InitImagesController implements InitImagesInterface
 
     private static array|null $initImagesBase64 = [];
 
-    private static string|null $lastInitImages = null;
-
-    private static string|null $currentInitImages = null;
+    private static int|null $currentInitImagesIndex  = null;
 
     public function __construct()
     {
@@ -34,7 +32,7 @@ class InitImagesController implements InitImagesInterface
         new ConfigController();
         $config = (new ConfigController())->getConfig();
 
-        if (!is_dir('prompt')) {
+        if (!is_dir('init_images')) {
             throw new PromptImageGeneratorException(self::ERROR_NO_INIT_IMAGES_DIRECTORY_FOUND);
         }
 
@@ -43,7 +41,7 @@ class InitImagesController implements InitImagesInterface
             throw new PromptImageGeneratorException(self::ERROR_NO_INIT_IMAGES_SUBDIRECTORIES_FOUND);
         }
 
-        $initImagesData = [];
+        $initImagesComplete = [];
         foreach ($initImagesDirectories as $initImagesDirectory) {
             $name = str_replace('init_images/', '', $initImagesDirectory);
             $files = array_filter(glob($initImagesDirectory . '/*'), 'is_file');
@@ -52,76 +50,69 @@ class InitImagesController implements InitImagesInterface
             }
             foreach ($files as $file) {
                 if (str_ends_with($file, '.png') || str_ends_with($file, '.jpg') || str_ends_with($file, '.jpeg')) {
-                    if (!isset($initImagesData[$name])) {
-                        $initImagesData[$name] = [];
+                    if (!isset($initImagesComplete[$name])) {
+                        $initImagesComplete[$name] = [];
                     }
-                    $initImagesData[$name][] = $file;
+                    $initImagesComplete[$name][] = $file;
                 }
             }
         }
-        if (empty($initImagesData)) {
+        if (empty($initImagesComplete)) {
             throw new PromptImageGeneratorException(self::ERROR_NO_INIT_IMAGES_DATA_FOUND);
         }
 
-        self::$initImagesData = $initImagesData;
         if ($config['initImages'] !== null) {
-            if (!array_key_exists($config['initImages'], self::$initImagesData)) {
+            if (!array_key_exists($config['initImages'], $initImagesComplete)) {
                 throw new PromptImageGeneratorException(self::ERROR_CONFIGURED_INIT_IMAGES_NOT_FOUND);
             }
-            self::$currentInitImages = $config['initImages'];
+            self::$initImagesData = $initImagesComplete[$config['initImages']];
         } else {
-            self::$currentInitImages = array_key_first(self::$initImagesData);
+            foreach ($initImagesComplete as $item) {
+                foreach ($item as $file) {
+                    self::$initImagesData[] = $file;
+                }
+            }
         }
 
         new EchoController(self::SUCCESS_INIT_INIT_IMAGES);
         new EchoController();
     }
 
-    public function getNextInitImages(): array
+    public function getNextInitImage(): string
     {
-        self::$lastInitImages = self::$currentInitImages;
-
-        $initImages = $this->getInitImagesBase64(self::$currentInitImages);;
-
         $configController = new ConfigController();
         $config = $configController->getConfig();
         if ($config['initImages'] === null) {
-            $currentInitImages = self::$currentInitImages;
-            self::$currentInitImages = null;
-            $next = false;
-            foreach (self::$initImagesData as $initImagesKey => $initImagesData) {
-                if ($next) {
-                    self::$currentInitImages = $initImagesKey;
-                    break;
-                } elseif ($currentInitImages === $initImagesKey) {
-                    $next = true;
-                }
-            }
-            if (self::$currentInitImages === null) {
-                self::$currentInitImages = array_key_first(self::$initImagesData);
+            self::$currentInitImagesIndex = random_int(0, count(self::$initImagesData) - 1);
+        } else {
+            self::$currentInitImagesIndex =
+                is_null(self::$currentInitImagesIndex)
+                    ? 0
+                    : self::$currentInitImagesIndex + 1;
+            if (self::$currentInitImagesIndex >= count(self::$initImagesData)) {
+                self::$currentInitImagesIndex = 0;
             }
         }
 
-        return $initImages;
+        return $this->getInitImagesBase64(self::$currentInitImagesIndex);
     }
 
-    private function getInitImagesBase64(string $initImages): array
+    private function getInitImagesBase64(int $currentInitImagesIndex): string
     {
-        if (!isset(self::$initImagesBase64[$initImages])) {
-            foreach (self::$initImagesData[$initImages] as $file) {
-                try {
-                    if (str_ends_with($file, '.png')) {
-                        self::$initImagesBase64[$initImages][] = $this->png2base64($file);
-                    } elseif (str_ends_with($file, '.jpg') || str_ends_with($file, '.jpeg')) {
-                        self::$initImagesBase64[$initImages][] = $this->jpg2base64($file);
-                    }
-                } catch (Throwable $throwable) {
-                    new PromptImageGeneratorException(self::ERROR_PHP_GD_MISSING);
+        if (!isset(self::$initImagesBase64[$currentInitImagesIndex])) {
+            $file = self::$initImagesData[$currentInitImagesIndex];
+            try {
+                if (str_ends_with($file, '.png')) {
+                    self::$initImagesBase64[$currentInitImagesIndex] = $this->png2base64($file);
+                } elseif (str_ends_with($file, '.jpg') || str_ends_with($file, '.jpeg')) {
+                    self::$initImagesBase64[$currentInitImagesIndex] = $this->jpg2base64($file);
                 }
+            } catch (Throwable $throwable) {
+                new PromptImageGeneratorException(self::ERROR_PHP_GD_MISSING);
             }
         }
 
-        return self::$initImagesBase64[$initImages];
+        return self::$initImagesBase64[$currentInitImagesIndex];
     }
 
     private function jpg2base64(string $file): string
@@ -146,8 +137,8 @@ class InitImagesController implements InitImagesInterface
         return base64_encode($data);
     }
 
-    public function getLastInitImages(): string|null
+    public function getCurrentInitImageFile(): string
     {
-        return self::$lastInitImages;
+        return self::$initImagesData[self::$currentInitImagesIndex];
     }
 }

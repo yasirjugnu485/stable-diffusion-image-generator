@@ -36,8 +36,9 @@ class ExecuteController implements ExecuteInterface
                 $promptController = new PromptController();
                 $nextPrompt = $promptController->getNextPrompt();
                 $initImagesController = new InitImagesController();
-                $nextInitImages = $initImagesController->getNextInitImages();
-                $this->callImg2img($nextPrompt, $nextInitImages);
+                $nextInitImage = $initImagesController->getNextInitImage();
+                $currentInitImageFile = $initImagesController->getCurrentInitImageFile();
+                $this->callImg2img($nextPrompt, $nextInitImage, $currentInitImageFile);
             }
 
             new EchoController();
@@ -114,12 +115,12 @@ class ExecuteController implements ExecuteInterface
         }
     }
 
-    private function callImg2img(string $prompt, array $initImages): void
+    private function callImg2img(string $prompt, string $nextInitImage, string $currentInitImageFile): void
     {
         new EchoController(sprintf(
             self::ECHO_GENERATE_IMAGE_WITH_PROMPT_AND_IMAGES,
             $prompt,
-            count($initImages)
+            $currentInitImageFile
         ));
 
         $checkpointController = new CheckpointController();
@@ -132,7 +133,7 @@ class ExecuteController implements ExecuteInterface
 
         $img2imgModel = new Img2ImgModel();
         $img2imgModel->setPrompt($prompt);
-        $img2imgModel->setInitImages($initImages);
+        $img2imgModel->setInitImages([$nextInitImage]);
         $payload = $img2imgModel->toJson();
 
         if (!$config['dryRun']) {
@@ -153,7 +154,7 @@ class ExecuteController implements ExecuteInterface
                             mkdir('outputs/img2img/' . 
                                 $config['dateTime'] . '/' . 
                                 $checkpoint . '/' .
-                                $lastPrompt);
+                                $lastPrompt, 0777, true);
                         }
                         file_put_contents('outputs/img2img/' . 
                             $config['dateTime'] . '/' . 
@@ -175,7 +176,7 @@ class ExecuteController implements ExecuteInterface
                 new EchoController(sprintf(
                     self::ERROR_GENERATE_IMAGE_WITH_PROMPT_AND_IMAGES,
                     $prompt,
-                    count($initImages)
+                    $currentInitImageFile
                 ));
             }
         } else {
