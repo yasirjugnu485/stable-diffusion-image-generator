@@ -91,7 +91,7 @@ $this->initImages = null;
  *
  * @var int
  */
-$this->width = 512;
+$this->width = 100;
 
 /**
  * Image height
@@ -100,7 +100,7 @@ $this->width = 512;
  *
  * @var int
  */
-$this->height = 512;
+$this->height = 100;
 
 /**
  * Number ob sampling steps
@@ -138,7 +138,7 @@ $this->refinerSwitchAt = 0.8;
  *
  * @var bool
  */
-$this->restoreFaces = true;
+$this->restoreFaces = false;
 
 /**
  * Tiling
@@ -197,7 +197,7 @@ $this->hrResizeY = null;
  * @description Scale of the resized image. Only available if hires fix is enabled. Overrides hr resize width and
  *              height if not null.
  *
- * @var int|null
+ * @var float|null
  */
 $this->hrScayle = 2;
 

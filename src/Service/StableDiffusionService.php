@@ -160,6 +160,11 @@ class StableDiffusionService
             throw new StableDiffusionServiceException($error);
         }
 
+        $array = json_decode($response, true);
+        if ($array['error']) {
+            throw new StableDiffusionServiceException($response);
+        }
+
         return $response;
     }
 

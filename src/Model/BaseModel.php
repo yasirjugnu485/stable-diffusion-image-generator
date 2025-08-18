@@ -38,7 +38,7 @@ class BaseModel
 
     protected int|null $hrResizeY = null;
 
-    protected int|null $hrScale = null;
+    protected float|null $hrScale = null;
 
     protected string|null $hrSamplerName = null;
 
@@ -46,6 +46,7 @@ class BaseModel
     {
         $configController = new ConfigController();
         $config = $configController->getConfig();
+
         $this->height = $config['height'];
         $this->width = $config['width'];
         $this->steps = $config['steps'];
@@ -87,17 +88,6 @@ class BaseModel
         if ($this->refinerCheckpoint) {
             $toJson['refiner_checkpoint'] = $this->refinerCheckpoint;
             $toJson['refiner_switch_at'] = $this->refinerSwitchAt;
-        }
-        if ($this->enableHr) {
-            $toJson['enable_hr'] = $this->enableHr;
-            $toJson['hr_upscaler'] = $this->hrUpscaler;
-            $toJson['hr_sampler_name'] = $this->hrSamplerName;
-            if ($this->hrScale !== null) {
-                $toJson['hr_scale'] = $this->hrScale;
-            } else {
-                $toJson['hr_resize_x'] = $this->hrResizeX;
-                $toJson['hr_resize_y'] = $this->hrResizeY;
-            }
         }
         if (count($this->overrideSettings)) {
             $toJson['override_settings'] = $this->overrideSettings;
