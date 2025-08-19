@@ -59,9 +59,6 @@ class ExecuteController implements ExecuteInterface
     {
         new EchoController(sprintf(self::ECHO_GENERATE_IMAGE_WITH_PROMPT, $prompt));
 
-        $checkpointController = new CheckpointController();
-        $checkpoint = $checkpointController->getCurrentCheckpoint();
-
         $promptController = new PromptController();
         $lastPrompt = $promptController->getLastPrompt();
         $configController = new ConfigController();
@@ -70,6 +67,9 @@ class ExecuteController implements ExecuteInterface
         $txt2imgModel = new Txt2ImgModel();
         $txt2imgModel->setPrompt($prompt);
         $payload = $txt2imgModel->toJson();
+
+        $checkpointController = new CheckpointController();
+        $checkpoint = $checkpointController->getCurrentCheckpoint();
 
         if (!$config['dryRun']) {
             $stableDiffusionService = new StableDiffusionService();
@@ -123,9 +123,6 @@ class ExecuteController implements ExecuteInterface
             $currentInitImageFile
         ));
 
-        $checkpointController = new CheckpointController();
-        $checkpoint = $checkpointController->getCurrentCheckpoint();
-
         $promptController = new PromptController();
         $lastPrompt = $promptController->getLastPrompt();
         $configController = new ConfigController();
@@ -135,6 +132,9 @@ class ExecuteController implements ExecuteInterface
         $img2imgModel->setPrompt($prompt);
         $img2imgModel->setInitImages([$nextInitImage]);
         $payload = $img2imgModel->toJson();
+
+        $checkpointController = new CheckpointController();
+        $checkpoint = $checkpointController->getCurrentCheckpoint();
 
         if (!$config['dryRun']) {
             $stableDiffusionService = new StableDiffusionService();
