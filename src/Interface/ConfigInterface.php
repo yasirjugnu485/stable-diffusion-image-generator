@@ -16,8 +16,6 @@ interface ConfigInterface
 
     const string ERROR_NO_HOST_CONFIGURED = 'No host configured';
 
-    const string ERROR_NO_NUMBER_OF_IMAGES_CONFIGURED = 'No number of images configured';
-
     const string ERROR_NO_WIDTH_CONFIGURED = 'No width configured';
 
     const string ERROR_NO_HEIGHT_CONFIGURED = 'No height configured';

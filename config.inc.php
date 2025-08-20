@@ -4,6 +4,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /**
  * Host with port
+ *
  * @description The host and port where the stable diffusion API is running.
  *
  * @var bool
@@ -13,7 +14,7 @@ $this->host = 'http://127.0.0.1:7860';
 /**
  * Number of images to create
  *
- * @description The number of images to generate. If set to null, the script will generate unlimited images.
+ * @description The number of images to generate. If set to null or 0, the script will generate unlimited images.
  *
  * @var int|null
  */
@@ -24,6 +25,7 @@ $this->numberOfImages = 10;
  *
  * @description If true, the script will wait for the callback from the stable diffusion API and save the images.
  *              If false, the script will only call the API to create the images.
+ * @warning     Will automatically be enabled if loop is enabled.
  *
  * @var bool
  */
@@ -34,6 +36,7 @@ $this->saveImages = true;
  *
  * @description Creates a txt2txt -> img2img or img2img -> img2img loop, depending on the mode option. Creates the first
  *              image with the configured mode and all subsequent images as img2img with the generated image.
+ * @warning     Will automatically enable saveImages if enabled.
  *
  * @var bool
  */
@@ -61,7 +64,7 @@ $this->dryRun = false;
  *
  * @var string
  */
-$this->mode = 'img2img';
+$this->mode = 'txt2img';
 
 /**
  * Checkpoint

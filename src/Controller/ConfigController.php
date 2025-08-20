@@ -94,8 +94,6 @@ class ConfigController implements ConfigInterface
 
         if (!isset($this->host)) {
             throw new PromptImageGeneratorException(self::ERROR_NO_HOST_CONFIGURED);
-        } elseif (!$this->numberOfImages) {
-            throw new PromptImageGeneratorException(self::ERROR_NO_NUMBER_OF_IMAGES_CONFIGURED);
         } elseif (!$this->width) {
             throw new PromptImageGeneratorException(self::ERROR_NO_WIDTH_CONFIGURED);
         } elseif (!$this->height) {
@@ -104,8 +102,11 @@ class ConfigController implements ConfigInterface
             throw new PromptImageGeneratorException(self::ERROR_NO_STEPS_CONFIGURED);
         }
 
-        if ($this->numberOfImages === null) {
-            $this->numberOfImages = 0;
+        if (!$this->numberOfImages) {
+            $this->numberOfImages = 1000000;
+        }
+        if ($this->loop) {
+            $this->saveImages = true;
         }
 
         $classVars = get_object_vars($this);
