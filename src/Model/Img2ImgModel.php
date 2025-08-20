@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Model;
 
+use Controller\EchoController;
+
 class Img2ImgModel extends BaseModel
 {
     private array|null $initImages = null;

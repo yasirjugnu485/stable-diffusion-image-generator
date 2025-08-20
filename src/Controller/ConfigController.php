@@ -18,6 +18,8 @@ class ConfigController implements ConfigInterface
 
     private bool $saveImages = true;
 
+    private bool $loop = false;
+
     private string|array|false|null $checkpoint = null;
 
     private string $mode = 'txt2img';

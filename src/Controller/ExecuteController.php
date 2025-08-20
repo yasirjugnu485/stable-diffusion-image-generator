@@ -28,11 +28,13 @@ class ExecuteController implements ExecuteInterface
                 new EchoController(sprintf(self::ECHO_GENERATE_IMAGE, ($numberOfGeneratedImages + 1)));
             }
 
-            if ($config['mode'] === 'txt2img') {
+            if (($config['mode'] === 'txt2img' && !$config['loop']) ||
+                ($config['mode'] === 'txt2img' && $config['loop'] && !$numberOfGeneratedImages)) {
                 $promptController = new PromptController();
                 $nextPrompt = $promptController->getNextPrompt();
                 $this->callTxt2img($nextPrompt);
-            } elseif ($config['mode'] === 'img2img') {
+            } elseif ($config['mode'] === 'img2img' || (
+                $config['mode'] === 'txt2img' && $config['loop'] && $numberOfGeneratedImages)) {
                 $promptController = new PromptController();
                 $nextPrompt = $promptController->getNextPrompt();
                 $initImagesController = new InitImagesController();
@@ -81,7 +83,7 @@ class ExecuteController implements ExecuteInterface
                         $name = microtime();
                         $name = str_replace('.', '_', $name);
                         $name = str_replace(' ', '_', $name);
-                        $file = base64_decode($image);
+                        $imageDecoded = base64_decode($image);
                         if (!is_dir('outputs/txt2img/' .
                             $config['dateTime'] . '/' .
                             $checkpoint . '/' .
@@ -91,11 +93,15 @@ class ExecuteController implements ExecuteInterface
                                 $checkpoint . '/' .
                                 $lastPrompt, 0777, true);
                         }
-                        file_put_contents('outputs/txt2img/' .
+                        $file = 'outputs/txt2img/' .
                             $config['dateTime'] . '/' .
                             $checkpoint . '/' .
                             $lastPrompt . '/' .
-                            $name . '.png', $file);
+                            $name . '.png';
+                        file_put_contents($file, $imageDecoded);
+                        if ($config['loop']) {
+                            $this->setNextImage($file, $image);
+                        }
                         new EchoController(sprintf(
                             self::SUCCESS_SAVE_IMAGE_WITH_PROMPT,
                             'outputs/txt2img/' .
@@ -146,7 +152,7 @@ class ExecuteController implements ExecuteInterface
                         $name = microtime();
                         $name = str_replace('.', '_', $name);
                         $name = str_replace(' ', '_', $name);
-                        $file = base64_decode($image);
+                        $imageDecoded = base64_decode($image);
                         if (!is_dir('outputs/img2img/' . 
                             $config['dateTime'] . '/' . 
                             $checkpoint . '/' .
@@ -156,11 +162,15 @@ class ExecuteController implements ExecuteInterface
                                 $checkpoint . '/' .
                                 $lastPrompt, 0777, true);
                         }
-                        file_put_contents('outputs/img2img/' . 
-                            $config['dateTime'] . '/' . 
+                        $file = 'outputs/img2img/' .
+                            $config['dateTime'] . '/' .
                             $checkpoint . '/' .
-                            $lastPrompt . '/' . 
-                            $name . '.png', $file);
+                            $lastPrompt . '/' .
+                            $name . '.png';
+                        file_put_contents($file, $imageDecoded);
+                        if ($config['loop']) {
+                            $this->setNextImage($file, $image);
+                        }
                         new EchoController(sprintf(
                             self::SUCCESS_SAVE_IMAGE_WITH_PROMPT,
                             'outputs/img2img/' . 
@@ -182,6 +192,12 @@ class ExecuteController implements ExecuteInterface
         } else {
             $this->addPayloadToDryRun($payload);
         }
+    }
+
+    private function setNextImage(string $nextImage, string $imageBase64): void
+    {
+        $initImagesController = new InitImagesController();
+        $initImagesController->setNextImage($nextImage, $imageBase64);
     }
 
     private function addPayloadToDryRun(string $payload): void

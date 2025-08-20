@@ -30,6 +30,16 @@ $this->numberOfImages = 10;
 $this->saveImages = true;
 
 /**
+ * Loop txt2txt -> img2img or loop img2img -> img2img
+ *
+ * @description Creates a txt2txt -> img2img or img2img -> img2img loop, depending on the mode option. Creates the first
+ *              image with the configured mode and all subsequent images as img2img with the generated image.
+ *
+ * @var bool
+ */
+$this->loop = false;
+
+/**
  * Dry run
  *
  * @description If true, only settings will be checked and no images will be created.
@@ -51,7 +61,7 @@ $this->dryRun = false;
  *
  * @var string
  */
-$this->mode = 'txt2img';
+$this->mode = 'img2img';
 
 /**
  * Checkpoint

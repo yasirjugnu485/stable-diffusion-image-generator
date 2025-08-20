@@ -16,6 +16,10 @@ class InitImagesController implements InitImagesInterface
 
     private static int|null $currentInitImagesIndex  = null;
 
+    private static string|null $nextImage = null;
+
+    private static string|null $nextImageBase64 = null;
+
     public function __construct()
     {
         if (count(self::$initImagesData) > 0) {
@@ -82,6 +86,10 @@ class InitImagesController implements InitImagesInterface
     {
         $configController = new ConfigController();
         $config = $configController->getConfig();
+        if ($config['loop'] && self::$nextImage) {
+            return self::$nextImageBase64;
+        }
+
         if ($config['initImages'] === null) {
             self::$currentInitImagesIndex = random_int(0, count(self::$initImagesData) - 1);
         } else {
@@ -137,8 +145,14 @@ class InitImagesController implements InitImagesInterface
         return base64_encode($data);
     }
 
+    public function setNextImage(string $nextImage, string $imageBase64): void
+    {
+        self::$nextImage = $nextImage;
+        self::$nextImageBase64 = $imageBase64;
+    }
+
     public function getCurrentInitImageFile(): string
     {
-        return self::$initImagesData[self::$currentInitImagesIndex];
+        return self::$nextImage ?? self::$initImagesData[self::$currentInitImagesIndex];
     }
 }
