@@ -39,8 +39,29 @@ class Img2ImgModel extends BaseModel
     public function toJson(): string
     {
         $toJson = json_decode(parent::toJson(), true);
+
         if ($this->initImages) {
             $toJson['init_images'] = $this->initImages;
+        }
+        if ($this->enableHr) {
+            $toJson['script_name'] = 'SD upscale';
+            $toJson['alwayson_scripts'] = [];
+            $toJson['enable_hr'] = $this->enableHr;
+            $toJson['hr_upscaler'] = $this->hrUpscaler;
+            $toJson['hr_sampler_name'] = $this->hrSamplerName;
+            if ($this->hrScale !== null) {
+                $toJson['script_args'] = [null, 64, $this->hrUpscaler, $this->hrScale];
+            } else {
+                $percentX = 100 / $this->width * $this->hrResizeX;
+                $percentY = 100 / $this->height * $this->hrResizeY;
+                $percent = ($percentX + $percentY) / 2;
+                $toJson['script_args'] = [
+                    null,
+                    64,
+                    $this->hrUpscaler,
+                    $percent <= 100 ? 2 : $percent / 100
+                ];
+            }
         }
 
         return json_encode($toJson);

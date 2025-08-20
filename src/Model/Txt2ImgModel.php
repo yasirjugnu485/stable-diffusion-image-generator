@@ -25,6 +25,20 @@ class Txt2ImgModel extends BaseModel
 
     public function toJson(): string
     {
-        return parent::toJson();
+        $toJson = json_decode(parent::toJson(), true);
+
+        if ($this->enableHr) {
+            $toJson['enable_hr'] = $this->enableHr;
+//            $toJson['hr_upscaler'] = $this->hrUpscaler;
+//            $toJson['hr_sampler_name'] = $this->hrSamplerName;
+//            if ($this->hrScale !== null) {
+//                $toJson['hr_scale'] = $this->hrScale;
+//            } else {
+//                $toJson['hr_resize_x'] = $this->hrResizeX;
+//                $toJson['hr_resize_y'] = $this->hrResizeY;
+//            }
+        }
+
+        return json_encode($toJson);
     }
 }

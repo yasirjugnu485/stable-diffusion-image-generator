@@ -52,7 +52,7 @@ class ConfigController implements ConfigInterface
 
     private int|null $hrResizeY = null;
 
-    private int|null $hrScale = null;
+    private float|null $hrScale = null;
 
     private string|null $hrSamplerName = null;
 
