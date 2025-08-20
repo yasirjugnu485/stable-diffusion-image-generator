@@ -161,7 +161,7 @@ class StableDiffusionService
         }
 
         $array = json_decode($response, true);
-        if ($array['error']) {
+        if (isset($array['error'])) {
             throw new StableDiffusionServiceException($response);
         }
 
