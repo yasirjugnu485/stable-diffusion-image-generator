@@ -32,7 +32,7 @@ class ExecuteController implements ExecuteInterface
                 ($config['mode'] === 'txt2img' && $config['loop'] && !$numberOfGeneratedImages)) {
                 $promptController = new PromptController();
                 $nextPrompt = $promptController->getNextPrompt();
-                $this->callTxt2img($nextPrompt);
+                $this->callTxt2img($nextPrompt, $numberOfGeneratedImages);
             } elseif ($config['mode'] === 'img2img' || (
                 $config['mode'] === 'txt2img' && $config['loop'] && $numberOfGeneratedImages)) {
                 $promptController = new PromptController();
@@ -40,7 +40,7 @@ class ExecuteController implements ExecuteInterface
                 $initImagesController = new InitImagesController();
                 $nextInitImage = $initImagesController->getNextInitImage();
                 $currentInitImageFile = $initImagesController->getCurrentInitImageFile();
-                $this->callImg2img($nextPrompt, $nextInitImage, $currentInitImageFile);
+                $this->callImg2img($nextPrompt, $nextInitImage, $currentInitImageFile, $numberOfGeneratedImages);
             }
 
             new EchoController();
@@ -57,7 +57,10 @@ class ExecuteController implements ExecuteInterface
         }
     }
 
-    private function callTxt2img(string $prompt): void
+    private function callTxt2img(
+        string $prompt,
+        int $numberOfGeneratedImages
+    ): void
     {
         new EchoController(sprintf(self::ECHO_GENERATE_IMAGE_WITH_PROMPT, $prompt));
 
@@ -80,38 +83,27 @@ class ExecuteController implements ExecuteInterface
                 $data = json_decode($response, true);
                 if (isset($data['images'])) {
                     foreach ($data['images'] as $image) {
-                        $name = microtime();
-                        $name = str_replace('.', '_', $name);
-                        $name = str_replace(' ', '_', $name);
                         $imageDecoded = base64_decode($image);
-                        if (!is_dir('outputs/txt2img/' .
-                            $config['dateTime'] . '/' .
-                            $checkpoint . '/' .
-                            $lastPrompt)) {
-                            mkdir('outputs/txt2img/' .
-                                $config['dateTime'] . '/' .
-                                $checkpoint . '/' .
-                                $lastPrompt, 0777, true);
+                        $name =
+                            str_pad((string)$numberOfGeneratedImages, 10, '0', STR_PAD_LEFT);
+                        $directory = 'outputs/';
+                        if ($config['loop']) {
+                            $directory .= 'loop/';
+                        } else {
+                            $directory .= 'txt2img/';
                         }
-                        $file = 'outputs/' .
-                            $config['loop'] ? 'loop/' : 'txt2img/' .
-                            $config['dateTime'] . '/' .
-                            $checkpoint . '/' .
-                            $lastPrompt . '/' .
-                            $name . '.png';
+                        $directory .= $config['dateTime'] . '/' . $checkpoint . '/' . $lastPrompt;
+                        new EchoController($directory);
+
+                        $file = $directory . '/' . $name . '.png';
+                        if (!is_dir($directory)) {
+                            mkdir($directory, 0777, true);
+                        }
                         file_put_contents($file, $imageDecoded);
                         if ($config['loop']) {
                             $this->setNextImage($file, $image);
                         }
-                        new EchoController(sprintf(
-                            self::SUCCESS_SAVE_IMAGE_WITH_PROMPT,
-                            'outputs/txt2img/' .
-                            $config['dateTime'] . '/' .
-                            $checkpoint . '/' .
-                            $lastPrompt . '/' .
-                            $name . '.png',
-                            $prompt
-                        ));
+                        new EchoController(sprintf(self::SUCCESS_SAVE_IMAGE, $file));
                     }
                 }
             } else {
@@ -122,10 +114,15 @@ class ExecuteController implements ExecuteInterface
         }
     }
 
-    private function callImg2img(string $prompt, string $nextInitImage, string $currentInitImageFile): void
+    private function callImg2img(
+        string $prompt,
+        string $nextInitImage,
+        string $currentInitImageFile,
+        int $numberOfGeneratedImages
+    ): void
     {
         new EchoController(sprintf(
-            self::ECHO_GENERATE_IMAGE_WITH_PROMPT_AND_IMAGES,
+            self::ECHO_GENERATE_IMAGE_WITH_PROMPT_AND_IMAGE,
             $prompt,
             $currentInitImageFile
         ));
@@ -150,43 +147,30 @@ class ExecuteController implements ExecuteInterface
                 $data = json_decode($response, true);
                 if (isset($data['images'])) {
                     foreach ($data['images'] as $image) {
-                        $name = microtime();
-                        $name = str_replace('.', '_', $name);
-                        $name = str_replace(' ', '_', $name);
                         $imageDecoded = base64_decode($image);
-                        if (!is_dir('outputs/img2img/' . 
-                            $config['dateTime'] . '/' . 
-                            $checkpoint . '/' .
-                            $lastPrompt)) {
-                            mkdir('outputs/img2img/' . 
-                                $config['dateTime'] . '/' . 
-                                $checkpoint . '/' .
-                                $lastPrompt, 0777, true);
+                        $name =
+                            str_pad((string)$numberOfGeneratedImages, 10, '0', STR_PAD_LEFT);
+                        $directory = 'outputs/';
+                        if ($config['loop']) {
+                            $directory .= 'loop/';
+                        } else {
+                            $directory .= 'img2img/';
                         }
-                        $file = 'outputs/' .
-                            $config['loop'] ? 'loop/' : 'img2img/' .
-                            $config['dateTime'] . '/' .
-                            $checkpoint . '/' .
-                            $lastPrompt . '/' .
-                            $name . '.png';
+                        $directory .= $config['dateTime'] . '/' . $checkpoint . '/' . $lastPrompt;
+                        $file = $directory . '/' . $name . '.png';
+                        if (!is_dir($directory)) {
+                            mkdir($directory, 0777, true);
+                        }
                         file_put_contents($file, $imageDecoded);
                         if ($config['loop']) {
                             $this->setNextImage($file, $image);
                         }
-                        new EchoController(sprintf(
-                            self::SUCCESS_SAVE_IMAGE_WITH_PROMPT,
-                            'outputs/img2img/' . 
-                            $config['dateTime'] . '/' . 
-                            $checkpoint . '/' .
-                            $lastPrompt . '/' . 
-                            $name . '.png',
-                            $prompt
-                        ));
+                        new EchoController(sprintf(self::SUCCESS_SAVE_IMAGE, $file));
                     }
                 }
             } else {
                 new EchoController(sprintf(
-                    self::ERROR_GENERATE_IMAGE_WITH_PROMPT_AND_IMAGES,
+                    self::ERROR_GENERATE_IMAGE_WITH_PROMPT_AND_IMAGE,
                     $prompt,
                     $currentInitImageFile
                 ));

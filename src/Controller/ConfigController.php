@@ -75,6 +75,7 @@ class ConfigController implements ConfigInterface
         $this->initCheckpoints();
         $this->initSamplers();
         $this->initRefiner();
+        $this->initInitImages();
 
         self::$initialized = true;
     }
@@ -139,6 +140,11 @@ class ConfigController implements ConfigInterface
     private function initRefiner(): void
     {
         new RefinerController();
+    }
+
+    private function initInitImages(): void
+    {
+        new InitImagesController();
     }
 
     public function getOptions(): void

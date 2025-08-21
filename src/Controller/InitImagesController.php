@@ -22,7 +22,10 @@ class InitImagesController implements InitImagesInterface
 
     public function __construct()
     {
-        if (count(self::$initImagesData) > 0) {
+        new ConfigController();
+        $config = (new ConfigController())->getConfig();
+
+        if (count(self::$initImagesData) > 0 || ($config['mode'] !== 'img2img' && !$config['loop'])) {
             return;
         }
 
