@@ -22,6 +22,8 @@ class ConfigController implements ConfigInterface
 
     private string|array|false|null $checkpoint = null;
 
+    private string|array|false|null $sampler = null;
+
     private string $mode = 'txt2img';
 
     private string|null $prompt = null;
@@ -71,6 +73,7 @@ class ConfigController implements ConfigInterface
         $this->initConfigData();
         $this->getOptions();
         $this->initCheckpoints();
+        $this->initSamplers();
         $this->initRefiner();
 
         self::$initialized = true;
@@ -126,6 +129,11 @@ class ConfigController implements ConfigInterface
     private function initCheckpoints(): void
     {
         new CheckpointController();
+    }
+
+    private function initSamplers(): void
+    {
+        new SamplerController();
     }
 
     private function initRefiner(): void

@@ -7,6 +7,7 @@ namespace Model;
 use Controller\CheckpointController;
 use Controller\ConfigController;
 use Controller\RefinerController;
+use Controller\SamplerController;
 
 class BaseModel
 {
@@ -19,6 +20,8 @@ class BaseModel
     protected int $height;
 
     protected int $steps;
+
+    protected string|null $samplerName = null;
 
     protected array $overrideSettings = [];
 
@@ -70,6 +73,7 @@ class BaseModel
 
     public function toJson(): string
     {
+        $this->setSamplerName();
         $this->setOverrideSettings();
         $this->setRefiner();
 
@@ -89,12 +93,27 @@ class BaseModel
             $toJson['refiner_checkpoint'] = $this->refinerCheckpoint;
             $toJson['refiner_switch_at'] = $this->refinerSwitchAt;
         }
+        if ($this->samplerName) {
+            $toJson['sampler_name'] = $this->samplerName;
+        }
         if (count($this->overrideSettings)) {
             $toJson['override_settings'] = $this->overrideSettings;
             $toJson['override_settings_restore_afterwards'] = true;
         }
 
         return json_encode($toJson);
+    }
+
+    private function setSamplerName(): void
+    {
+        $samplerController = new SamplerController();
+        $samplerController->setNextSampler();
+        $currentSampler = $samplerController->getCurrentSampler();
+        if ($currentSampler) {
+            $this->samplerName = $currentSampler;
+        } else {
+            $this->samplerName = null;
+        }
     }
 
     private function setOverrideSettings(): void

@@ -50,6 +50,47 @@ class StableDiffusionService
         return $models;
     }
 
+    public function getSamplers(): array|null
+    {
+        $configController = new ConfigController();
+        $config = $configController->getConfig();
+
+        $url = rtrim($config['host'], '/') . '/sdapi/v1/samplers';
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => [
+                'content-type: application/json',
+                'Connection: Keep-Alive'
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $error = curl_error($curl);
+        if ($error) {
+            throw new StableDiffusionServiceException($error);
+        }
+
+        $samplers = json_decode($response, true);
+        if (file_exists(__DIR__ . '/../../samplers.json')) {
+            unlink(__DIR__ . '/../../samplers.json');
+        }
+        file_put_contents(
+            __DIR__ . '/../../samplers.json',
+            json_encode($samplers,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)
+        );
+
+        return $samplers;
+    }
+
     public function getOptions(): array|null
     {
         $configController = new ConfigController();

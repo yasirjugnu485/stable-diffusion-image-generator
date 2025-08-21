@@ -10,9 +10,9 @@ interface ExecuteInterface
 
     const string ECHO_GENERATE_IMAGE_OF = 'Generate image %1$s of %2$s';
 
-    const string ECHO_GENERATE_IMAGE_WITH_PROMPT = 'Call Stable Diffusion API and generate image with prompt "%1$s"';
+    const string ECHO_GENERATE_IMAGE_WITH_PROMPT = 'Call Stable Diffusion txt2img API to generating image with prompt "%1$s"';
 
-    const string ECHO_GENERATE_IMAGE_WITH_PROMPT_AND_IMAGES = 'Generate generating image with prompt "%1$s" and images "%2$s"';
+    const string ECHO_GENERATE_IMAGE_WITH_PROMPT_AND_IMAGES = 'Call Stable Diffusion img2img API to generating image with prompt "%1$s" and images "%2$s"';
 
     const string ERROR_GENERATE_IMAGE_WITH_PROMPT = 'Error generating image with prompt "%1$s"';
 

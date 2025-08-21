@@ -93,7 +93,8 @@ class ExecuteController implements ExecuteInterface
                                 $checkpoint . '/' .
                                 $lastPrompt, 0777, true);
                         }
-                        $file = 'outputs/txt2img/' .
+                        $file = 'outputs/' .
+                            $config['loop'] ? 'loop/' : 'txt2img/' .
                             $config['dateTime'] . '/' .
                             $checkpoint . '/' .
                             $lastPrompt . '/' .
@@ -162,7 +163,8 @@ class ExecuteController implements ExecuteInterface
                                 $checkpoint . '/' .
                                 $lastPrompt, 0777, true);
                         }
-                        $file = 'outputs/img2img/' .
+                        $file = 'outputs/' .
+                            $config['loop'] ? 'loop/' : 'img2img/' .
                             $config['dateTime'] . '/' .
                             $checkpoint . '/' .
                             $lastPrompt . '/' .

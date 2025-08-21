@@ -77,6 +77,16 @@ $this->mode = 'txt2img';
 $this->checkpoint = null;
 
 /**
+ * Sampler
+ *
+ * @description String of the sampler name, array from multiple samplers, null for all samplers are used in turn, false
+ *              for default sampler (Euler).
+ *
+ * @var string|array|false|null
+ */
+$this->sampler = false;
+
+/**
  * String of prompt generator directory to merge prompt or set null to random select prompt directory
  *
  * @description The directory where the prompt generator files are located. A subdirectory in prompt directory where
@@ -85,7 +95,7 @@ $this->checkpoint = null;
  *
  * @var string|null
  */
-$this->prompt = null;
+$this->prompt = 'test';
 
 /**
  * String of img2img init image directory or set null to random select init image directory
@@ -95,7 +105,7 @@ $this->prompt = null;
  *
  * @var string|null
  */
-$this->initImages = null;
+$this->initImages = 'test';
 
 /**
  * Image width
@@ -104,7 +114,7 @@ $this->initImages = null;
  *
  * @var int
  */
-$this->width = 100;
+$this->width = 512;
 
 /**
  * Image height
@@ -113,7 +123,7 @@ $this->width = 100;
  *
  * @var int
  */
-$this->height = 100;
+$this->height = 512;
 
 /**
  * Number ob sampling steps

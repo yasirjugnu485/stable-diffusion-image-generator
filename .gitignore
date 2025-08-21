@@ -1,6 +1,7 @@
 .idea/
 vendor/
 checkpoints.json
+config.local.php
 dry_run.json
 options.json
-config.local.php
+samplers.json
