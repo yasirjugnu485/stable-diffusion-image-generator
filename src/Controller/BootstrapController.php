@@ -4,12 +4,24 @@ declare(strict_types=1);
 
 namespace Controller;
 
-class BootstrapController
+use Interface\BootstrapInterface;
+use Throwable;
+
+include_once ('src/Interface/BootstrapInterface.php');
+
+class BootstrapController implements BootstrapInterface
 {
     public function __construct()
     {
         $this->classLoader('src/Interface');
         $this->classLoader('src');
+
+        new EchoController(self::ECHO_START_APPLICATION);
+        new EchoController(self::ECHO_START_BY);
+        $this->startBuildInWebServer();
+        new EchoController(self::SUCCESS_START_APPLICATION);
+
+        new EchoController();
     }
 
     private function classLoader(string $directory): void
@@ -26,6 +38,17 @@ class BootstrapController
                     }
                 }
             }
+        }
+    }
+
+    public function startBuildInWebServer(): void
+    {
+        new EchoController(self::ECHO_TRY_START_BUILD_IN_SERVER);
+        try {
+            exec('php -S 127.0.0.1:8000 -t public/ > /dev/null 2>&1 &');
+            new EchoController(self::SUCCESS_START_BUILD_IN_SERVER);
+        } catch(Throwable $throwable) {
+            new EchoController(self::ERROR_START_BUILD_IN_SERVER);
         }
     }
 

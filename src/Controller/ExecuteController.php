@@ -76,35 +76,34 @@ class ExecuteController implements ExecuteInterface
         $checkpointController = new CheckpointController();
         $checkpoint = $checkpointController->getCurrentCheckpoint();
 
+        $name = str_pad((string)$numberOfGeneratedImages, 10, '0', STR_PAD_LEFT);
+        $directory = 'outputs/';
+        if ($config['loop']) {
+            $directory .= 'loop/';
+        } else {
+            $directory .= 'txt2img/';
+        }
+        $directory .= $config['dateTime'] . '/' . $checkpoint . '/' . $lastPrompt;
+        $file = $directory . '/' . $name . '.png';
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+        $payloadController = new PayloadController();
+        $payloadController->add($file, 'txt2img', $payload);
+
         if (!$config['dryRun']) {
             $stableDiffusionService = new StableDiffusionService();
             $response = $stableDiffusionService->callTxt2img($payload);
             if ($config['saveImages'] && $response) {
                 $data = json_decode($response, true);
-                if (isset($data['images'])) {
-                    foreach ($data['images'] as $image) {
-                        $imageDecoded = base64_decode($image);
-                        $name =
-                            str_pad((string)$numberOfGeneratedImages, 10, '0', STR_PAD_LEFT);
-                        $directory = 'outputs/';
-                        if ($config['loop']) {
-                            $directory .= 'loop/';
-                        } else {
-                            $directory .= 'txt2img/';
-                        }
-                        $directory .= $config['dateTime'] . '/' . $checkpoint . '/' . $lastPrompt;
-                        new EchoController($directory);
-
-                        $file = $directory . '/' . $name . '.png';
-                        if (!is_dir($directory)) {
-                            mkdir($directory, 0777, true);
-                        }
-                        file_put_contents($file, $imageDecoded);
-                        if ($config['loop']) {
-                            $this->setNextImage($file, $image);
-                        }
-                        new EchoController(sprintf(self::SUCCESS_SAVE_IMAGE, $file));
+                if (isset($data['images'][0])) {
+                    $image = $data['images'][0];
+                    $imageDecoded = base64_decode($image);
+                    file_put_contents($file, $imageDecoded);
+                    if ($config['loop']) {
+                        $this->setNextImage($file, $image);
                     }
+                    new EchoController(sprintf(self::SUCCESS_SAVE_IMAGE, $file));
                 }
             } else {
                 new EchoController(sprintf(self::ERROR_GENERATE_IMAGE_WITH_PROMPT, $prompt));
@@ -140,33 +139,34 @@ class ExecuteController implements ExecuteInterface
         $checkpointController = new CheckpointController();
         $checkpoint = $checkpointController->getCurrentCheckpoint();
 
+        $name = str_pad((string)$numberOfGeneratedImages, 10, '0', STR_PAD_LEFT);
+        $directory = 'outputs/';
+        if ($config['loop']) {
+            $directory .= 'loop/';
+        } else {
+            $directory .= 'img2img/';
+        }
+        $directory .= $config['dateTime'] . '/' . $checkpoint . '/' . $lastPrompt;
+        $file = $directory . '/' . $name . '.png';
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+        $payloadController = new PayloadController();
+        $payloadController->add($file, 'img2img', $payload, $currentInitImageFile);
+
         if (!$config['dryRun']) {
             $stableDiffusionService = new StableDiffusionService();
             $response = $stableDiffusionService->callImg2img($payload);
             if ($config['saveImages'] && $response) {
                 $data = json_decode($response, true);
-                if (isset($data['images'])) {
-                    foreach ($data['images'] as $image) {
-                        $imageDecoded = base64_decode($image);
-                        $name =
-                            str_pad((string)$numberOfGeneratedImages, 10, '0', STR_PAD_LEFT);
-                        $directory = 'outputs/';
-                        if ($config['loop']) {
-                            $directory .= 'loop/';
-                        } else {
-                            $directory .= 'img2img/';
-                        }
-                        $directory .= $config['dateTime'] . '/' . $checkpoint . '/' . $lastPrompt;
-                        $file = $directory . '/' . $name . '.png';
-                        if (!is_dir($directory)) {
-                            mkdir($directory, 0777, true);
-                        }
-                        file_put_contents($file, $imageDecoded);
-                        if ($config['loop']) {
-                            $this->setNextImage($file, $image);
-                        }
-                        new EchoController(sprintf(self::SUCCESS_SAVE_IMAGE, $file));
+                if (isset($data['images'][0])) {
+                    $image = $data['images'][0];
+                    $imageDecoded = base64_decode($image);
+                    file_put_contents($file, $imageDecoded);
+                    if ($config['loop']) {
+                        $this->setNextImage($file, $image);
                     }
+                    new EchoController(sprintf(self::SUCCESS_SAVE_IMAGE, $file));
                 }
             } else {
                 new EchoController(sprintf(
