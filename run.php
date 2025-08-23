@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Controller\BootstrapController;
+use Cli\Controller\BootstrapController;
 
-include 'src/Controller/BootstrapController.php';
+include __DIR__ . '/src/Cli/Controller/BootstrapController.php';
 $bootstrapController = new BootstrapController();
 $bootstrapController->run();
