@@ -39,18 +39,18 @@ class InitImagesController implements InitImagesInterface
         new ConfigController();
         $config = (new ConfigController())->getConfig();
 
-        if (!is_dir('init_images')) {
+        if (!is_dir(ROOT_DIR . 'init_images')) {
             throw new PromptImageGeneratorException(self::ERROR_NO_INIT_IMAGES_DIRECTORY_FOUND);
         }
 
-        $initImagesDirectories = array_filter(glob('init_images/*'), 'is_dir');
+        $initImagesDirectories = array_filter(glob(ROOT_DIR . 'init_images/*'), 'is_dir');
         if (empty($initImagesDirectories)) {
             throw new PromptImageGeneratorException(self::ERROR_NO_INIT_IMAGES_SUBDIRECTORIES_FOUND);
         }
 
         $initImagesComplete = [];
         foreach ($initImagesDirectories as $initImagesDirectory) {
-            $name = str_replace('init_images/', '', $initImagesDirectory);
+            $name = str_replace(ROOT_DIR . 'init_images/', '', $initImagesDirectory);
             $files = array_filter(glob($initImagesDirectory . '/*'), 'is_file');
             if (empty($files)) {
                 continue;

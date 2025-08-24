@@ -7,14 +7,14 @@ namespace Cli\Controller;
 use Cli\Interface\BootstrapInterface;
 use Throwable;
 
-include_once ('src/Cli/Interface/BootstrapInterface.php');
+include_once (ROOT_DIR . 'src/Cli/Interface/BootstrapInterface.php');
 
 class BootstrapController implements BootstrapInterface
 {
     public function __construct()
     {
-        $this->classLoader(__DIR__ . 'src/Cli/Interface');
-        $this->classLoader('src/Cli');
+        $this->classLoader(ROOT_DIR . 'src/Cli/Interface');
+        $this->classLoader(ROOT_DIR . 'src/Cli');
 
         new EchoController(self::ECHO_START_APPLICATION);
         new EchoController(self::ECHO_START_BY);
@@ -26,14 +26,14 @@ class BootstrapController implements BootstrapInterface
 
     private function classLoader(string $directory): void
     {
-        if(is_dir($directory)) {
+        if (is_dir($directory)) {
             $scan = scandir($directory);
             unset($scan[0], $scan[1]);
-            foreach($scan as $file) {
-                if(is_dir($directory . '/' . $file)) {
+            foreach ($scan as $file) {
+                if (is_dir($directory . '/' . $file)) {
                     $this->classLoader($directory . '/' . $file);
                 } else {
-                    if(strpos($file, '.php') !== false) {
+                    if (strpos($file, '.php') !== false) {
                         include_once($directory. '/' . $file);
                     }
                 }

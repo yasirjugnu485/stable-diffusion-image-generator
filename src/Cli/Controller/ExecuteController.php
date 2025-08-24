@@ -77,7 +77,7 @@ class ExecuteController implements ExecuteInterface
         $checkpoint = $checkpointController->getCurrentCheckpoint();
 
         $name = str_pad((string)$numberOfGeneratedImages, 10, '0', STR_PAD_LEFT);
-        $directory = 'outputs/';
+        $directory = ROOT_DIR . 'outputs/';
         if ($config['loop']) {
             $directory .= 'loop/';
         } else {
@@ -140,7 +140,7 @@ class ExecuteController implements ExecuteInterface
         $checkpoint = $checkpointController->getCurrentCheckpoint();
 
         $name = str_pad((string)$numberOfGeneratedImages, 10, '0', STR_PAD_LEFT);
-        $directory = 'outputs/';
+        $directory = ROOT_DIR . 'outputs/';
         if ($config['loop']) {
             $directory .= 'loop/';
         } else {

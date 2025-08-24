@@ -32,7 +32,7 @@ class PayloadController
         $configController = new ConfigController();
         $config = $configController->getConfig();
 
-        $file = 'outputs/';
+        $file = ROOT_DIR . 'outputs/';
         if ($config['loop']) {
             $file .= 'loop/' . $config['dateTime'] . '/payloads.json';
         } elseif ($config['mode'] === 'txt2txt') {

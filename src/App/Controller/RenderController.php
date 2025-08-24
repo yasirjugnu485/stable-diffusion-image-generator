@@ -12,7 +12,8 @@ class RenderController
         foreach ($params as $key => $value) {
             ${$key} = $value;
         }
-        eval("?> '../templates/main.php' <?php ");
+        $params['template'] = 'home.php';
+        include(ROOT_DIR . 'templates/main.php');
         $rendered = ob_get_contents() . "\n";
         ob_end_clean();
 

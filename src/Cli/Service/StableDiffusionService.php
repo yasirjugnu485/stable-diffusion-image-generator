@@ -39,11 +39,11 @@ class StableDiffusionService
         }
 
         $models = json_decode($response, true);
-        if (file_exists(__DIR__ . '/../../checkpoints.json')) {
-            unlink(__DIR__ . '/../../checkpoints.json');
+        if (file_exists(ROOT_DIR . '/checkpoints.json')) {
+            unlink(ROOT_DIR . '/checkpoints.json');
         }
         file_put_contents(
-            __DIR__ . '/../../checkpoints.json',
+            ROOT_DIR . '/checkpoints.json',
             json_encode($models,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)
         );
 
@@ -80,11 +80,11 @@ class StableDiffusionService
         }
 
         $samplers = json_decode($response, true);
-        if (file_exists(__DIR__ . '/../../samplers.json')) {
-            unlink(__DIR__ . '/../../samplers.json');
+        if (file_exists(ROOT_DIR . '/samplers.json')) {
+            unlink(ROOT_DIR . '/samplers.json');
         }
         file_put_contents(
-            __DIR__ . '/../../samplers.json',
+            ROOT_DIR . '/samplers.json',
             json_encode($samplers,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)
         );
 
@@ -121,11 +121,11 @@ class StableDiffusionService
         }
 
         $options = json_decode($response, true);
-        if (file_exists(__DIR__ . '/../../options.json')) {
-            unlink(__DIR__ . '/../../options.json');
+        if (file_exists(ROOT_DIR . '/options.json')) {
+            unlink(ROOT_DIR . '/options.json');
         }
         file_put_contents(
-            __DIR__ . '/../../options.json',
+            ROOT_DIR . '/options.json',
             json_encode($options,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)
         );
 

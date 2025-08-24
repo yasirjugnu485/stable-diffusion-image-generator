@@ -26,7 +26,7 @@ class DryRunController
     {
         if (self::$payloads) {
             file_put_contents(
-                'dry_run.json',
+                ROOT_DIR . 'dry_run.json',
                 json_encode(self::$payloads, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT)
             );
         }

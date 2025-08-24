@@ -87,13 +87,13 @@ class ConfigController implements ConfigInterface
         $date = new DateTime('NOW');
         $this->dateTime = $date->format('Y-m-d H:i:s');
 
-        if (!file_exists('config.inc.php')) {
+        if (!file_exists(ROOT_DIR . 'config.inc.php')) {
             throw new PromptImageGeneratorException(self::ERROR_CONFIG_NOT_FOUND);
         }
-        include_once 'config.inc.php';
+        include_once ROOT_DIR . 'config.inc.php';
 
-        if (file_exists('config.local.php')) {
-            include_once 'config.local.php';
+        if (file_exists(ROOT_DIR . 'config.local.php')) {
+            include_once ROOT_DIR . 'config.local.php';
         }
 
         if (!isset($this->host)) {

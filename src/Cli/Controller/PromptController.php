@@ -31,18 +31,18 @@ class PromptController implements PromptInterface
         $configController = new ConfigController();
         $config = $configController->getConfig();
 
-        if (!is_dir('prompt')) {
+        if (!is_dir(ROOT_DIR . 'prompt')) {
             throw new PromptImageGeneratorException(self::ERROR_NO_PROMPT_DIRECTORY_FOUND);
         }
 
-        $promptDirectories = array_filter(glob('prompt/*'), 'is_dir');
+        $promptDirectories = array_filter(glob(ROOT_DIR . 'prompt/*'), 'is_dir');
         if (empty($promptDirectories)) {
             throw new PromptImageGeneratorException(self::ERROR_NO_PROMPT_SUBDIRECTORIES_FOUND);
         }
 
         $promptsData = [];
         foreach ($promptDirectories as $promptDirectory) {
-            $name = str_replace('prompt/', '', $promptDirectory);
+            $name = str_replace(ROOT_DIR . 'prompt/', '', $promptDirectory);
             $files = array_filter(glob($promptDirectory . '/*'), 'is_file');
             if (empty($files)) {
                 continue;
