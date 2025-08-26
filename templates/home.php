@@ -11,7 +11,11 @@
 
         } else {
             ?>
-
+                <div class="col-12">
+                    <div class="alert alert-warning">
+                        There are no recently images yet
+                    </div>
+                </div>
             <?php
         }
         ?>

@@ -93,6 +93,7 @@ class FileCollectorController
             if ($time > $newest) {
                 $targetType = 'txt2img';
                 $targetKey = $key;
+                $newest = $time;
             }
         }
         foreach (self::$fileData['img2img'] as $key => $file) {
@@ -103,6 +104,7 @@ class FileCollectorController
             if ($time > $newest) {
                 $targetType = 'img2img';
                 $targetKey = $key;
+                $newest = $time;
             }
         }
         foreach (self::$fileData['loop'] as $key => $file) {
@@ -113,6 +115,7 @@ class FileCollectorController
             if ($time > $newest) {
                 $targetType = 'loop';
                 $targetKey = $key;
+                $newest = $time;
             }
         }
 
@@ -143,8 +146,36 @@ class FileCollectorController
 
     private function getData(string $type, string $key): array
     {
-        return json_decode(
+        $payloads = json_decode(
             file_get_contents(ROOT_DIR . 'outputs/' . $type . '/' . $key . '/payloads.json'), true
         );
+
+        foreach ($payloads as $index => $payload) {
+            if (isset($payload['file'])) {
+                $split = explode('/outputs/' . $type . '/' . $key .'/', $payload['file']);
+                $payloads[$index]['file'] = '/outputs/' . $type . '/' . $key .'/' . end($split);
+            }
+        }
+
+        return $payloads;
+    }
+
+    public function getNavbarData(): array
+    {
+        $result = [];
+
+        foreach (self::$fileData as $type => $files) {
+            $result[$type] = [];
+            foreach ($files as $key => $file) {
+                $entry = str_replace(' ', '_', $key);
+                $entry = str_replace(':', '-', $entry);
+                $result[$type][] = [
+                    'name' => $key,
+                    'slug' => $entry
+                ];
+            }
+        }
+
+        return $result;
     }
 }

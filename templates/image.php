@@ -23,10 +23,9 @@
                             <?php
                         } else {
                             ?>
-                                <div class="text-center mt-5">
-                                    <h5>
-                                        No generated image found
-                                    </h5>
+                                <div class="text-center">
+                                    <img class="w-100 rounded"
+                                         src="/out/img/image-not-found.png">
                                 </div>
                             <?php
                         }
@@ -41,11 +40,10 @@
                         <?php
                     } else {
                         ?>
-                        <div class="text-center mt-5">
-                            <h5>
-                                No init image found
-                            </h5>
-                        </div>
+                            <div class="text-center">
+                                <img class="w-100 rounded"
+                                     src="/out/img/image-not-found.png">
+                            </div>
                         <?php
                     }
                     ?>
@@ -55,9 +53,9 @@
                         if (isset($image['payload']['override_settings']['sd_model_checkpoint'])) {
                             ?>
                             <div class="mb-4">
-                                <h6>
-                                    Model
-                                </h6>
+                                <strong>
+                                    Model:
+                                </strong>
                                 <?php
                                 echo $image['payload']['override_settings']['sd_model_checkpoint'];
                                 ?>
@@ -67,9 +65,9 @@
                         if (isset($image['payload']['prompt'])) {
                             ?>
                                 <div class="mb-4">
-                                    <h6>
-                                        Prompt
-                                    </h6>
+                                    <strong>
+                                        Prompt:
+                                    </strong>
                             <?php
                             echo $image['payload']['prompt'];
                             ?>
@@ -79,9 +77,9 @@
                         if (isset($image['payload']['steps'])) {
                             ?>
                             <div class="mb-4">
-                                <h6>
-                                    Steps
-                                </h6>
+                                <strong>
+                                    Steps:
+                                </strong>
                                 <?php
                                 echo $image['payload']['steps'];
                                 ?>
@@ -91,9 +89,9 @@
                         if (isset($image['payload']['width']) && isset($image['payload']['height'])) {
                             ?>
                             <div class="mb-4">
-                                <h6>
-                                    Size
-                                </h6>
+                                <strong>
+                                    Size:
+                                </strong>
                                 <?php
                                 echo $image['payload']['width'] . ' x ' . $image['payload']['height'];
                                 ?>

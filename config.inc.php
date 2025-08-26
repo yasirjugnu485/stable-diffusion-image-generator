@@ -12,6 +12,15 @@
 $this->host = 'http://127.0.0.1:7860';
 
 /**
+ * Start Web-Application
+ *
+ * @description Start PHP Build-In server for the Web-Application.
+ *
+ * @var bool
+ */
+$this->startWebApplication = true;
+
+/**
  * Number of images to create
  *
  * @description The number of images to generate. If set to null or 0, the script will generate unlimited images.

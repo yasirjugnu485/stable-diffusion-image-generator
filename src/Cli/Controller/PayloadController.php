@@ -32,14 +32,19 @@ class PayloadController
         $configController = new ConfigController();
         $config = $configController->getConfig();
 
-        $file = ROOT_DIR . 'outputs/';
+        $directory = ROOT_DIR . 'outputs/';
         if ($config['loop']) {
-            $file .= 'loop/' . $config['dateTime'] . '/payloads.json';
-        } elseif ($config['mode'] === 'txt2txt') {
-            $file .= 'txt2txt/' . $config['dateTime'] . '/payloads.json';
+            $directory .= 'loop/' . $config['dateTime'];
+        } elseif ($config['mode'] === 'txt2img') {
+            $directory .= 'txt2img/' . $config['dateTime'];
         } else {
-            $file .= 'img2img/' . $config['dateTime'] . '/payloads.json';
+            $directory .= 'img2img/' . $config['dateTime'];
         }
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
+        $file = $directory . '/payloads.json';
 
         file_put_contents($file, json_encode(self::$payload, JSON_PRETTY_PRINT));
     }

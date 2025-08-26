@@ -8,7 +8,6 @@ if (!isset($_GET['image'])) {
     header("HTTP/1.0 404 Not Found");
     exit();
 } elseif (!file_exists(ROOT_DIR . $_GET['image'])) {
-    echo 'TEST';
     header("HTTP/1.0 404 Not Found");
     exit();
 }

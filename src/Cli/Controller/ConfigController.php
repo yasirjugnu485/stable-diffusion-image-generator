@@ -16,6 +16,8 @@ class ConfigController implements ConfigInterface
 
     private string $host = 'http://127.0.0.1:7860';
 
+    private bool $startWebApplication = true;
+
     private bool $saveImages = true;
 
     private bool $loop = false;

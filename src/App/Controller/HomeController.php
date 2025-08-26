@@ -10,13 +10,17 @@ class HomeController
     {
         $fileCollectorController = new FileCollectorController();
         $data = $fileCollectorController->getLastFiles();
+        $navbar = $fileCollectorController->getNavbarData();
 
-        $this->render(['data' => $data]);
+        $this->render([
+            'data' => $data,
+            'navbar' => $navbar,
+        ]);
     }
 
     private function render(array $params = []): void
     {
-        $params['template'] = ROOT_DIR . 'home.php';
+        $params['template'] = 'home.php';
 
         $renderController = new RenderController();
         $renderController->render($params);

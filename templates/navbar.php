@@ -14,12 +14,31 @@
         <div class="collapse navbar-collapse"
              id="navbar">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item text-light">
-                    <a class="nav-link active text-light"
-                       aria-current="page"
-                       href="/txt2img">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-light" h
+                       ref="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
                         txt2img
                     </a>
+                    <ul class="dropdown-menu">
+                        <?php
+                            if (count($params['navbar']['txt2img'])) {
+                                foreach ($params['navbar']['txt2img'] as $entry) {
+                                    ?>
+                                        <li>
+                                            <a class="dropdown-item" href="/txt2img/<?php echo $entry['slug']; ?>">
+                                                <?php echo $entry['name']; ?>
+                                            </a>
+                                        </li>
+                                    <?php
+                                }
+                            } else {
+
+                            }
+                        ?>
+                    </ul>
                 </li>
                 <li class="nav-item text-light">
                     <a class="nav-link active text-light"
