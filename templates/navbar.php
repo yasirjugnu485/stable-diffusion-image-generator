@@ -15,44 +15,94 @@
              id="navbar">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-light" h
-                       ref="#"
+                    <a class="nav-link dropdown-toggle text-light"
+                       href="#"
                        role="button"
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
                         txt2img
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu<?php if (count($params['navbar']['txt2img']) == 0) { echo ' bg-warning'; } ?>">
                         <?php
-                            if (count($params['navbar']['txt2img'])) {
-                                foreach ($params['navbar']['txt2img'] as $entry) {
-                                    ?>
-                                        <li>
-                                            <a class="dropdown-item" href="/txt2img/<?php echo $entry['slug']; ?>">
-                                                <?php echo $entry['name']; ?>
-                                            </a>
-                                        </li>
-                                    <?php
-                                }
-                            } else {
-
+                        if (count($params['navbar']['txt2img'])) {
+                            foreach ($params['navbar']['txt2img'] as $entry) {
+                                ?>
+                                <li>
+                                    <a class="dropdown-item text-dark" href="/txt2img/<?php echo $entry['slug']; ?>">
+                                        <?php echo $entry['name']; ?>
+                                    </a>
+                                </li>
+                                <?php
                             }
+                        } else {
+                            ?>
+                            <div class="dropdown-item bg-warning text-dark">
+                                No txt2img images available
+                            </div>
+                            <?php
+                        }
                         ?>
                     </ul>
                 </li>
-                <li class="nav-item text-light">
-                    <a class="nav-link active text-light"
-                       aria-current="page"
-                       href="/img2img">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-light"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
                         img2img
                     </a>
+                    <ul class="dropdown-menu<?php if (count($params['navbar']['img2img']) == 0) { echo ' bg-warning'; } ?>">
+                        <?php
+                        if (count($params['navbar']['img2img'])) {
+                            foreach ($params['navbar']['img2img'] as $entry) {
+                                ?>
+                                <li>
+                                    <a class="dropdown-item text-dark" href="/img2img/<?php echo $entry['slug']; ?>">
+                                        <?php echo $entry['name']; ?>
+                                    </a>
+                                </li>
+                                <?php
+                            }
+                        } else {
+                            ?>
+                                <div class="dropdown-item bg-warning text-dark">
+                                    No img2img images available
+                                </div>
+                            <?php
+                        }
+                        ?>
+                    </ul>
                 </li>
-                <li class="nav-item text-light">
-                    <a class="nav-link active text-light"
-                       aria-current="page"
-                       href="/loop">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-light"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
                         loop
                     </a>
+                    <ul class="dropdown-menu<?php if (count($params['navbar']['loop']) == 0) { echo ' bg-warning'; } ?>">
+                        <?php
+                        if (count($params['navbar']['loop'])) {
+                            foreach ($params['navbar']['loop'] as $entry) {
+                                ?>
+                                <li>
+                                    <a class="dropdown-item text-dark" href="/loop/<?php echo $entry['slug']; ?>">
+                                        <?php echo $entry['name']; ?>
+                                    </a>
+                                </li>
+                                <?php
+                            }
+                        } else {
+                            ?>
+                            <div class="dropdown-item bg-warning text-dark">
+                                No loop images available
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </ul>
                 </li>
             </ul>
         </div>

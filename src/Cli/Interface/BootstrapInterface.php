@@ -17,4 +17,6 @@ interface BootstrapInterface
     const string ERROR_START_BUILD_IN_SERVER = 'Error on starting build in webserver';
 
     const string SUCCESS_START_APPLICATION = 'Successfully started application';
+
+    const string ERROR_UNKNOWN_ARGUMENT = 'Unknown argument "%1$s" type in "php run.php --help" for help';
 }

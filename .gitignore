@@ -5,3 +5,4 @@ config.local.php
 dry_run.json
 options.json
 samplers.json
+task_*
