@@ -104,7 +104,7 @@ class BootstrapController implements BootstrapInterface
         if ($config['startWebApplication']) {
             new EchoController(self::ECHO_TRY_START_BUILD_IN_SERVER);
             try {
-                exec('php -S 127.0.0.1:8000 -t public/ > /dev/null 2>&1 &');
+                exec('php -S 0.0.0.0:8000 -t public/ > /dev/null 2>&1 &');
                 new EchoController(self::SUCCESS_START_BUILD_IN_SERVER);
             } catch (Throwable $throwable) {
                 new EchoController(self::ERROR_START_BUILD_IN_SERVER);
