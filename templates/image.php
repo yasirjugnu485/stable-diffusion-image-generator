@@ -35,7 +35,9 @@
                     }
                     ?>
                 </div>
-                <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0 d-block<?php if (!isset($image['payload']['init_images']) || !file_exists(ROOT_DIR . $image['payload']['init_images'])) { echo ' d-none'; }?>">
+                <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0 d-block<?php if (!isset($image['payload']['init_images']) || !file_exists(ROOT_DIR . $image['payload']['init_images'])) {
+                    echo ' d-none';
+                } ?>">
                     <h4>
                         Initial image
                     </h4>
@@ -104,18 +106,17 @@
                         <?php
                     }
                     if (isset($image['payload']['width']) && isset($image['payload']['height'])) {
-                        ?>
-                        <p>
-                            <strong>
-                                Size:
-                            </strong>
-                            <?php
-                            echo $image['payload']['width'] . ' x ' . $image['payload']['height'];
-                            ?>
-                        </div>
-                        <?php
-                    }
                     ?>
+                    <p>
+                        <strong>
+                            Size:
+                        </strong>
+                        <?php
+                        echo $image['payload']['width'] . ' x ' . $image['payload']['height'];
+                        ?>
+                        <?php
+                        }
+                        ?>
                 </div>
             </div>
         </div>
