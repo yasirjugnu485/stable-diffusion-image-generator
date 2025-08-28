@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-class HomeController
+class ImagesController
 {
     public function __construct()
     {
         $fileCollectorController = new FileCollectorController();
-        $data = $fileCollectorController->getLastFiles();
-
+        $data = $fileCollectorController->getFilesByTypeAndDateTime();
         $navbar = $fileCollectorController->getNavbarData();
 
         $this->render([
@@ -23,7 +22,7 @@ class HomeController
 
     private function render(array $params = []): void
     {
-        $params['template'] = 'home.php';
+        $params['template'] = 'images.php';
 
         $renderController = new RenderController();
         $renderController->render($params);

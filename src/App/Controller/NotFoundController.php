@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-class HomeController
+class NotFoundController
 {
     public function __construct()
     {
         $fileCollectorController = new FileCollectorController();
-        $data = $fileCollectorController->getLastFiles();
-
         $navbar = $fileCollectorController->getNavbarData();
 
         $this->render([
-            'data' => $data,
             'navbar' => $navbar,
         ]);
 
@@ -23,7 +20,7 @@ class HomeController
 
     private function render(array $params = []): void
     {
-        $params['template'] = 'home.php';
+        $params['template'] = 'not_found.php';
 
         $renderController = new RenderController();
         $renderController->render($params);

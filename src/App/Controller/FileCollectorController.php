@@ -11,6 +11,8 @@ class FileCollectorController
 {
     public static array|null $fileData = null;
 
+    public static array|null $filesByTypeAndDateTime = null;
+
     public function __construct()
     {
         $this->collectFiles();
@@ -158,6 +160,28 @@ class FileCollectorController
         }
 
         return $payloads;
+    }
+
+    public function collectFilesByTypeAndDateTime(string $type, string $dateTime): array|null
+    {
+        $split = explode('_', $dateTime);
+        $dateTime = $split[0] . ' ' . str_replace('-', ':', $split[1]);
+
+        if (!isset(self::$fileData[$type][$dateTime])) {
+            return null;
+        }
+
+        self::$filesByTypeAndDateTime = [
+            'type' => $type,
+            'payloads' => $this->getData($type, $dateTime)
+        ];
+
+        return self::$filesByTypeAndDateTime;
+    }
+
+    public function getFilesByTypeAndDateTime(): array|null
+    {
+        return self::$filesByTypeAndDateTime;
     }
 
     public function getNavbarData(): array

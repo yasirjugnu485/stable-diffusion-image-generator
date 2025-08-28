@@ -1,7 +1,10 @@
 <div class="container" style="max-width: 1600px">
     <div class="row">
         <div class="col-md-12">
-            <h1>404 Not found</h1>
+            <div class="alert alert-danger">
+                <h3>404 Not found</h3>
+                <a href="/">Back to home</a>
+            </div>
         </div>
     </div>
 </div>
