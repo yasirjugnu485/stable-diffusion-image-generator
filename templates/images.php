@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-12">
             <h2>
-                Recently generated images
+                <?php echo $params['header']; ?>
             </h2>
         </div>
         <?php

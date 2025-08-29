@@ -10,12 +10,14 @@ class HomeController
     {
         $fileCollectorController = new FileCollectorController();
         $data = $fileCollectorController->getLastFiles();
-
-        $navbar = $fileCollectorController->getNavbarData();
+        $navbarController = new NavbarController();
+        $navbar = $navbarController->getData();
 
         $this->render([
             'data' => $data,
             'navbar' => $navbar,
+            'header' => 'Recently generated images',
+            'template' => 'home.php',
         ]);
 
         exit();
@@ -23,8 +25,6 @@ class HomeController
 
     private function render(array $params = []): void
     {
-        $params['template'] = 'home.php';
-
         $renderController = new RenderController();
         $renderController->render($params);
     }

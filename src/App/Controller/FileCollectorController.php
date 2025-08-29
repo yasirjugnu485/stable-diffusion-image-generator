@@ -11,7 +11,13 @@ class FileCollectorController
 {
     public static array|null $fileData = null;
 
+    public static array|null $payloads = null;
+
     public static array|null $filesByTypeAndDateTime = null;
+
+    public static string|null $type = null;
+
+    public static string|null $dateTime = null;
 
     public function __construct()
     {
@@ -33,6 +39,10 @@ class FileCollectorController
             }
 
             self::$fileData = $fileData;
+        }
+
+        if (null === self::$payloads) {
+            $this->collectPayloads();
         }
     }
 
@@ -146,6 +156,21 @@ class FileCollectorController
         return false;
     }
 
+    private function collectPayloads(): void
+    {
+        self::$payloads = [];
+        foreach (self::$fileData as $type => $typeData) {
+            foreach ($typeData as $dateTime => $payloads) {
+                if (file_exists(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/payloads.json')) {
+                     self::$payloads = array_merge(self::$payloads, json_decode(
+                        file_get_contents(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/payloads.json'),
+                        true
+                    ));
+                }
+            }
+        }
+    }
+
     private function getData(string $type, string $key): array
     {
         $payloads = json_decode(
@@ -157,6 +182,10 @@ class FileCollectorController
                 $split = explode('/outputs/' . $type . '/' . $key .'/', $payload['file']);
                 $payloads[$index]['file'] = '/outputs/' . $type . '/' . $key .'/' . end($split);
             }
+            if (isset($payload['payload']['init_images'])) {
+                $split = explode('/init_images/', $payload['payload']['init_images']);
+                $payloads[$index]['payload']['init_images'] = '/init_images/' . end($split);
+            }
         }
 
         return $payloads;
@@ -166,11 +195,12 @@ class FileCollectorController
     {
         $split = explode('_', $dateTime);
         $dateTime = $split[0] . ' ' . str_replace('-', ':', $split[1]);
-
         if (!isset(self::$fileData[$type][$dateTime])) {
             return null;
         }
 
+        self::$type = $type;
+        self::$dateTime = $dateTime;
         self::$filesByTypeAndDateTime = [
             'type' => $type,
             'payloads' => $this->getData($type, $dateTime)
@@ -179,27 +209,45 @@ class FileCollectorController
         return self::$filesByTypeAndDateTime;
     }
 
+    public function collectUsedCheckpoints(): array
+    {
+        if (null === self::$payloads) {
+            $this->collectPayloads();
+        }
+        if (!count(self::$payloads)) {
+            return [];
+        }
+
+        $checkpoints = [];
+        foreach (self::$payloads as $payload) {
+            if (isset($payload['payload']['override_settings']['sd_model_checkpoint'])) {
+                if (!in_array($payload['payload']['override_settings']['sd_model_checkpoint'], $checkpoints)) {
+                    $checkpoints[] = $payload['payload']['override_settings']['sd_model_checkpoint'];
+                }
+            }
+        }
+        sort($checkpoints);
+
+        return $checkpoints;
+    }
+
+    public function getFileData(): array|null
+    {
+        return self::$fileData;
+    }
+
     public function getFilesByTypeAndDateTime(): array|null
     {
         return self::$filesByTypeAndDateTime;
     }
 
-    public function getNavbarData(): array
+    public function getType(): string|null
     {
-        $result = [];
+        return self::$type;
+    }
 
-        foreach (self::$fileData as $type => $files) {
-            $result[$type] = [];
-            foreach ($files as $key => $file) {
-                $entry = str_replace(' ', '_', $key);
-                $entry = str_replace(':', '-', $entry);
-                $result[$type][] = [
-                    'name' => $key,
-                    'slug' => $entry
-                ];
-            }
-        }
-
-        return $result;
+    public function getDateTime(): string|null
+    {
+        return self::$dateTime;
     }
 }

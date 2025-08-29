@@ -10,11 +10,14 @@ class ImagesController
     {
         $fileCollectorController = new FileCollectorController();
         $data = $fileCollectorController->getFilesByTypeAndDateTime();
-        $navbar = $fileCollectorController->getNavbarData();
+        $navbarController = new NavbarController();
+        $navbar = $navbarController->getData();
 
         $this->render([
             'data' => $data,
             'navbar' => $navbar,
+            'header' => $fileCollectorController->getType() . ' -> ' . $fileCollectorController->getDateTime(),
+            'template' => 'images.php',
         ]);
 
         exit();
@@ -22,8 +25,6 @@ class ImagesController
 
     private function render(array $params = []): void
     {
-        $params['template'] = 'images.php';
-
         $renderController = new RenderController();
         $renderController->render($params);
     }
