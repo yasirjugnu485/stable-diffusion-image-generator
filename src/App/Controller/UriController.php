@@ -23,12 +23,20 @@ class UriController
         if ($requestIndex[1] === 'txt2img' || $requestIndex[1] === 'img2img' || $requestIndex[1] === 'loop') {
             $fileCollectorController = new FileCollectorController();
             $files = $fileCollectorController->collectFilesByTypeAndDateTime($requestIndex[1], $requestIndex[2]);
-            if (!$files) {
-                $this->notFound();
+            if ($files) {
+                $imagesController = new imagesController();
+                $imagesController->renderByTypeAndDateTime();
+            }
+        } elseif ($requestIndex[1] === 'checkpoints' || trim($requestIndex[2])) {
+            $fileCollectorController = new FileCollectorController();
+            $files = $fileCollectorController->collectFilesByCheckpoint($requestIndex[2]);
+            if ($files) {
+                $imagesController = new imagesController();
+                $imagesController->renderByCheckpoint();
             }
         }
 
-        $this->images();
+        $this->notFound();
     }
 
     private function home(): void
@@ -38,7 +46,7 @@ class UriController
 
     private function images(): void
     {
-        new ImagesController();
+        new imagesController();
     }
 
     private function notFound(): void

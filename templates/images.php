@@ -14,7 +14,7 @@
             ?>
             <div class="col-12">
                 <div class="alert alert-warning">
-                    There are no recently images yet
+                    There are no images yet
                 </div>
             </div>
             <?php

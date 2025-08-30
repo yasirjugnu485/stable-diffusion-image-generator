@@ -19,6 +19,10 @@ class FileCollectorController
 
     public static string|null $dateTime = null;
 
+    public static array|null $filesByCheckpoint = null;
+
+    public static string|null $checkpoint = null;
+
     public function __construct()
     {
         $this->collectFiles();
@@ -133,7 +137,7 @@ class FileCollectorController
 
         if ($targetType && $targetKey) {
             $result['type'] = $targetType;
-            $result['payloads'] = $this->getData($targetType, $targetKey);
+            $result['payloads'] = $this->getDataFromPayload($targetType, $targetKey);
         }
 
         return $result;
@@ -156,22 +160,27 @@ class FileCollectorController
         return false;
     }
 
-    private function collectPayloads(): void
+    private function collectPayloads(): array
     {
-        self::$payloads = [];
-        foreach (self::$fileData as $type => $typeData) {
-            foreach ($typeData as $dateTime => $payloads) {
-                if (file_exists(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/payloads.json')) {
-                     self::$payloads = array_merge(self::$payloads, json_decode(
-                        file_get_contents(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/payloads.json'),
-                        true
-                    ));
+        if (null === self::$payloads) {
+            self::$payloads = [];
+            foreach (self::$fileData as $type => $typeData) {
+                foreach ($typeData as $dateTime => $payloads) {
+                    if (file_exists(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/payloads.json')) {
+                        self::$payloads = array_merge(self::$payloads, json_decode(
+                            file_get_contents(
+                                ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/payloads.json'),
+                            true
+                        ));
+                    }
                 }
             }
         }
+
+        return self::$payloads;
     }
 
-    private function getData(string $type, string $key): array
+    private function getDataFromPayload(string $type, string $key): array
     {
         $payloads = json_decode(
             file_get_contents(ROOT_DIR . 'outputs/' . $type . '/' . $key . '/payloads.json'), true
@@ -203,7 +212,7 @@ class FileCollectorController
         self::$dateTime = $dateTime;
         self::$filesByTypeAndDateTime = [
             'type' => $type,
-            'payloads' => $this->getData($type, $dateTime)
+            'payloads' => $this->getDataFromPayload($type, $dateTime)
         ];
 
         return self::$filesByTypeAndDateTime;
@@ -231,6 +240,40 @@ class FileCollectorController
         return $checkpoints;
     }
 
+    public function collectFilesByCheckpoint(string $checkpoint): array|null
+    {
+        $filesByCheckpoint = [];
+        $payloads = $this->collectPayloads();
+        foreach ($payloads as $payload) {
+            if (isset($payload['payload']['override_settings']['sd_model_checkpoint'])) {
+                if ($payload['payload']['override_settings']['sd_model_checkpoint'] === $checkpoint) {
+                    if (isset($payload['file'])) {
+                        $split = explode('/outputs/', $payload['file']);
+                        $payload['file'] = '/outputs/' . end($split);
+                    }
+                    if (isset($payload['payload']['init_images'])) {
+                        $split = explode('/init_images/', $payload['payload']['init_images']);
+                        $payload['payload']['init_images'] = '/init_images/' . end($split);
+                    }
+                    $filesByCheckpoint[] = $payload;
+                }
+            }
+        }
+
+        if (count($filesByCheckpoint)) {
+            self::$checkpoint = $checkpoint;
+            self::$filesByCheckpoint = [
+                'type' => $checkpoint,
+                'payloads' => $filesByCheckpoint
+            ];
+        } else {
+            self::$checkpoint = null;
+            self::$filesByCheckpoint = null;
+        }
+
+        return self::$filesByCheckpoint;
+    }
+
     public function getFileData(): array|null
     {
         return self::$fileData;
@@ -249,5 +292,15 @@ class FileCollectorController
     public function getDateTime(): string|null
     {
         return self::$dateTime;
+    }
+
+    public function getFilesByCheckpoint(): array|null
+    {
+        return self::$filesByCheckpoint;
+    }
+
+    public function getCheckpoint(): string|null
+    {
+        return self::$checkpoint;
     }
 }
