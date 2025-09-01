@@ -3,9 +3,9 @@
     <div class="container mb-5" style="max-width: 1600px">
         <div class="row">
             <div class="col-12">
-                <h2>
+                <h3>
                     Used Checkpoints (Models)
-                </h2>
+                </h3>
                 <?php
                 foreach ($checkpoints as $checkpoint) {
                     ?>

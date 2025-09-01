@@ -15,12 +15,46 @@ class imagesController
         self::$renderData['navbar'] = $navbar;
     }
 
+    public function renderByType(string $type): void
+    {
+        $fileCollectorController = new FileCollectorController();
+
+        self::$renderData['data'] = $fileCollectorController->getFilesType($type);
+        self::$renderData['breadcrumbs'] = [
+            [
+                'title' => $type,
+                'url' => '/' . $type,
+                'active' => false
+            ]
+        ];
+        self::$renderData['template'] = 'images.php';
+
+        $this->render(self::$renderData);
+
+        exit();
+    }
+
     public function renderByTypeAndDateTime(): void
     {
         $fileCollectorController = new FileCollectorController();
+        $type = $fileCollectorController->getType();
+        $dateTime = $fileCollectorController->getDateTime();
+        $dateTimeName = str_replace(':', '-', $dateTime);
+        $dateTimeName = str_replace(' ', '_', $dateTimeName);
+
         self::$renderData['data'] = $fileCollectorController->getFilesByTypeAndDateTime();
-        self::$renderData['header'] =
-            $fileCollectorController->getType() . ' -> ' . $fileCollectorController->getDateTime();
+        self::$renderData['breadcrumbs'] = [
+            [
+                'title' => $type,
+                'url' => '/' . $type,
+                'active' => false
+            ],
+            [
+                'title' => $dateTime,
+                'url' => '/' . $type . '/' . $dateTimeName,
+                'active' => true
+            ]
+        ];
         self::$renderData['template'] = 'images.php';
 
         $this->render(self::$renderData);
@@ -31,7 +65,22 @@ class imagesController
     public function renderByCheckpoint(): void
     {
         $fileCollectorController = new FileCollectorController();
+        $checkpoint = $fileCollectorController->getCheckpoint();
+
         self::$renderData['data'] = $fileCollectorController->getFilesByCheckpoint();
+        self::$renderData['breadcrumbs'] = [
+            [
+                'title' => 'checkpoints',
+                'url' => '/checkpoints',
+                'active' => false
+            ],
+            [
+                'title' => $checkpoint,
+                'url' => '/checkpoints/' . $checkpoint,
+                'active' => true
+            ]
+        ];
+
         self::$renderData['header'] = 'checkpoints.json -> ' . $fileCollectorController->getCheckpoint();
         self::$renderData['template'] = 'images.php';
 

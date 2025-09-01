@@ -23,7 +23,9 @@
                     if (file_exists(ROOT_DIR . $image['file'])) {
                         ?>
                         <img class="w-100 border rounded"
-                             src="/image.php?image=<?php echo urlencode($image['file']); ?>">
+                             style="cursor: pointer;"
+                             src="/image.php?image=<?php echo urlencode($image['file']); ?>"
+                             onclick="openModal(); currentSlide(<?php echo $index; ?>)">
                         <?php
                     } else {
                         ?>

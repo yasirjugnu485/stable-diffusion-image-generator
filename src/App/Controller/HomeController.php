@@ -14,12 +14,20 @@ class HomeController
         $navbarController = new NavbarController();
         $navbar = $navbarController->getData();
 
+        $breadcrumbs = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ]
+        ];
+
         $this->render([
             'data' => $data,
             'navbar' => $navbar,
             'checkpoints' => $checkpoints,
             'title' => 'Home',
-            'header' => 'Last generated images',
+            'breadcrumbs' => $breadcrumbs,
             'template' => 'home.php',
         ]);
 
