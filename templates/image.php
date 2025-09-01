@@ -73,11 +73,11 @@
                         ?>
                         <p>
                             <strong>
-                                Model:
+                                Checkpoint (Model):
                             </strong>
-                            <?php
-                            echo $image['payload']['override_settings']['sd_model_checkpoint'];
-                            ?>
+                            <a href="/checkpoints/<?php echo $image['payload']['override_settings']['sd_model_checkpoint']; ?>">
+                                <?php echo $image['payload']['override_settings']['sd_model_checkpoint']; ?>
+                            </a>
                         </p>
                         <?php
                     }

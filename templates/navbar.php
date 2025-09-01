@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary bg-primary navbar-dark mb-4">
+<nav class="navbar navbar-expand-lg bg-body-tertiary bg-primary navbar-dark mb-5">
     <div class="container-fluid">
         <a class="navbar-brand text-light"
            href="/">

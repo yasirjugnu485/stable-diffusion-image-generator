@@ -1,4 +1,4 @@
-<div class="container" style="max-width: 1600px">
+<div class="container mb-5" style="max-width: 1600px">
     <div class="row">
         <div class="col-12">
             <h2>

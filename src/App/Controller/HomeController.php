@@ -10,13 +10,16 @@ class HomeController
     {
         $fileCollectorController = new FileCollectorController();
         $data = $fileCollectorController->getLastFiles();
+        $checkpoints = $fileCollectorController->collectUsedCheckpoints();
         $navbarController = new NavbarController();
         $navbar = $navbarController->getData();
 
         $this->render([
             'data' => $data,
             'navbar' => $navbar,
-            'header' => 'Recently generated images',
+            'checkpoints' => $checkpoints,
+            'title' => 'Home',
+            'header' => 'Last generated images',
             'template' => 'home.php',
         ]);
 
