@@ -8,14 +8,12 @@ class NotFoundController
 {
     public function __construct()
     {
-        $fileCollectorController = new FileCollectorController();
-        $navbar = $fileCollectorController->getNavbarData();
+        $navbarController = new NavbarController;
+        $navbar = $navbarController->getData();
 
         $this->render([
             'navbar' => $navbar,
         ]);
-
-        exit();
     }
 
     private function render(array $params = []): void

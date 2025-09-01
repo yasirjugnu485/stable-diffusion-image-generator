@@ -26,9 +26,18 @@
                        aria-expanded="false">
                         txt2img
                     </a>
-                    <ul class="dropdown-menu<?php if (count($params['navbar']['types']['txt2img']) == 0) { echo ' bg-warning'; } ?>">
+                    <ul class="dropdown-menu<?php if (count($params['navbar']['types']['txt2img']) == 0) {
+                        echo ' bg-warning';
+                    } ?>">
                         <?php
                         if (count($params['navbar']['types']['txt2img'])) {
+                            ?>
+                            <li>
+                                <a class="dropdown-item text-dark" href="/txt2img">
+                                    Overview
+                                </a>
+                            </li>
+                            <?php
                             foreach ($params['navbar']['types']['txt2img'] as $entry) {
                                 ?>
                                 <li>
@@ -57,9 +66,18 @@
                        aria-expanded="false">
                         img2img
                     </a>
-                    <ul class="dropdown-menu<?php if (count($params['navbar']['types']['img2img']) == 0) { echo ' bg-warning'; } ?>">
+                    <ul class="dropdown-menu<?php if (count($params['navbar']['types']['img2img']) == 0) {
+                        echo ' bg-warning';
+                    } ?>">
                         <?php
                         if (count($params['navbar']['types']['img2img'])) {
+                            ?>
+                            <li>
+                                <a class="dropdown-item text-dark" href="/img2img">
+                                    Overview
+                                </a>
+                            </li>
+                            <?php
                             foreach ($params['navbar']['types']['img2img'] as $entry) {
                                 ?>
                                 <li>
@@ -71,9 +89,9 @@
                             }
                         } else {
                             ?>
-                                <div class="dropdown-item bg-warning text-dark">
-                                    No img2img images available
-                                </div>
+                            <div class="dropdown-item bg-warning text-dark">
+                                No img2img images available
+                            </div>
                             <?php
                         }
                         ?>
@@ -88,9 +106,18 @@
                        aria-expanded="false">
                         loop
                     </a>
-                    <ul class="dropdown-menu<?php if (count($params['navbar']['types']['loop']) == 0) { echo ' bg-warning'; } ?>">
+                    <ul class="dropdown-menu<?php if (count($params['navbar']['types']['loop']) == 0) {
+                        echo ' bg-warning';
+                    } ?>">
                         <?php
                         if (count($params['navbar']['types']['loop'])) {
+                            ?>
+                            <li>
+                                <a class="dropdown-item text-dark" href="/loop">
+                                    Overview
+                                </a>
+                            </li>
+                            <?php
                             foreach ($params['navbar']['types']['loop'] as $entry) {
                                 ?>
                                 <li>
@@ -119,9 +146,18 @@
                        aria-expanded="false">
                         checkpoints
                     </a>
-                    <ul class="dropdown-menu<?php if (count($params['navbar']['checkpoints']) == 0) { echo ' bg-warning'; } ?>">
+                    <ul class="dropdown-menu<?php if (count($params['navbar']['checkpoints']) == 0) {
+                        echo ' bg-warning';
+                    } ?>">
                         <?php
                         if (count($params['navbar']['checkpoints'])) {
+                            ?>
+                            <li>
+                                <a class="dropdown-item text-dark" href="/checkpoints">
+                                    Overview
+                                </a>
+                            </li>
+                            <?php
                             foreach ($params['navbar']['checkpoints'] as $entry) {
                                 ?>
                                 <li>

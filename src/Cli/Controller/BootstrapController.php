@@ -9,7 +9,7 @@ use Cli\Interface\BootstrapInterface;
 use DateTime;
 use Throwable;
 
-include_once (ROOT_DIR . 'src/Cli/Interface/BootstrapInterface.php');
+include_once(ROOT_DIR . 'src/Cli/Interface/BootstrapInterface.php');
 
 class BootstrapController implements BootstrapInterface
 {
@@ -55,15 +55,15 @@ class BootstrapController implements BootstrapInterface
         ];
 
         if (isset($_SERVER['argv'])) {
-           for ($i= 0; $i < count($_SERVER['argv']); $i++) {
-               if (!in_array($_SERVER['argv'][$i], $possibleArguments)) {
-                   Throw new PromptImageGeneratorException(sprintf(
-                       self::ERROR_UNKNOWN_ARGUMENT,
-                       $_SERVER['argv'][$i]
-                   ));
-               }
-               self::$arguments[$_SERVER['argv'][$i]] = [];
-           }
+            for ($i = 0; $i < count($_SERVER['argv']); $i++) {
+                if (!in_array($_SERVER['argv'][$i], $possibleArguments)) {
+                    throw new PromptImageGeneratorException(sprintf(
+                        self::ERROR_UNKNOWN_ARGUMENT,
+                        $_SERVER['argv'][$i]
+                    ));
+                }
+                self::$arguments[$_SERVER['argv'][$i]] = [];
+            }
         }
     }
 
@@ -77,7 +77,7 @@ class BootstrapController implements BootstrapInterface
                     $this->classLoader($directory . '/' . $file);
                 } else {
                     if (strpos($file, '.php') !== false) {
-                        include_once($directory. '/' . $file);
+                        include_once($directory . '/' . $file);
                     }
                 }
             }

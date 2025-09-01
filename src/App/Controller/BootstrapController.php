@@ -25,7 +25,7 @@ class BootstrapController
                     $this->classLoader($directory . '/' . $file);
                 } else {
                     if (strpos($file, '.php') !== false) {
-                        include_once($directory. '/' . $file);
+                        include_once($directory . '/' . $file);
                     }
                 }
             }

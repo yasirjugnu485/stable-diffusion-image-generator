@@ -20,31 +20,33 @@ class UriController
             $this->notFound();
         }
 
-        if ($requestIndex[1] === 'txt2img' && !isset($requestIndex[2])) {
+        if (($requestIndex[1] === 'txt2img' || $requestIndex[1] === 'img2img' || $requestIndex[1] === 'loop') &&
+            !isset($requestIndex[2])) {
             $fileCollectorController = new FileCollectorController();
-            $files = $fileCollectorController->collectFilesByType('txt2img');
+            $files = $fileCollectorController->collectFilesByType($requestIndex[1]);
             if ($files) {
-                $imagesController = new imagesController();
+                $imagesController = new RenderController();
                 $imagesController->renderByType();
             }
-        } elseif ($requestIndex[1] === 'img2img' && !isset($requestIndex[2])) {
+        } elseif (($requestIndex[1] === 'checkpoints') && !isset($requestIndex[2])) {
             $fileCollectorController = new FileCollectorController();
-
-        } elseif ($requestIndex[1] === 'loop' && !isset($requestIndex[2])) {
-            $fileCollectorController = new FileCollectorController();
-
+            $files = $fileCollectorController->collectCheckpointFiles();
+            if ($files) {
+                $imagesController = new RenderController();
+                $imagesController->renderCheckpoints();
+            }
         } elseif ($requestIndex[1] === 'txt2img' || $requestIndex[1] === 'img2img' || $requestIndex[1] === 'loop') {
             $fileCollectorController = new FileCollectorController();
             $files = $fileCollectorController->collectFilesByTypeAndDateTime($requestIndex[1], $requestIndex[2]);
             if ($files) {
-                $imagesController = new imagesController();
+                $imagesController = new RenderController();
                 $imagesController->renderByTypeAndDateTime();
             }
         } elseif ($requestIndex[1] === 'checkpoints' || trim($requestIndex[2])) {
             $fileCollectorController = new FileCollectorController();
             $files = $fileCollectorController->collectFilesByCheckpoint($requestIndex[2]);
             if ($files) {
-                $imagesController = new imagesController();
+                $imagesController = new RenderController();
                 $imagesController->renderByCheckpoint();
             }
         }
@@ -59,7 +61,7 @@ class UriController
 
     private function images(): void
     {
-        new imagesController();
+        new RenderController();
     }
 
     private function notFound(): void

@@ -9,16 +9,16 @@
                 <?php
                 foreach ($checkpoints as $checkpoint) {
                     ?>
-                        <a href="/checkpoints/<?php echo $checkpoint; ?>" style="text-decoration: none">
-                            <button class="btn btn-secondary mb-2">
-                                <?php echo $checkpoint; ?>
-                            </button>
-                        </a>
+                    <a href="/checkpoints/<?php echo $checkpoint; ?>" style="text-decoration: none">
+                        <button class="btn btn-secondary mb-2">
+                            <?php echo $checkpoint; ?>
+                        </button>
+                    </a>
                     <?php
                 }
                 ?>
             </div>
         </div>
     </div>
-<?php
+    <?php
 }

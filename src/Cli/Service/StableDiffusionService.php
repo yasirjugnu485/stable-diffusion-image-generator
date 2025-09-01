@@ -44,7 +44,7 @@ class StableDiffusionService
         }
         file_put_contents(
             ROOT_DIR . '/checkpoints.json',
-            json_encode($models,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)
+            json_encode($models, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
         );
 
         return $models;
@@ -85,7 +85,7 @@ class StableDiffusionService
         }
         file_put_contents(
             ROOT_DIR . '/samplers.json',
-            json_encode($samplers,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)
+            json_encode($samplers, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
         );
 
         return $samplers;
@@ -126,7 +126,7 @@ class StableDiffusionService
         }
         file_put_contents(
             ROOT_DIR . '/options.json',
-            json_encode($options,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)
+            json_encode($options, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
         );
 
         return $options;

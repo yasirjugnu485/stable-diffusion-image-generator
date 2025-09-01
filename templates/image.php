@@ -7,11 +7,9 @@
                 echo end($split);
                 ?>
             </h5>
-            <div class="float-right bg-primary px-2 py-1 rounded">
-                <?php
-                echo $image['mode'];
-                ?>
-            </div>
+            <button class="btn btn-danger float-right">
+                <i class="bi bi-trash-fill"></i>
+            </button>
         </div>
         <div class="card-footer bg-white">
             <div class="row">
@@ -37,28 +35,21 @@
                     }
                     ?>
                 </div>
-                <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0 d-block<?php if (!isset($image['payload']['init_images']) || !file_exists(ROOT_DIR . $image['payload']['init_images'])) {
-                    echo ' d-none';
-                } ?>">
-                    <h4>
-                        Initial image
-                    </h4>
-                    <?php
-                    if (isset($image['payload']['init_images']) && file_exists(ROOT_DIR . $image['payload']['init_images'])) {
-                        ?>
+                <?php
+                if (isset($image['payload']['init_images']) && file_exists(ROOT_DIR . $image['payload']['init_images'])) {
+                    ?>
+                    <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0 d-block<?php if (!isset($image['payload']['init_images']) || !file_exists(ROOT_DIR . $image['payload']['init_images'])) {
+                        echo ' d-none';
+                    } ?>">
+                        <h4>
+                            Initial image
+                        </h4>
                         <img class="w-100 border rounded"
                              src="/image.php?image=<?php echo urlencode($image['payload']['init_images']); ?>">
-                        <?php
-                    } else {
-                        ?>
-                        <div class="text-center">
-                            <img class="w-100 rounded"
-                                 src="/out/img/image-not-found.png">
-                        </div>
-                        <?php
-                    }
-                    ?>
-                </div>
+                    </div>
+                    <?php
+                }
+                ?>
                 <div class="col-12 col-lg-4">
                     <h4>
                         Data
@@ -71,6 +62,18 @@
                     ?>
                     </p>
                     <?php
+                    if (isset($image['mode'])) {
+                        ?>
+                        <p>
+                            <strong>
+                                Mode:
+                            </strong>
+                            <a href="/<?php echo $image['mode']; ?>">
+                                <?php echo $image['mode']; ?>
+                            </a>
+                        </p>
+                        <?php
+                    }
                     if (isset($image['payload']['override_settings']['sd_model_checkpoint'])) {
                         ?>
                         <p>

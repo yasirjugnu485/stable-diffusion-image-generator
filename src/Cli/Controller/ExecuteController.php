@@ -34,7 +34,7 @@ class ExecuteController implements ExecuteInterface
                 $nextPrompt = $promptController->getNextPrompt();
                 $this->callTxt2img($nextPrompt, $numberOfGeneratedImages);
             } elseif ($config['mode'] === 'img2img' || (
-                $config['mode'] === 'txt2img' && $config['loop'] && $numberOfGeneratedImages)) {
+                    $config['mode'] === 'txt2img' && $config['loop'] && $numberOfGeneratedImages)) {
                 $promptController = new PromptController();
                 $nextPrompt = $promptController->getNextPrompt();
                 $initImagesController = new InitImagesController();
@@ -59,7 +59,7 @@ class ExecuteController implements ExecuteInterface
 
     private function callTxt2img(
         string $prompt,
-        int $numberOfGeneratedImages
+        int    $numberOfGeneratedImages
     ): void
     {
         new EchoController(sprintf(self::ECHO_GENERATE_IMAGE_WITH_PROMPT, $prompt));
@@ -117,7 +117,7 @@ class ExecuteController implements ExecuteInterface
         string $prompt,
         string $nextInitImage,
         string $currentInitImageFile,
-        int $numberOfGeneratedImages
+        int    $numberOfGeneratedImages
     ): void
     {
         new EchoController(sprintf(

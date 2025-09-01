@@ -12,7 +12,7 @@ class RefinerController implements RefinerInterface
     private static array|null $checkpointData = null;
 
     private static array|false|null $checkpoint = false;
-    
+
     private static string|null $lastCheckpoint = null;
 
     private static string|null $currentCheckpoint = null;

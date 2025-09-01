@@ -14,7 +14,7 @@ class InitImagesController implements InitImagesInterface
 
     private static array|null $initImagesBase64 = [];
 
-    private static int|null $currentInitImagesIndex  = null;
+    private static int|null $currentInitImagesIndex = null;
 
     private static string|null $nextImage = null;
 

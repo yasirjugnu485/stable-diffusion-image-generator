@@ -15,6 +15,8 @@ class FileCollectorController
 
     public static array|null $filesByType = null;
 
+    public static array|null $checkpointFiles = null;
+
     public static array|null $filesByTypeAndDateTime = null;
 
     public static string|null $type = null;
@@ -190,8 +192,8 @@ class FileCollectorController
 
         foreach ($payloads as $index => $payload) {
             if (isset($payload['file'])) {
-                $split = explode('/outputs/' . $type . '/' . $key .'/', $payload['file']);
-                $payloads[$index]['file'] = '/outputs/' . $type . '/' . $key .'/' . end($split);
+                $split = explode('/outputs/' . $type . '/' . $key . '/', $payload['file']);
+                $payloads[$index]['file'] = '/outputs/' . $type . '/' . $key . '/' . end($split);
             }
             if (isset($payload['payload']['init_images'])) {
                 $split = explode('/init_images/', $payload['payload']['init_images']);
@@ -205,18 +207,58 @@ class FileCollectorController
     public function collectFilesByType(string $type, int $limit = 1000): array
     {
         self::$filesByType = [];
+        self::$filesByType['payloads'] = [];
         self::$type = $type;
         if (!isset(self::$fileData[$type])) {
             return [];
         }
 
-        foreach (self::$fileData[$type] as $dateTime) {
-
-            var_export($dateTime);
-            die();
+        foreach (self::$payloads as $payload) {
+            if ($payload['mode'] === $type) {
+                $split = explode('/outputs/' . $type . '/', $payload['file']);
+                $payload['file'] = '/outputs/' . $type . '/' . end($split);
+                if (isset($payload['payload']['init_images'])) {
+                    $split = explode('/init_images/', $payload['payload']['init_images']);
+                    $payload['payload']['init_images'] = '/init_images/' . end($split);
+                }
+                self::$filesByType['payloads'][] = $payload;
+                if (count(self::$filesByType) >= $limit) {
+                    break;
+                }
+            }
         }
 
-        return [];
+        return self::$filesByType;
+    }
+
+    public function collectCheckpointFiles(int $limit = 10): array
+    {
+        self::$checkpointFiles = [];
+
+        foreach (self::$payloads as $payload) {
+            if (isset($payload['payload']['override_settings']['sd_model_checkpoint'])) {
+                $checkpoint = $payload['payload']['override_settings']['sd_model_checkpoint'];
+                $type = $payload['mode'];
+                if (!isset(self::$checkpointFiles[$checkpoint])) {
+                    self::$checkpointFiles[$checkpoint] = [];
+                }
+                if (!isset(self::$checkpointFiles[$checkpoint]['payloads'])) {
+                    self::$checkpointFiles[$checkpoint]['payloads'] = [];
+                }
+                if (count(self::$checkpointFiles[$checkpoint]['payloads']) >= $limit) {
+                    continue;
+                }
+                $split = explode('/outputs/' . $type . '/', $payload['file']);
+                $payload['file'] = '/outputs/' . $type . '/' . end($split);
+                if (isset($payload['payload']['init_images'])) {
+                    $split = explode('/init_images/', $payload['payload']['init_images']);
+                    $payload['payload']['init_images'] = '/init_images/' . end($split);
+                }
+                self::$checkpointFiles[$checkpoint]['payloads'][] = $payload;
+            }
+        }
+
+        return self::$checkpointFiles;
     }
 
     public function collectFilesByTypeAndDateTime(string $type, string $dateTime): array|null
@@ -296,6 +338,16 @@ class FileCollectorController
     public function getFileData(): array|null
     {
         return self::$fileData;
+    }
+
+    public function getFilesByType(string $type): array
+    {
+        return self::$filesByType;
+    }
+
+    public function getCheckpointFiles(): array
+    {
+        return self::$checkpointFiles;
     }
 
     public function getFilesByTypeAndDateTime(): array|null
