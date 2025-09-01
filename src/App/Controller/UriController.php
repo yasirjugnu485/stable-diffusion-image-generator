@@ -16,11 +16,24 @@ class UriController
         }
 
         $requestIndex = explode('/', $requestUri);
-        if (count($requestIndex) !== 3) {
+        if (count($requestIndex) > 3) {
             $this->notFound();
         }
 
-        if ($requestIndex[1] === 'txt2img' || $requestIndex[1] === 'img2img' || $requestIndex[1] === 'loop') {
+        if ($requestIndex[1] === 'txt2img' && !isset($requestIndex[2])) {
+            $fileCollectorController = new FileCollectorController();
+            $files = $fileCollectorController->collectFilesByType('txt2img');
+            if ($files) {
+                $imagesController = new imagesController();
+                $imagesController->renderByType();
+            }
+        } elseif ($requestIndex[1] === 'img2img' && !isset($requestIndex[2])) {
+            $fileCollectorController = new FileCollectorController();
+
+        } elseif ($requestIndex[1] === 'loop' && !isset($requestIndex[2])) {
+            $fileCollectorController = new FileCollectorController();
+
+        } elseif ($requestIndex[1] === 'txt2img' || $requestIndex[1] === 'img2img' || $requestIndex[1] === 'loop') {
             $fileCollectorController = new FileCollectorController();
             $files = $fileCollectorController->collectFilesByTypeAndDateTime($requestIndex[1], $requestIndex[2]);
             if ($files) {

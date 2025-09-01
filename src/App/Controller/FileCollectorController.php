@@ -13,6 +13,8 @@ class FileCollectorController
 
     public static array|null $payloads = null;
 
+    public static array|null $filesByType = null;
+
     public static array|null $filesByTypeAndDateTime = null;
 
     public static string|null $type = null;
@@ -198,6 +200,23 @@ class FileCollectorController
         }
 
         return $payloads;
+    }
+
+    public function collectFilesByType(string $type, int $limit = 1000): array
+    {
+        self::$filesByType = [];
+        self::$type = $type;
+        if (!isset(self::$fileData[$type])) {
+            return [];
+        }
+
+        foreach (self::$fileData[$type] as $dateTime) {
+
+            var_export($dateTime);
+            die();
+        }
+
+        return [];
     }
 
     public function collectFilesByTypeAndDateTime(string $type, string $dateTime): array|null

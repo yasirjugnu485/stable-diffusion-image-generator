@@ -15,11 +15,12 @@ class imagesController
         self::$renderData['navbar'] = $navbar;
     }
 
-    public function renderByType(string $type): void
+    public function renderByType(): void
     {
         $fileCollectorController = new FileCollectorController();
+        $type = $fileCollectorController->getType();
 
-        self::$renderData['data'] = $fileCollectorController->getFilesType($type);
+        self::$renderData['data'] = $fileCollectorController->getFilesByType($type);
         self::$renderData['breadcrumbs'] = [
             [
                 'title' => $type,
