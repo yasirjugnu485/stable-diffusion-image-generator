@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -9,33 +17,88 @@ use RecursiveIteratorIterator;
 
 class FileCollectorController
 {
+    /**
+     * File data
+     *
+     * @var array|null
+     */
     public static array|null $fileData = null;
 
+    /**
+     * Payload files
+     *
+     * @var array|null
+     */
     public static array|null $payloads = null;
 
+    /**
+     * Files collected by type
+     *
+     * @var array|null
+     */
     public static array|null $filesByType = null;
 
+    /**
+     * File set collected by checkpoint
+     *
+     * @var array|null
+     */
     public static array|null $checkpointFiles = null;
 
+    /**
+     * Files collected by type and date time
+     *
+     * @var array|null
+     */
     public static array|null $filesByTypeAndDateTime = null;
 
+    /**
+     * Type from last collected by type or by type and date time
+     *
+     * @var string|null
+     */
     public static string|null $type = null;
 
+    /**
+     * Date time from last collected by type and date time
+     *
+     * @var string|null
+     */
     public static string|null $dateTime = null;
 
+    /**
+     * Files collected by checkpoint
+     *
+     * @var array|null
+     */
     public static array|null $filesByCheckpoint = null;
 
+    /**
+     * Checkpoint from last collected by checkpoint
+     *
+     * @var string|null
+     */
     public static string|null $checkpoint = null;
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->collectFiles();
     }
 
+    /**
+     * Collect all files and payloads
+     *
+     * @return void
+     */
     private function collectFiles(): void
     {
         if (null === self::$fileData) {
-            $fileData = $this->getFileList(ROOT_DIR . 'outputs/');
+            $fileData = $this->collectFileList(ROOT_DIR . 'outputs/');
             if (!isset($fileData['loop'])) {
                 $fileData['loop'] = [];
             }
@@ -54,7 +117,14 @@ class FileCollectorController
         }
     }
 
-    private function getFileList(string $directory, bool $asArray = true): array
+    /**
+     * Collect files from directory
+     *
+     * @param string $directory Directory
+     * @param bool $asArray Return as array
+     * @return array
+     */
+    private function collectFileList(string $directory, bool $asArray = true): array
     {
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS),
@@ -75,7 +145,13 @@ class FileCollectorController
         return $asArray ? $this->parsePathsOfFiles($result) : $result;
     }
 
-    private function parsePathsOfFiles($array)
+    /**
+     * Parse path of files
+     *
+     * @param array $array Collected file list
+     * @return array|mixed
+     */
+    private function parsePathsOfFiles(array $array)
     {
         rsort($array);
         $result = array();
@@ -98,6 +174,11 @@ class FileCollectorController
         return $result;
     }
 
+    /**
+     * Get last generated files
+     *
+     * @return array
+     */
     public function getLastFiles(): array
     {
         $result = [];
@@ -147,6 +228,12 @@ class FileCollectorController
         return $result;
     }
 
+    /**
+     * Check if array contains files
+     *
+     * @param array $array Files
+     * @return bool
+     */
     private function containsFiles(array $array): bool
     {
         foreach ($array as $fileOrArray) {
@@ -164,6 +251,11 @@ class FileCollectorController
         return false;
     }
 
+    /**
+     * Collect payloads
+     *
+     * @return array
+     */
     private function collectPayloads(): array
     {
         if (null === self::$payloads) {
@@ -184,6 +276,13 @@ class FileCollectorController
         return self::$payloads;
     }
 
+    /**
+     * Get data from payloads by type and key
+     *
+     * @param string $type Type
+     * @param string $key Key
+     * @return array
+     */
     private function getDataFromPayload(string $type, string $key): array
     {
         $payloads = json_decode(
@@ -204,6 +303,13 @@ class FileCollectorController
         return $payloads;
     }
 
+    /**
+     * Collect files by type
+     *
+     * @param string $type Type
+     * @param int $limit Limit
+     * @return array
+     */
     public function collectFilesByType(string $type, int $limit = 1000): array
     {
         self::$filesByType = [];
@@ -231,6 +337,12 @@ class FileCollectorController
         return self::$filesByType;
     }
 
+    /**
+     * Collect set of checkpoint files
+     *
+     * @param int $limit Limit per type
+     * @return array
+     */
     public function collectCheckpointFiles(int $limit = 10): array
     {
         self::$checkpointFiles = [];
@@ -261,6 +373,13 @@ class FileCollectorController
         return self::$checkpointFiles;
     }
 
+    /**
+     * Collect files by type and date time
+     *
+     * @param string $type Type
+     * @param string $dateTime Date time
+     * @return array|null
+     */
     public function collectFilesByTypeAndDateTime(string $type, string $dateTime): array|null
     {
         $split = explode('_', $dateTime);
@@ -279,6 +398,11 @@ class FileCollectorController
         return self::$filesByTypeAndDateTime;
     }
 
+    /**
+     * Collect used checkpoints
+     *
+     * @return array
+     */
     public function collectUsedCheckpoints(): array
     {
         if (null === self::$payloads) {
@@ -301,6 +425,12 @@ class FileCollectorController
         return $checkpoints;
     }
 
+    /**
+     * Collect files by checkpoint
+     *
+     * @param string $checkpoint Checkpoint
+     * @return array|null
+     */
     public function collectFilesByCheckpoint(string $checkpoint): array|null
     {
         $filesByCheckpoint = [];
@@ -335,41 +465,82 @@ class FileCollectorController
         return self::$filesByCheckpoint;
     }
 
+    /**
+     * Get file data
+     *
+     * @return array|null
+     */
     public function getFileData(): array|null
     {
         return self::$fileData;
     }
 
+    /**
+     * Get collected files by type
+     *
+     * @param string $type
+     * @return array
+     */
     public function getFilesByType(string $type): array
     {
         return self::$filesByType;
     }
 
+    /**
+     * Get file set collected by checkpoint
+     *
+     * @return array
+     */
     public function getCheckpointFiles(): array
     {
         return self::$checkpointFiles;
     }
 
+    /**
+     * Get files collected by type and date time
+     *
+     * @return array|null
+     */
     public function getFilesByTypeAndDateTime(): array|null
     {
         return self::$filesByTypeAndDateTime;
     }
 
+    /**
+     * Get type from last collected by type or by type and date time
+     *
+     * @return string|null
+     */
     public function getType(): string|null
     {
         return self::$type;
     }
 
+    /**
+     * Get date time from last collected by type and date time
+     *
+     * @return string|null
+     */
     public function getDateTime(): string|null
     {
         return self::$dateTime;
     }
 
+    /**
+     * Get files collected by checkpoint
+     *
+     * @return array|null
+     */
     public function getFilesByCheckpoint(): array|null
     {
         return self::$filesByCheckpoint;
     }
 
+    /**
+     * Get checkpoint from last collected by checkpoint
+     *
+     * @return string|null
+     */
     public function getCheckpoint(): string|null
     {
         return self::$checkpoint;

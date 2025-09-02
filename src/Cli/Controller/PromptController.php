@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace Cli\Controller;
@@ -9,22 +17,50 @@ use Cli\Interface\PromptInterface;
 
 class PromptController implements PromptInterface
 {
+    /**
+     * Prompt data
+     *
+     * @var array
+     */
     private static array $promptData = [];
 
+    /**
+     * Last prompt
+     *
+     * @var string|null
+     */
     private static string|null $lastPrompt = null;
 
+    /**
+     * Current prompt
+     *
+     * @var string|null
+     */
     private static string|null $currentPrompt;
 
+    /**
+     * Constructor
+     *
+     * @throws PromptImageGeneratorException
+     */
     public function __construct()
     {
         if (count(self::$promptData) > 0) {
             return;
         }
 
-        $this->loadPromptData();
+        $this->initializePromptData();
     }
 
-    private function loadPromptData(): void
+    /**
+     * /**
+     * Initializes the prompt data.
+     *
+     * @return void
+     *
+     * @throws PromptImageGeneratorException If no prompt directory is found or if no prompt data is found.
+     */
+    private function initializePromptData(): void
     {
         new EchoController(self::ECHO_START);
 
@@ -84,6 +120,12 @@ class PromptController implements PromptInterface
         new EchoController();
     }
 
+    /**
+     * Get next prompt
+     *
+     * @return string
+     * @throws PromptImageGeneratorException
+     */
     public function getNextPrompt(): string
     {
         self::$lastPrompt = self::$currentPrompt;
@@ -116,6 +158,11 @@ class PromptController implements PromptInterface
         return implode(' ', $prompt);
     }
 
+    /**
+     * Get last prompt
+     *
+     * @return string
+     */
     public function getLastPrompt(): string
     {
         return self::$lastPrompt;

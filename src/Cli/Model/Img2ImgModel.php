@@ -1,18 +1,44 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace Cli\Model;
 
+use Cli\Exception\PromptImageGeneratorException;
+
 class Img2ImgModel extends BaseModel
 {
+    /**
+     * Initialize image
+     *
+     * @var array|null
+     */
     private array|null $initImages = null;
 
+    /**
+     * Constructor
+     *
+     * @throws PromptImageGeneratorException
+     */
     public function __construct()
     {
         parent::__construct();
     }
 
+    /**
+     * Set prompt
+     *
+     * @param string $prompt Prompt
+     * @return $this
+     */
     public function setPrompt(string $prompt): static
     {
         $this->prompt = $prompt;
@@ -20,6 +46,12 @@ class Img2ImgModel extends BaseModel
         return $this;
     }
 
+    /**
+     * Set negative prompt
+     *
+     * @param string $negativePrompt Negative prompt
+     * @return $this
+     */
     public function setNegativePrompt(string $negativePrompt): static
     {
         $this->negativePrompt = $negativePrompt;
@@ -27,6 +59,12 @@ class Img2ImgModel extends BaseModel
         return $this;
     }
 
+    /**
+     * Set initialize image
+     *
+     * @param string|array $initImages Initialize image
+     * @return $this
+     */
     public function setInitImages(string|array $initImages): static
     {
         $this->initImages = is_string($initImages) ? [$initImages] : [array_values($initImages)[0]];
@@ -34,6 +72,11 @@ class Img2ImgModel extends BaseModel
         return $this;
     }
 
+    /**
+     * Convert to JSON payload
+     *
+     * @return string
+     */
     public function toJson(): string
     {
         $toJson = json_decode(parent::toJson(), true);

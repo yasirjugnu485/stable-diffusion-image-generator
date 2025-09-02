@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -44,7 +52,7 @@ class UriController
             }
         } elseif ($requestIndex[1] === 'checkpoints' || trim($requestIndex[2])) {
             $fileCollectorController = new FileCollectorController();
-            $files = $fileCollectorController->collectFilesByCheckpoint($requestIndex[2]);
+            $files = $fileCollectorController->collectFilesByCheckpoint(trim($requestIndex[2]));
             if ($files) {
                 $imagesController = new RenderController();
                 $imagesController->renderByCheckpoint();
@@ -57,11 +65,6 @@ class UriController
     private function home(): void
     {
         new HomeController();
-    }
-
-    private function images(): void
-    {
-        new RenderController();
     }
 
     private function notFound(): void

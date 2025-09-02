@@ -1,23 +1,58 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace Cli\Controller;
 
+use Cli\Exception\PromptImageGeneratorException;
 use Cli\Exception\StableDiffusionServiceException;
 use Cli\Interface\SamplerInterface;
-use Cli\Service\StableDiffusionService;
+use Shared\Service\StableDiffusionService;
 
 class SamplerController implements SamplerInterface
 {
+    /**
+     * Sampler data
+     *
+     * @var array|null
+     */
     private static array|null $samplerData = null;
 
+    /**
+     * Used samplers from config
+     *
+     * @var array|false|string[]|null
+     */
     private static array|false|null $sampler = null;
 
+    /**
+     * LAst used sampler
+     *
+     * @var string|null
+     */
     private static string|null $lastSampler = null;
 
+    /**
+     * Current sampler
+     *
+     * @var string|null
+     */
     private static string|null $currentSampler = null;
 
+    /**
+     * Constructor
+     *
+     * @throws StableDiffusionServiceException
+     * @throws PromptImageGeneratorException
+     */
     public function __construct()
     {
         if (self::$samplerData === null) {
@@ -57,6 +92,13 @@ class SamplerController implements SamplerInterface
         }
     }
 
+    /**
+     * Initialize samplers data
+     *
+     * @param bool $silent Echo progress in console
+     * @return array
+     * @throws StableDiffusionServiceException
+     */
     private function initSamplers(bool $silent = false): array
     {
         if (self::$samplerData === null) {
@@ -76,6 +118,11 @@ class SamplerController implements SamplerInterface
         return self::$samplerData;
     }
 
+    /**
+     * Set next sampler
+     *
+     * @return void
+     */
     public function setNextSampler(): void
     {
         if (is_array(self::$sampler)) {
@@ -101,11 +148,21 @@ class SamplerController implements SamplerInterface
         }
     }
 
+    /**
+     * Get sampler data
+     *
+     * @return array|null
+     */
     public function getSamplerData(): array|null
     {
         return self::$samplerData;
     }
 
+    /**
+     * Get current sampler
+     *
+     * @return string|null
+     */
     public function getCurrentSampler(): string|null
     {
         return self::$currentSampler;

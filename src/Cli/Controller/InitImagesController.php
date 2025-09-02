@@ -1,25 +1,65 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace Cli\Controller;
 
 use Cli\Exception\PromptImageGeneratorException;
 use Cli\Interface\InitImagesInterface;
+use Random\RandomException;
 use Throwable;
 
 class InitImagesController implements InitImagesInterface
 {
+    /**
+     * Initialize images data
+     *
+     * @var array
+     */
     private static array $initImagesData = [];
 
+    /**
+     * Initialize images in base64
+     *
+     * @var array|null
+     */
     private static array|null $initImagesBase64 = [];
 
+    /**
+     * Current initialize images index
+     *
+     * @var int|null
+     */
     private static int|null $currentInitImagesIndex = null;
 
+    /**
+     * Next initialize image
+     *
+     * @var string|null
+     */
     private static string|null $nextImage = null;
 
+    /**
+     * Next initialize image in base64
+     *
+     * @var string|null
+     */
     private static string|null $nextImageBase64 = null;
 
+    /**
+     * Constructor
+     *
+     * @return void
+     * @throws PromptImageGeneratorException
+     */
     public function __construct()
     {
         new ConfigController();
@@ -32,6 +72,12 @@ class InitImagesController implements InitImagesInterface
         $this->initInitImagesData();
     }
 
+    /**
+     * Initialize initialize images data
+     *
+     * @return void
+     * @throws PromptImageGeneratorException
+     */
     private function initInitImagesData(): void
     {
         new EchoController(self::ECHO_INIT_INIT_IMAGES);
@@ -85,6 +131,13 @@ class InitImagesController implements InitImagesInterface
         new EchoController();
     }
 
+    /**
+     * Get next initialize image
+     *
+     * @return string
+     * @throws PromptImageGeneratorException
+     * @throws RandomException
+     */
     public function getNextInitImage(): string
     {
         $configController = new ConfigController();
@@ -108,6 +161,12 @@ class InitImagesController implements InitImagesInterface
         return $this->getInitImagesBase64(self::$currentInitImagesIndex);
     }
 
+    /**
+     * Get initialize image in base64
+     *
+     * @param int $currentInitImagesIndex Current initialize images index
+     * @return string
+     */
     private function getInitImagesBase64(int $currentInitImagesIndex): string
     {
         if (!isset(self::$initImagesBase64[$currentInitImagesIndex])) {
@@ -126,6 +185,12 @@ class InitImagesController implements InitImagesInterface
         return self::$initImagesBase64[$currentInitImagesIndex];
     }
 
+    /**
+     * Convert jpg to base64
+     *
+     * @param string $file File
+     * @return string
+     */
     private function jpg2base64(string $file): string
     {
         $image = imagecreatefromjpeg($file);
@@ -137,6 +202,12 @@ class InitImagesController implements InitImagesInterface
         return base64_encode($data);
     }
 
+    /**
+     * Convert png to base64
+     *
+     * @param string $file File
+     * @return string
+     */
     private function png2base64(string $file): string
     {
         $image = imagecreatefrompng($file);
@@ -148,12 +219,24 @@ class InitImagesController implements InitImagesInterface
         return base64_encode($data);
     }
 
+    /**
+     * Set next initialize image
+     *
+     * @param string $nextImage Next initialize image
+     * @param string $imageBase64 Image base64
+     * @return void
+     */
     public function setNextImage(string $nextImage, string $imageBase64): void
     {
         self::$nextImage = $nextImage;
         self::$nextImageBase64 = $imageBase64;
     }
 
+    /**
+     * Get current initialize image file
+     *
+     * @return string
+     */
     public function getCurrentInitImageFile(): string
     {
         return self::$nextImage ?? self::$initImagesData[self::$currentInitImagesIndex];

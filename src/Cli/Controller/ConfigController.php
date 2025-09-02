@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace Cli\Controller;
@@ -10,60 +18,201 @@ use DateTime;
 
 class ConfigController implements ConfigInterface
 {
+    /**
+     * Config is initialized
+     *
+     * @var bool
+     */
     public static bool $initialized = false;
 
+    /**
+     * Config data
+     *
+     * @var array
+     */
     private static array $configData = [];
 
+    /**
+     * Host and port
+     *
+     * @var string
+     */
     private string $host = 'http://127.0.0.1:7860';
 
+    /**
+     * Start web application
+     *
+     * @var bool
+     */
     private bool $startWebApplication = true;
 
+    /**
+     * Save images
+     *
+     * @var bool
+     */
     private bool $saveImages = true;
 
+    /**
+     * Use loop function
+     *
+     * @var bool
+     */
     private bool $loop = false;
 
+    /**
+     * Used checkpoints
+     *
+     * @var string|array|false|null
+     */
     private string|array|false|null $checkpoint = null;
 
+    /**
+     * Used samplers
+     *
+     * @var string|array|false|null
+     */
     private string|array|false|null $sampler = null;
 
+    /**
+     * Used mode
+     *
+     * @var string
+     */
     private string $mode = 'txt2img';
 
+    /**
+     * Used prompt merger
+     *
+     * @var string|null
+     */
     private string|null $prompt = null;
 
+    /**
+     * Number of images to generate
+     *
+     * @var int|null
+     */
     private int|null $numberOfImages = 1;
 
+    /**
+     * Image width
+     *
+     * @var int
+     */
     private int $width = 512;
 
+    /**
+     * Image height
+     *
+     * @var int
+     */
     private int $height = 512;
 
+    /**
+     * Number ob sampling steps
+     *
+     * @var int
+     */
     private int $steps = 20;
 
+    /**
+     * Used refiner checkpoints
+     *
+     * @var string|array|false|null
+     */
     private string|array|false|null $refinerCheckpoint = false;
 
+    /**
+     * Refiner switch at
+     *
+     * @var float
+     */
     private float $refinerSwitchAt = 0.8;
 
+    /**
+     * Restore faces
+     *
+     * @var bool
+     */
     private bool $restoreFaces = true;
 
+    /**
+     * Tiling
+     *
+     * @var bool
+     */
     private bool $tiling = false;
 
+    /**
+     * Used init images directory
+     *
+     * @var string|null
+     */
     private string|null $initImages = null;
 
+    /**
+     * Enable high resolution upscaling
+     *
+     * @var bool
+     */
     private bool $enableHr = false;
 
+    /**
+     * Used upscaler for high resolution upscaling
+     *
+     * @var string|null
+     */
     private string|null $hrUpscaler = null;
 
+    /**
+     * Resize width for high resolution upscaling
+     *
+     * @var int|null
+     */
     private int|null $hrResizeX = null;
 
+    /**
+     * Resize height for high resolution upscaling
+     *
+     * @var int|null
+     */
     private int|null $hrResizeY = null;
 
+    /**
+     * Scale for high resolution upscaling
+     *
+     * @var float|null
+     */
     private float|null $hrScale = null;
 
+    /**
+     * Used sampler for high resolution upscaling
+     *
+     * @var string|null
+     */
     private string|null $hrSamplerName = null;
 
+    /**
+     * Dry run
+     *
+     * @var bool
+     */
     private bool $dryRun = false;
 
+    /**
+     * Date time CLI application started
+     *
+     * @var string|null
+     */
     private string|null $dateTime = null;
 
+    /**
+     * Constructor
+     *
+     * @return void
+     * @throws PromptImageGeneratorException
+     */
     public function __construct()
     {
         if (count(self::$configData) > 0) {
@@ -82,6 +231,12 @@ class ConfigController implements ConfigInterface
         self::$initialized = true;
     }
 
+    /**
+     * Initialize config data
+     *
+     * @return void
+     * @throws PromptImageGeneratorException
+     */
     private function initConfigData(): void
     {
         new EchoController(self::ECHO_INIT_CONFIG);
@@ -129,31 +284,62 @@ class ConfigController implements ConfigInterface
         }
     }
 
+    /**
+     * Initialize checkpoints
+     *
+     * @return void
+     */
     private function initCheckpoints(): void
     {
         new CheckpointController();
     }
 
+    /**
+     * Initialize samplers
+     *
+     * @return void
+     */
     private function initSamplers(): void
     {
         new SamplerController();
     }
 
+    /**
+     * Initialize refiner
+     *
+     * @return void
+     */
     private function initRefiner(): void
     {
         new RefinerController();
     }
 
+    /**
+     * Initialize initialize images
+     *
+     * @return void
+     */
     private function initInitImages(): void
     {
         new InitImagesController();
     }
 
+    /**
+     * Get options
+     *
+     * @return void
+     */
     public function getOptions(): void
     {
         new OptionController();
     }
 
+    /**
+     * Get config data
+     *
+     * @return array
+     * @throws PromptImageGeneratorException
+     */
     public function getConfig(): array
     {
         if (!count(self::$configData)) {

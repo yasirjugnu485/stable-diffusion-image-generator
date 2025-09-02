@@ -1,13 +1,38 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace Cli\Controller;
 
+use Cli\Exception\PromptImageGeneratorException;
+
 class PayloadController
 {
+    /**
+     * Payload
+     *
+     * @var array
+     */
     private static array $payload = [];
 
+    /**
+     * Add to payload
+     *
+     * @param string $file File
+     * @param string $mode Mode
+     * @param string $payload Payload
+     * @param string|null $img2imgFile Img2img file
+     * @return void
+     * @throws PromptImageGeneratorException
+     */
     public function add(string $file, string $mode, string $payload, string|null $img2imgFile = null): void
     {
         $payload = json_decode($payload, true);
@@ -27,6 +52,12 @@ class PayloadController
         $this->save();
     }
 
+    /**
+     * Save payload
+     *
+     * @return void
+     * @throws PromptImageGeneratorException
+     */
     private function save(): void
     {
         $configController = new ConfigController();

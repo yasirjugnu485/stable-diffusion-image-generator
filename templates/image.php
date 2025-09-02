@@ -1,3 +1,14 @@
+<?php
+
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
+?>
 <div class="col-12 mb-4">
     <div class="card border border-dark">
         <div class="card-header bg-dark text-light">

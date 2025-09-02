@@ -1,22 +1,57 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace Cli\Controller;
 
+use Cli\Exception\PromptImageGeneratorException;
 use Cli\Exception\StableDiffusionServiceException;
 use Cli\Interface\RefinerInterface;
 
 class RefinerController implements RefinerInterface
 {
+    /**
+     * Refiner checkpoint data
+     *
+     * @var array|null
+     */
     private static array|null $checkpointData = null;
 
+    /**
+     * Refiner checkpoints from config
+     *
+     * @var array|false|string[]|null
+     */
     private static array|false|null $checkpoint = false;
 
+    /**
+     * Last used refiner checkpoint
+     *
+     * @var string|null
+     */
     private static string|null $lastCheckpoint = null;
 
+    /**
+     * Current refiner checkpoint
+     *
+     * @var string|null
+     */
     private static string|null $currentCheckpoint = null;
 
+    /**
+     * Constructor
+     *
+     * @throws StableDiffusionServiceException
+     * @throws PromptImageGeneratorException
+     */
     public function __construct()
     {
         if (self::$checkpointData === null) {
@@ -56,6 +91,11 @@ class RefinerController implements RefinerInterface
         }
     }
 
+    /**
+     * Initialize refiner checkpoints data
+     *
+     * @return array
+     */
     private function initCheckpoints(): array
     {
         if (self::$checkpointData === null) {
@@ -66,6 +106,11 @@ class RefinerController implements RefinerInterface
         return self::$checkpointData;
     }
 
+    /**
+     * Set next refiner checkpoint
+     *
+     * @return void
+     */
     public function setNextCheckpoint(): void
     {
         if (is_array(self::$checkpoint)) {
@@ -91,6 +136,11 @@ class RefinerController implements RefinerInterface
         }
     }
 
+    /**
+     * Get current refiner checkpoint
+     *
+     * @return string|null
+     */
     public function getCurrentCheckpoint(): string|null
     {
         return self::$currentCheckpoint;

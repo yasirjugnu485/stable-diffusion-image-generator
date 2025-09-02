@@ -2,7 +2,7 @@ Usage: php run.php [args...]
    --help                   This help
    -h                       This help
    --start-web-application  Start Build-In-Server with web application only on http://localhost:8000
-   --silent                 Run application silent in background
-   -s                       Run application silent in background
    --kill                   Kill all silent applications in background
    -k                       Kill all silent applications in background
+   --config [file]          Run with custom config file in the root directory
+   -c [file]                Run with custom config file in the root directory

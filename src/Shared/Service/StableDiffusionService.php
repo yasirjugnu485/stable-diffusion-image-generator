@@ -1,14 +1,30 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
-namespace Cli\Service;
+namespace Shared\Service;
 
 use Cli\Controller\ConfigController;
+use Cli\Exception\PromptImageGeneratorException;
 use Cli\Exception\StableDiffusionServiceException;
 
 class StableDiffusionService
 {
+    /**
+     * Get checkpoints
+     *
+     * @return array|null
+     * @throws StableDiffusionServiceException
+     * @throws PromptImageGeneratorException
+     */
     public function getSdModels(): array|null
     {
         $configController = new ConfigController();
@@ -50,6 +66,13 @@ class StableDiffusionService
         return $models;
     }
 
+    /**
+     * Get samplers
+     *
+     * @return array|null
+     * @throws PromptImageGeneratorException
+     * @throws StableDiffusionServiceException
+     */
     public function getSamplers(): array|null
     {
         $configController = new ConfigController();
@@ -91,6 +114,13 @@ class StableDiffusionService
         return $samplers;
     }
 
+    /**
+     * Get options
+     *
+     * @return array|null
+     * @throws PromptImageGeneratorException
+     * @throws StableDiffusionServiceException
+     */
     public function getOptions(): array|null
     {
         $configController = new ConfigController();
@@ -132,6 +162,14 @@ class StableDiffusionService
         return $options;
     }
 
+    /**
+     * Set options
+     *
+     * @param array|string $payload Payload
+     * @return string|null
+     * @throws PromptImageGeneratorException
+     * @throws StableDiffusionServiceException
+     */
     public function setOptions(array|string $payload): string|null
     {
         $configController = new ConfigController();
@@ -165,6 +203,14 @@ class StableDiffusionService
         return $response;
     }
 
+    /**
+     * Call Stable Diffusion txt2img API
+     *
+     * @param string $payload Payload
+     * @return string|null
+     * @throws PromptImageGeneratorException
+     * @throws StableDiffusionServiceException
+     */
     public function callTxt2img(string $payload): string|null
     {
         $configController = new ConfigController();
@@ -209,6 +255,14 @@ class StableDiffusionService
         return $response;
     }
 
+    /**
+     * Call Stable Diffusion img2img API
+     *
+     * @param string $payload Payload
+     * @return string|null
+     * @throws PromptImageGeneratorException
+     * @throws StableDiffusionServiceException
+     */
     public function callImg2img(string $payload): string|null
     {
         $configController = new ConfigController();
@@ -248,6 +302,13 @@ class StableDiffusionService
         return $response;
     }
 
+    /**
+     * Get current progress state
+     *
+     * @return array|null
+     * @throws PromptImageGeneratorException
+     * @throws StableDiffusionServiceException
+     */
     public function getProgress(): array|null
     {
         $configController = new ConfigController();

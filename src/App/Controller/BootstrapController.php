@@ -1,20 +1,40 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace App\Controller;
 
 class BootstrapController
 {
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     public function __construct()
     {
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
         error_reporting(E_ALL);
 
+        $this->classLoader(ROOT_DIR . 'src/Shared');
         $this->classLoader(ROOT_DIR . 'src/App');
     }
 
+    /**
+     * Class loader
+     *
+     * @param string $directory Class directory
+     * @return void
+     */
     private function classLoader(string $directory): void
     {
         if (is_dir($directory)) {
@@ -32,6 +52,11 @@ class BootstrapController
         }
     }
 
+    /**
+     * Run application
+     *
+     * @return void
+     */
     public function run(): void
     {
         $fileCollectorController = new FileCollectorController();

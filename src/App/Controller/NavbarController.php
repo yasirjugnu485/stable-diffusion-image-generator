@@ -1,13 +1,31 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace App\Controller;
 
 class NavbarController
 {
+    /**
+     * Navbar data
+     *
+     * @var array|null
+     */
     private static array|null $navbarData = null;
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     public function __construct()
     {
         if (self::$navbarData === null) {
@@ -16,6 +34,11 @@ class NavbarController
         }
     }
 
+    /**
+     * Collect checkpoints
+     *
+     * @return void
+     */
     private function collectCheckpoints(): void
     {
         if (self::$navbarData === null) {
@@ -26,6 +49,11 @@ class NavbarController
         self::$navbarData['checkpoints'] = $fileCollectorController->collectUsedCheckpoints();
     }
 
+    /**
+     * Collect navbar data
+     *
+     * @return void
+     */
     private function collectNavbarData(): void
     {
         if (self::$navbarData === null) {
@@ -48,6 +76,11 @@ class NavbarController
         }
     }
 
+    /**
+     * Get navbar data
+     *
+     * @return array
+     */
     public function getData(): array
     {
         return self::$navbarData;

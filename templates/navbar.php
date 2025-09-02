@@ -1,3 +1,14 @@
+<?php
+
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
+?>
 <nav class="navbar navbar-expand-lg bg-body-tertiary bg-primary navbar-dark mb-5">
     <div class="container-fluid">
         <a class="navbar-brand text-light"
@@ -180,5 +191,92 @@
 
             </ul>
         </div>
+
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-light"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Prompt Merger
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right<?php if (count($params['navbar']['types']['txt2img']) == 0) {
+                        echo ' bg-warning';
+                    } ?>">
+                        <?php
+                        if (count($params['navbar']['types']['txt2img'])) {
+                            ?>
+                            <li>
+                                <a class="dropdown-item text-dark" href="/prompt-merger">
+                                    Overview
+                                </a>
+                            </li>
+                            <?php
+                            foreach ($params['navbar']['types']['txt2img'] as $entry) {
+                                ?>
+                                <li>
+                                    <a class="dropdown-item text-dark" href="/txt2img/<?php echo $entry['slug']; ?>">
+                                        <?php echo $entry['name']; ?>
+                                    </a>
+                                </li>
+                                <?php
+                            }
+                        } else {
+                            ?>
+                            <div class="dropdown-item bg-warning text-dark">
+                                No txt2img images available
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-light"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Initialize Images
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right<?php if (count($params['navbar']['types']['txt2img']) == 0) {
+                        echo ' bg-warning';
+                    } ?>">
+                        <?php
+                        if (count($params['navbar']['types']['txt2img'])) {
+                            ?>
+                            <li>
+                                <a class="dropdown-item text-dark" href="/initialize-images">
+                                    Overview
+                                </a>
+                            </li>
+                            <?php
+                            foreach ($params['navbar']['types']['txt2img'] as $entry) {
+                                ?>
+                                <li>
+                                    <a class="dropdown-item text-dark" href="/txt2img/<?php echo $entry['slug']; ?>">
+                                        <?php echo $entry['name']; ?>
+                                    </a>
+                                </li>
+                                <?php
+                            }
+                        } else {
+                            ?>
+                            <div class="dropdown-item bg-warning text-dark">
+                                No txt2img images available
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+
     </div>
 </nav>

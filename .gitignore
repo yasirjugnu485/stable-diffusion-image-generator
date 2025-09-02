@@ -1,6 +1,7 @@
 .idea/
 vendor/
 checkpoints.json
+config.app.php
 config.local.php
 dry_run.json
 options.json

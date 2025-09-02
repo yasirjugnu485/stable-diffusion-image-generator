@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 if (isset($params['breadcrumbs'])) {
     if (is_array($params['breadcrumbs'])) {
         if (count($params['breadcrumbs'])) {

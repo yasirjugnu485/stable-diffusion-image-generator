@@ -1,23 +1,58 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace Cli\Controller;
 
+use Cli\Exception\PromptImageGeneratorException;
 use Cli\Exception\StableDiffusionServiceException;
 use Cli\Interface\CheckpointInterface;
-use Cli\Service\StableDiffusionService;
+use Shared\Service\StableDiffusionService;
 
 class CheckpointController implements CheckpointInterface
 {
+    /**
+     * Checkpoints data
+     *
+     * @var array|null
+     */
     private static array|null $checkpointData = null;
 
+    /**
+     * Used checkpoints from config
+     *
+     * @var array|false|string[]|null
+     */
     private static array|false|null $checkpoint = false;
 
+    /**
+     * Last used checkpoint
+     *
+     * @var string|null
+     */
     private static string|null $lastCheckpoint = null;
 
+    /**
+     * Current checkpoint
+     *
+     * @var string|null
+     */
     private static string|null $currentCheckpoint = null;
 
+    /**
+     * Constructor
+     *
+     * @throws StableDiffusionServiceException
+     * @throws PromptImageGeneratorException
+     */
     public function __construct()
     {
         if (self::$checkpointData === null) {
@@ -57,6 +92,13 @@ class CheckpointController implements CheckpointInterface
         }
     }
 
+    /**
+     * Initialize checkpoints data
+     *
+     * @param bool $silent Echo progress in console
+     * @return array
+     * @throws StableDiffusionServiceException
+     */
     private function initCheckpoints(bool $silent = false): array
     {
         if (self::$checkpointData === null) {
@@ -76,6 +118,11 @@ class CheckpointController implements CheckpointInterface
         return self::$checkpointData;
     }
 
+    /**
+     * Set next checkpoint from used checkpoints in config
+     *
+     * @return void
+     */
     public function setNextCheckpoint(): void
     {
         if (is_array(self::$checkpoint)) {
@@ -101,11 +148,21 @@ class CheckpointController implements CheckpointInterface
         }
     }
 
+    /**
+     * Get checkpoint data
+     *
+     * @return array|null
+     */
     public function getCheckpointData(): array|null
     {
         return self::$checkpointData;
     }
 
+    /**
+     * Get current checkpoint
+     *
+     * @return string|null
+     */
     public function getCurrentCheckpoint(): string|null
     {
         return self::$currentCheckpoint;

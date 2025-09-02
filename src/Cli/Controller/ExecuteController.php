@@ -1,16 +1,32 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace Cli\Controller;
 
+use Cli\Exception\PromptImageGeneratorException;
+use Cli\Exception\StableDiffusionServiceException;
 use Cli\Interface\ExecuteInterface;
 use Cli\Model\Img2ImgModel;
 use Cli\Model\Txt2ImgModel;
-use Cli\Service\StableDiffusionService;
+use Shared\Service\StableDiffusionService;
 
 class ExecuteController implements ExecuteInterface
 {
+    /**
+     * Execute CLI application
+     *
+     * @return void
+     * @throws PromptImageGeneratorException|StableDiffusionServiceException
+     */
     public function run(): void
     {
         $configController = new ConfigController();
@@ -57,6 +73,15 @@ class ExecuteController implements ExecuteInterface
         }
     }
 
+    /**
+     * Generate txt2txt image
+     *
+     * @param string $prompt Prompt
+     * @param int $numberOfGeneratedImages Number of generated images
+     * @return void
+     * @throws PromptImageGeneratorException
+     * @throws StableDiffusionServiceException
+     */
     private function callTxt2img(
         string $prompt,
         int    $numberOfGeneratedImages
@@ -113,6 +138,17 @@ class ExecuteController implements ExecuteInterface
         }
     }
 
+    /**
+     * Generate img2img image
+     *
+     * @param string $prompt Prompt
+     * @param string $nextInitImage Next initialize image
+     * @param string $currentInitImageFile Current initialize image file
+     * @param int $numberOfGeneratedImages Number of generated images
+     * @return void
+     * @throws PromptImageGeneratorException
+     * @throws StableDiffusionServiceException
+     */
     private function callImg2img(
         string $prompt,
         string $nextInitImage,
@@ -180,18 +216,36 @@ class ExecuteController implements ExecuteInterface
         }
     }
 
+    /**
+     * Set next img2img image
+     *
+     * @param string $nextImage Next image
+     * @param string $imageBase64 Image base64
+     * @return void
+     */
     private function setNextImage(string $nextImage, string $imageBase64): void
     {
         $initImagesController = new InitImagesController();
         $initImagesController->setNextImage($nextImage, $imageBase64);
     }
 
+    /**
+     * Add payload to dry run
+     *
+     * @param string $payload Payload
+     * @return void
+     */
     private function addPayloadToDryRun(string $payload): void
     {
         $dryRunController = new DryRunController();
         $dryRunController->addPayload($payload);
     }
 
+    /**
+     * Exit CLI application
+     *
+     * @return void
+     */
     private function exit(): void
     {
         $dryRunController = new DryRunController();

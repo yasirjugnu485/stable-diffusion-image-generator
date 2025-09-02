@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace Cli\Model;
@@ -8,43 +16,134 @@ use Cli\Controller\CheckpointController;
 use Cli\Controller\ConfigController;
 use Cli\Controller\RefinerController;
 use Cli\Controller\SamplerController;
+use Cli\Exception\PromptImageGeneratorException;
 
 class BaseModel
 {
+    /**
+     * Prompt
+     *
+     * @var string|null
+     */
     protected string|null $prompt = null;
 
+    /**
+     * Negative prompt
+     *
+     * @var string|null
+     */
     protected string|null $negativePrompt = null;
 
+    /**
+     * Image width
+     *
+     * @var int
+     */
     protected int $width;
 
+    /**
+     * Image height
+     *
+     * @var int
+     */
     protected int $height;
 
+    /**
+     * Number of sampling steps
+     *
+     * @var int
+     */
     protected int $steps;
 
+    /**
+     * Sampler name
+     *
+     * @var string|null
+     */
     protected string|null $samplerName = null;
 
+    /**
+     * Override settings
+     *
+     * @var array
+     */
     protected array $overrideSettings = [];
 
+    /**
+     * Refiner checkpoint
+     *
+     * @var string|null
+     */
     protected string|null $refinerCheckpoint = null;
 
+    /**
+     * Refiner switch at
+     *
+     * @var float|null
+     */
     protected float|null $refinerSwitchAt = null;
 
+    /**
+     * Restore faces
+     *
+     * @var bool
+     */
     protected bool $restoreFaces = true;
 
+    /**
+     * Tiling
+     *
+     * @var bool
+     */
     protected bool $tiling = false;
 
+    /**
+     * Enable high resolution upscaling
+     *
+     * @var bool
+     */
     protected bool $enableHr = false;
 
+    /**
+     * Upscaler for high resolution upscaling
+     *
+     * @var string|null
+     */
     protected string|null $hrUpscaler = null;
 
+    /**
+     * Resize width for high resolution upscaling
+     *
+     * @var int|null
+     */
     protected int|null $hrResizeX = null;
 
+    /**
+     * Resize height for high resolution upscaling
+     *
+     * @var int|null
+     */
     protected int|null $hrResizeY = null;
 
+    /**
+     * Scale for high resolution upscaling
+     *
+     * @var float|null
+     */
     protected float|null $hrScale = null;
 
+    /**
+     * Sampler for high resolution upscaling
+     *
+     * @var string|null
+     */
     protected string|null $hrSamplerName = null;
 
+    /**
+     * Constructor
+     *
+     * @throws PromptImageGeneratorException
+     */
     public function __construct()
     {
         $configController = new ConfigController();
@@ -71,6 +170,11 @@ class BaseModel
         }
     }
 
+    /**
+     * Convert to JSON payload
+     *
+     * @return string
+     */
     public function toJson(): string
     {
         $this->setSamplerName();
@@ -104,6 +208,11 @@ class BaseModel
         return json_encode($toJson);
     }
 
+    /**
+     * Set sampler name
+     *
+     * @return void
+     */
     private function setSamplerName(): void
     {
         $samplerController = new SamplerController();
@@ -116,6 +225,11 @@ class BaseModel
         }
     }
 
+    /**
+     * Set override settings
+     *
+     * @return void
+     */
     private function setOverrideSettings(): void
     {
         $checkpointController = new CheckpointController();
@@ -130,6 +244,11 @@ class BaseModel
         }
     }
 
+    /**
+     * Set refiner
+     *
+     * @return void
+     */
     private function setRefiner(): void
     {
         $refinerController = new RefinerController();

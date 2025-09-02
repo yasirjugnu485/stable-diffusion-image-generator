@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Stable Diffusion Image Generator
+ *
+ * @author      Moses Rivera
+ * @copyright   xtrose® Media Studio 2025
+ * @license     GNU GENERAL PUBLIC LICENSE
+ */
+
 declare(strict_types=1);
 
 namespace Cli\Controller;
@@ -13,22 +21,32 @@ include_once(ROOT_DIR . 'src/Cli/Interface/BootstrapInterface.php');
 
 class BootstrapController implements BootstrapInterface
 {
+    /**
+     * Arguments and argument parameters
+     *
+     * @var array
+     */
     private static array $arguments = [];
 
+    /**
+     * Constructor
+     *
+     * @return void
+     * @throws PromptImageGeneratorException
+     */
     public function __construct()
     {
+        $this->classLoader(ROOT_DIR . 'src/Shared');
         $this->classLoader(ROOT_DIR . 'src/Cli/Interface');
         $this->classLoader(ROOT_DIR . 'src/Cli');
 
-        $this->getArguments();
+        $this->initArguments();
 
         $useArguments = false;
         if (array_key_exists('--help', self::$arguments) || array_key_exists('-h', self::$arguments)) {
             $this->help();
         } elseif (array_key_exists('--start-web-application', self::$arguments)) {
             $this->startBuildInWebServer(true);
-        } elseif (array_key_exists('--silent', self::$arguments) || array_key_exists('-s', self::$arguments)) {
-            $this->runSilent();
         }
 
         if (!$useArguments) {
@@ -41,17 +59,23 @@ class BootstrapController implements BootstrapInterface
         }
     }
 
-    private function getArguments(): void
+    /**
+     * Initialize arguments and argument parameters
+     *
+     * @return void
+     * @throws PromptImageGeneratorException
+     */
+    private function initArguments(): void
     {
         $possibleArguments = [
             'run.php',
             '--help',
             '-h',
             '--start-web-application',
-            '--silent',
-            '-s',
             '--kill',
             '-k',
+            '--config',
+            '-c',
         ];
 
         if (isset($_SERVER['argv'])) {
@@ -62,11 +86,33 @@ class BootstrapController implements BootstrapInterface
                         $_SERVER['argv'][$i]
                     ));
                 }
-                self::$arguments[$_SERVER['argv'][$i]] = [];
+                if ($_SERVER['argv'][$i] === '--config' || $_SERVER['argv'][$i] === '-c') {
+                    $iplus = $i + 1;
+                    if (!isset($_SERVER['argv'][$iplus])) {
+                        throw new PromptImageGeneratorException(self::ERROR_UNKNOWN_CONFIG);
+                    } elseif (!file_exists($_SERVER['argv'][$iplus])) {
+                        throw new PromptImageGeneratorException(
+                            sprintf(self::ERROR_CUSTOM_CONFIG_NOT_FOUND, $_SERVER['argv'][$iplus])
+                        );
+                    }
+                    self::$arguments[$_SERVER['argv'][$i]] = [$_SERVER['argv'][$iplus]];
+                    $i++;
+                } else {
+                    self::$arguments[$_SERVER['argv'][$i]] = [];
+                }
             }
+
+            var_export(self::$arguments);
+            die();
         }
     }
 
+    /**
+     * Class loader
+     *
+     * @param string $directory Class directory
+     * @return void
+     */
     private function classLoader(string $directory): void
     {
         if (is_dir($directory)) {
@@ -84,6 +130,11 @@ class BootstrapController implements BootstrapInterface
         }
     }
 
+    /**
+     * Display help
+     *
+     * @return void
+     */
     private function help(): void
     {
         new EchoController(file_get_contents(ROOT_DIR . 'scripts/help.txt'));
@@ -92,6 +143,13 @@ class BootstrapController implements BootstrapInterface
         exit();
     }
 
+    /**
+     * Start build-in web server
+     *
+     * @param bool $startOnly Only start the server and exit
+     * @return void
+     * @throws PromptImageGeneratorException
+     */
     private function startBuildInWebServer(bool $startOnly = false): void
     {
         if (!$startOnly) {
@@ -116,6 +174,11 @@ class BootstrapController implements BootstrapInterface
         }
     }
 
+    /**
+     * Run CLI application silent in background
+     *
+     * @return void
+     */
     private function runSilent(): void
     {
         try {
@@ -129,6 +192,12 @@ class BootstrapController implements BootstrapInterface
         exit();
     }
 
+    /**
+     * Run CLI application
+     *
+     * @return void
+     * @throws PromptImageGeneratorException
+     */
     private function run(): void
     {
         $configController = new ConfigController();
@@ -139,5 +208,15 @@ class BootstrapController implements BootstrapInterface
         }
         $executeController = new ExecuteController();
         $executeController->run();
+    }
+
+    /**
+     * Get arguments and argument parameters
+     *
+     * @return array
+     */
+    public function getArguments(): array
+    {
+        return self::$arguments;
     }
 }
