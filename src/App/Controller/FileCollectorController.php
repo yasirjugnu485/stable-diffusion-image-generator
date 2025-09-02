@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -121,13 +122,12 @@ class FileCollectorController
      * Collect files from directory
      *
      * @param string $directory Directory
-     * @param bool $asArray Return as array
      * @return array
      */
-    private function collectFileList(string $directory, bool $asArray = true): array
+    private function collectFileList(string $directory): array
     {
         $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS),
+            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
             RecursiveIteratorIterator::SELF_FIRST
         );
 
@@ -142,7 +142,7 @@ class FileCollectorController
             }
         }
 
-        return $asArray ? $this->parsePathsOfFiles($result) : $result;
+        return $this->parsePathsOfFiles($result);
     }
 
     /**

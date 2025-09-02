@@ -142,6 +142,36 @@ class RenderController
     }
 
     /**
+     * Render prompts
+     *
+     * @return void
+     */
+    public function renderPrompts(): void
+    {
+        $params = $this->prepareParams();
+        $promptCollectorController = new PromptCollectorController();
+        $params['prompts'] = $promptCollectorController->getPrompts();
+        $params['template'] = 'prompts.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render initialize images
+     *
+     * @return void
+     */
+    public function renderInitImages(): void
+    {
+        $params = $this->prepareParams();
+        $initImagesCollectorController = new InitImagesCollectorController();
+        $params['init_images'] = $initImagesCollectorController->getInitImages();
+        $params['template'] = 'init_images.php';
+
+        $this->render($params);
+    }
+
+    /**
      * Render
      *
      * @param array $params Parameters

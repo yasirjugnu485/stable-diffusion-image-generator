@@ -190,9 +190,6 @@
                 </li>
 
             </ul>
-        </div>
-
-        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
             <ul class="navbar-nav ml-auto">
 
                 <li class="nav-item dropdown">
@@ -203,11 +200,11 @@
                        aria-expanded="false">
                         Prompt Merger
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-right<?php if (count($params['navbar']['types']['txt2img']) == 0) {
+                    <ul class="dropdown-menu dropdown-menu-right<?php if (count($params['navbar']['prompts']) == 0) {
                         echo ' bg-warning';
                     } ?>">
                         <?php
-                        if (count($params['navbar']['types']['txt2img'])) {
+                        if (count($params['navbar']['prompts'])) {
                             ?>
                             <li>
                                 <a class="dropdown-item text-dark" href="/prompt-merger">
@@ -215,11 +212,11 @@
                                 </a>
                             </li>
                             <?php
-                            foreach ($params['navbar']['types']['txt2img'] as $entry) {
+                            foreach ($params['navbar']['prompts'] as $prompt) {
                                 ?>
                                 <li>
-                                    <a class="dropdown-item text-dark" href="/txt2img/<?php echo $entry['slug']; ?>">
-                                        <?php echo $entry['name']; ?>
+                                    <a class="dropdown-item text-dark" href="/prompt-merger/<?php echo $prompt; ?>">
+                                        <?php echo $prompt; ?>
                                     </a>
                                 </li>
                                 <?php
@@ -227,7 +224,7 @@
                         } else {
                             ?>
                             <div class="dropdown-item bg-warning text-dark">
-                                No txt2img images available
+                                No prompts available
                             </div>
                             <?php
                         }
@@ -243,11 +240,11 @@
                        aria-expanded="false">
                         Initialize Images
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-right<?php if (count($params['navbar']['types']['txt2img']) == 0) {
+                    <ul class="dropdown-menu dropdown-menu-right<?php if (count($params['navbar']['init_images']) == 0) {
                         echo ' bg-warning';
                     } ?>">
                         <?php
-                        if (count($params['navbar']['types']['txt2img'])) {
+                        if (count($params['navbar']['init_images'])) {
                             ?>
                             <li>
                                 <a class="dropdown-item text-dark" href="/initialize-images">
@@ -255,11 +252,11 @@
                                 </a>
                             </li>
                             <?php
-                            foreach ($params['navbar']['types']['txt2img'] as $entry) {
+                            foreach ($params['navbar']['init_images'] as $initImage) {
                                 ?>
                                 <li>
-                                    <a class="dropdown-item text-dark" href="/txt2img/<?php echo $entry['slug']; ?>">
-                                        <?php echo $entry['name']; ?>
+                                    <a class="dropdown-item text-dark" href="/initialize-images/<?php echo $initImage; ?>">
+                                        <?php echo $initImage; ?>
                                     </a>
                                 </li>
                                 <?php
@@ -267,7 +264,7 @@
                         } else {
                             ?>
                             <div class="dropdown-item bg-warning text-dark">
-                                No txt2img images available
+                                No initialize images available
                             </div>
                             <?php
                         }

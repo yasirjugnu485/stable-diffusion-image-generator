@@ -31,6 +31,8 @@ class NavbarController
         if (self::$navbarData === null) {
             $this->collectCheckpoints();
             $this->collectNavbarData();
+            $this->collectPrompts();
+            $this->collectInitImages();
         }
     }
 
@@ -74,6 +76,28 @@ class NavbarController
                 ];
             }
         }
+    }
+
+    /**
+     * Collect prompts
+     *
+     * @return void
+     */
+    private function collectPrompts(): void
+    {
+        $promptCollectorController = new PromptCollectorController();
+        self::$navbarData['prompts'] = $promptCollectorController->getPrompts();
+    }
+
+    /**
+     * Collect initialize images
+     *
+     * @return void
+     */
+    private function collectInitImages(): void
+    {
+        $initImagesCollectorController = new InitImagesCollectorController();
+        self::$navbarData['init_images'] = $initImagesCollectorController->getInitImages();
     }
 
     /**

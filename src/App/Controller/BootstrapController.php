@@ -59,7 +59,9 @@ class BootstrapController
      */
     public function run(): void
     {
-        $fileCollectorController = new FileCollectorController();
-        $uriController = new UriController();
+        new FileCollectorController();
+        new PromptCollectorController();
+        new InitImagesCollectorController();
+        new UriController();
     }
 }

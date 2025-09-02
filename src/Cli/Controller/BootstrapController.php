@@ -101,9 +101,6 @@ class BootstrapController implements BootstrapInterface
                     self::$arguments[$_SERVER['argv'][$i]] = [];
                 }
             }
-
-            var_export(self::$arguments);
-            die();
         }
     }
 
