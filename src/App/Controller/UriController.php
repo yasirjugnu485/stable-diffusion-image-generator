@@ -26,7 +26,7 @@ class UriController
             $this->home();
         }
 
-        $requestIndex = explode('/', $requestUri);
+        $requestIndex = explode('/', rtrim($requestUri, '/'));
         if (count($requestIndex) > 3) {
             $this->notFound();
         }
@@ -54,7 +54,7 @@ class UriController
                 $renderController = new RenderController();
                 $renderController->renderCheckpoints();
             }
-        } elseif ($requestIndex[1] === 'checkpoints' || isset($requestIndex[2])) {
+        } elseif ($requestIndex[1] === 'checkpoints' && isset($requestIndex[2])) {
             $fileCollectorController = new FileCollectorController();
             $files = $fileCollectorController->collectFilesByCheckpoint($requestIndex[2]);
             if ($files) {
@@ -67,6 +67,12 @@ class UriController
             if ($prompts) {
                 $renderController = new RenderController();
                 $renderController->renderPrompts();
+            }
+        } elseif ($requestIndex[1] === 'prompt-merger' && isset($requestIndex[2])) {
+            $promptCollectorController = new PromptCollectorController();
+            if ($promptCollectorController->promptExists($requestIndex[2])) {
+                $renderController = new RenderController();
+                $renderController->renderPromptEditor($requestIndex[2]);
             }
         } elseif ($requestIndex[1] === 'initialize-images' && !isset($requestIndex[2])) {
             $initImagesCollectorController = new InitImagesCollectorController();

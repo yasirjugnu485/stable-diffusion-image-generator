@@ -190,7 +190,7 @@
                 </li>
 
             </ul>
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ms-auto">
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-light"

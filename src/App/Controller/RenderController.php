@@ -23,8 +23,14 @@ class RenderController
     {
         $navbarController = new NavbarController();
         $navbar = $navbarController->getData();
+        $successController = new SuccessController();
+        $success = $successController->getSuccess();
+        $errorController = new ErrorController();
+        $error = $errorController->getError();
         return [
             'navbar' => $navbar,
+            'success' => $success,
+            'error' => $error,
         ];
     }
 
@@ -167,6 +173,24 @@ class RenderController
         $initImagesCollectorController = new InitImagesCollectorController();
         $params['init_images'] = $initImagesCollectorController->getInitImages();
         $params['template'] = 'init_images.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render prompt editor
+     *
+     * @param string $prompt Prompt
+     * @return void
+     */
+    public function renderPromptEditor(string $prompt): void
+    {
+        $params = $this->prepareParams();
+        $promptCollectorController = new PromptCollectorController();
+        $promptFiles = $promptCollectorController->getPromptFiles($prompt);
+        $params['prompt'] = $prompt;
+        $params['files'] = $promptFiles;
+        $params['template'] = 'prompt_editor.php';
 
         $this->render($params);
     }

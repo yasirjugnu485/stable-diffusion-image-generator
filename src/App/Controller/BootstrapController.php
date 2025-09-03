@@ -25,7 +25,10 @@ class BootstrapController
         ini_set('display_startup_errors', 1);
         error_reporting(E_ALL);
 
+        session_start();
+
         $this->classLoader(ROOT_DIR . 'src/Shared');
+        $this->classLoader(ROOT_DIR . 'src/App/Interface');
         $this->classLoader(ROOT_DIR . 'src/App');
     }
 

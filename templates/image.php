@@ -12,13 +12,13 @@
 <div class="col-12 mb-4">
     <div class="card border border-dark">
         <div class="card-header bg-dark text-light">
-            <h5 class="float-left mb-0 mt-1">
+            <h5 class="float-start mb-0 mt-1">
                 <?php
                 $split = explode('/', $image['file']);
                 echo end($split);
                 ?>
             </h5>
-            <button class="btn btn-danger float-right">
+            <button class="btn btn-danger float-end">
                 <i class="bi bi-trash-fill"></i>
             </button>
         </div>

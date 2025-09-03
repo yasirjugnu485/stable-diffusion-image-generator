@@ -12,11 +12,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interface\InitImagesCollectorInterface;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-class InitImagesCollectorController
+class InitImagesCollectorController implements InitImagesCollectorInterface
 {
     /**
      * Initialize images data
@@ -32,7 +33,22 @@ class InitImagesCollectorController
      */
     public function __construct()
     {
+        $this->handleActions();
         $this->collectInitImages();
+    }
+
+    /**
+     * Handle actions
+     *
+     * @return void
+     */
+    private function handleActions(): void
+    {
+        if (null === self::$initImagesData) {
+            if (isset($_POST['action']) && $_POST['action'] === 'addInitImages') {
+                $this->addInitImages();
+            }
+        }
     }
 
     /**
@@ -48,8 +64,6 @@ class InitImagesCollectorController
                 foreach ($initImagesData as $directory => $files) {
                     if (count($files)) {
                         sort($initImagesData[$directory]);
-                    } else {
-                        unset($initImagesData[$directory]);
                     }
                 }
                 self::$initImagesData = $initImagesData;
@@ -94,6 +108,29 @@ class InitImagesCollectorController
         }
 
         return $result;
+    }
+
+    /**
+     * Add init images
+     *
+     * @return void
+     */
+    protected function addInitImages(): void
+    {
+        $initImage = $_POST['initImages'];
+        $match = preg_match('/^[a-zA-Z0-9_-]+$/', $initImage);
+        if (!$match) {
+            new ErrorController(self::ERROR_INIT_IMAGES_DIRECTORY_WRONG_NAME);
+            return;
+        } elseif (is_dir(ROOT_DIR . 'init_images/' . $initImage) ||
+            is_file(ROOT_DIR . 'init_images/' . $initImage)) {
+            new ErrorController(self::ERROR_INIT_IMAGES_DIRECTORY_EXISTS);
+            return;
+        }
+
+        mkdir(ROOT_DIR . 'init_images/' . $initImage, 0777, true);
+
+        new SuccessController(self::SUCCESS_INIT_IMAGES_DIRECTORY_CREATED);
     }
 
     /**

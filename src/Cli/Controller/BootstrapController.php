@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Cli\Controller;
 
 use Cli\Exception\PromptImageGeneratorException;
+use Cli\Exception\StableDiffusionServiceException;
 use Cli\Interface\BootstrapInterface;
 use DateTime;
 use Throwable;
@@ -32,7 +33,7 @@ class BootstrapController implements BootstrapInterface
      * Constructor
      *
      * @return void
-     * @throws PromptImageGeneratorException
+     * @throws PromptImageGeneratorException|StableDiffusionServiceException
      */
     public function __construct()
     {
@@ -197,7 +198,7 @@ class BootstrapController implements BootstrapInterface
      * Run CLI application
      *
      * @return void
-     * @throws PromptImageGeneratorException
+     * @throws PromptImageGeneratorException|StableDiffusionServiceException
      */
     private function run(): void
     {
