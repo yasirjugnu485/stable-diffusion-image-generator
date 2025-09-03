@@ -94,8 +94,10 @@ class PromptCollectorController
         return $result;
     }
 
+
+
     /**
-     * Get prompt
+     * Get prompts
      *
      * @return array
      */

@@ -24,9 +24,9 @@ class BootstrapController implements BootstrapInterface
     /**
      * Arguments and argument parameters
      *
-     * @var array
+     * @var array|null
      */
-    private static array $arguments = [];
+    private static array|null $arguments = null;
 
     /**
      * Constructor
@@ -36,26 +36,30 @@ class BootstrapController implements BootstrapInterface
      */
     public function __construct()
     {
-        $this->classLoader(ROOT_DIR . 'src/Shared');
-        $this->classLoader(ROOT_DIR . 'src/Cli/Interface');
-        $this->classLoader(ROOT_DIR . 'src/Cli');
+        if (null === self::$arguments) {
+            self::$arguments = [];
 
-        $this->initArguments();
+            $this->classLoader(ROOT_DIR . 'src/Shared');
+            $this->classLoader(ROOT_DIR . 'src/Cli/Interface');
+            $this->classLoader(ROOT_DIR . 'src/Cli');
 
-        $useArguments = false;
-        if (array_key_exists('--help', self::$arguments) || array_key_exists('-h', self::$arguments)) {
-            $this->help();
-        } elseif (array_key_exists('--start-web-application', self::$arguments)) {
-            $this->startBuildInWebServer(true);
-        }
+            $this->initArguments();
 
-        if (!$useArguments) {
-            new EchoController(self::ECHO_START_APPLICATION);
-            new EchoController(self::ECHO_START_BY);
-            $this->startBuildInWebServer();
-            new EchoController(self::SUCCESS_START_APPLICATION);
-            new EchoController();
-            $this->run();
+            $useArguments = false;
+            if (array_key_exists('--help', self::$arguments) || array_key_exists('-h', self::$arguments)) {
+                $this->help();
+            } elseif (array_key_exists('--start-web-application', self::$arguments)) {
+                $this->startBuildInWebServer(true);
+            }
+
+            if (!$useArguments) {
+                new EchoController(self::ECHO_START_APPLICATION);
+                new EchoController(self::ECHO_START_BY);
+                $this->startBuildInWebServer();
+                new EchoController(self::SUCCESS_START_APPLICATION);
+                new EchoController();
+                $this->run();
+            }
         }
     }
 

@@ -249,8 +249,16 @@ class ConfigController implements ConfigInterface
         }
         include_once ROOT_DIR . 'config.inc.php';
 
-        if (file_exists(ROOT_DIR . 'config.local.php')) {
-            include_once ROOT_DIR . 'config.local.php';
+        $bootstrapController = new BootstrapController();
+        $arguments = $bootstrapController->getArguments();
+        var_export($arguments);
+
+        if (isset($arguments['--config'])) {
+            include_once $arguments['--config'][0];
+        } else {
+            if (file_exists(ROOT_DIR . 'config.local.php')) {
+                include_once ROOT_DIR . 'config.local.php';
+            }
         }
 
         if (!isset($this->host)) {
