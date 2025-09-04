@@ -26,6 +26,10 @@ class HomeController
         $checkpoints = $fileController->collectUsedCheckpoints();
         $navbarController = new NavbarController();
         $navbar = $navbarController->getData();
+        $successController = new SuccessController();
+        $success = $successController->getSuccess();
+        $errorController = new ErrorController();
+        $error = $errorController->getError();
 
         $breadcrumbs = [
             [
@@ -42,6 +46,8 @@ class HomeController
             'title' => 'Home',
             'breadcrumbs' => $breadcrumbs,
             'template' => 'home.php',
+            'success' => $success,
+            'error' => $error,
         ]);
 
         exit();

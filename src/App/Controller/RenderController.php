@@ -37,16 +37,16 @@ class RenderController
     /**
      * Render by type
      *
+     * @param string $type Type
      * @return void
      */
-    public function renderByType(): void
+    public function renderByType(string $type): void
     {
         $params = $this->prepareParams();
 
         $fileController = new FileController();
-        $type = $fileController->getType();
 
-        $params['data'] = $fileController->getFilesByType($type);
+        $params['data'] = $fileController->collectFilesByType($type);
         $params['breadcrumbs'] = [
             [
                 'title' => $type,
@@ -62,19 +62,19 @@ class RenderController
     /**
      * Render by type and date time
      *
+     * @param string $type Type
+     * @param string $dateTime Date time
      * @return void
      */
-    public function renderByTypeAndDateTime(): void
+    public function renderByTypeAndDateTime(string $type, string $dateTime): void
     {
         $params = $this->prepareParams();
 
         $fileController = new FileController();
-        $type = $fileController->getType();
-        $dateTime = $fileController->getDateTime();
+
         $dateTimeName = str_replace(':', '-', $dateTime);
         $dateTimeName = str_replace(' ', '_', $dateTimeName);
-
-        $params['data'] = $fileController->getFilesByTypeAndDateTime();
+        $params['data'] = $fileController->collectFilesByTypeAndDateTime($type, $dateTime);
         $params['breadcrumbs'] = [
             [
                 'title' => $type,
@@ -84,36 +84,6 @@ class RenderController
             [
                 'title' => $dateTime,
                 'url' => '/' . $type . '/' . $dateTimeName,
-                'active' => true
-            ]
-        ];
-        $params['template'] = 'images_base.php';
-
-        $this->render($params);
-    }
-
-    /**
-     * Render by checkpoint
-     *
-     * @return void
-     */
-    public function renderByCheckpoint(): void
-    {
-        $params = $this->prepareParams();
-
-        $fileController = new FileController();
-        $checkpoint = $fileController->getCheckpoint();
-
-        $params['data'] = $fileController->getFilesByCheckpoint();
-        $params['breadcrumbs'] = [
-            [
-                'title' => 'checkpoints',
-                'url' => '/checkpoints',
-                'active' => false
-            ],
-            [
-                'title' => $checkpoint,
-                'url' => '/checkpoints/' . $checkpoint,
                 'active' => true
             ]
         ];
@@ -133,7 +103,7 @@ class RenderController
 
         $fileController = new FileController();
         $params['checkpoints'] = $fileController->collectUsedCheckpoints();
-        $params['data'] = $fileController->getCheckpointFiles();
+        $params['data'] = $fileController->collectCheckpointFiles();
         $params['base_breadcrumbs'] = [
             [
                 'title' => 'checkpoints',
@@ -143,6 +113,36 @@ class RenderController
         ];
 
         $params['template'] = 'images_checkpoints.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render by checkpoint
+     *
+     * @param string $checkpoint Checkpoint
+     * @return void
+     */
+    public function renderByCheckpoint(string $checkpoint): void
+    {
+        $params = $this->prepareParams();
+
+        $fileController = new FileController();
+
+        $params['data'] = $fileController->collectFilesByCheckpoint($checkpoint);
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'checkpoints',
+                'url' => '/checkpoints',
+                'active' => false
+            ],
+            [
+                'title' => $checkpoint,
+                'url' => '/checkpoints/' . $checkpoint,
+                'active' => true
+            ]
+        ];
+        $params['template'] = 'images_base.php';
 
         $this->render($params);
     }
@@ -170,7 +170,7 @@ class RenderController
     public function renderInitImages(): void
     {
         $params = $this->prepareParams();
-        $initImagesController = new InitImagesController();
+        $initImagesController = new InitImageController();
         $params['init_images'] = $initImagesController->getInitImagesDirectories();
         $params['template'] = 'init_images.php';
 
@@ -204,7 +204,7 @@ class RenderController
     public function renderInitImagesEditor(string $initImagesDirectory): void
     {
         $params = $this->prepareParams();
-        $initImagesController = new InitImagesController();
+        $initImagesController = new InitImageController();
         $initImagesImages = $initImagesController->getInitImagesImages($initImagesDirectory);;
         $params['directory'] = $initImagesDirectory;
         $params['images'] = $initImagesImages;

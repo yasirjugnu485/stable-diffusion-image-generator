@@ -23,9 +23,15 @@ class NotFoundController
     {
         $navbarController = new NavbarController;
         $navbar = $navbarController->getData();
+        $successController = new SuccessController();
+        $success = $successController->getSuccess();
+        $errorController = new ErrorController();
+        $error = $errorController->getError();
 
         $this->render([
             'navbar' => $navbar,
+            'success' => $success,
+            'error' => $error,
         ]);
     }
 

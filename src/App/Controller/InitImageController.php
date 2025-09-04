@@ -18,7 +18,7 @@ use Random\RandomException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-class InitImagesController implements InitImagesInterface
+class InitImageController implements InitImagesInterface
 {
     /**
      * Initialize images data

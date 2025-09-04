@@ -96,7 +96,7 @@ class NavbarController
      */
     private function collectInitImages(): void
     {
-        $initImagesController = new InitImagesController();
+        $initImagesController = new InitImageController();
         self::$navbarData['init_images'] = $initImagesController->getInitImagesDirectories();
     }
 

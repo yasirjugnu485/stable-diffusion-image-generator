@@ -12,11 +12,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interface\FileInterface;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-class FileController
+class FileController implements FileInterface
 {
     /**
      * File data
@@ -33,62 +34,28 @@ class FileController
     public static array|null $payloads = null;
 
     /**
-     * Files collected by type
-     *
-     * @var array|null
-     */
-    public static array|null $filesByType = null;
-
-    /**
-     * File set collected by checkpoint
-     *
-     * @var array|null
-     */
-    public static array|null $checkpointFiles = null;
-
-    /**
-     * Files collected by type and date time
-     *
-     * @var array|null
-     */
-    public static array|null $filesByTypeAndDateTime = null;
-
-    /**
-     * Type from last collected by type or by type and date time
-     *
-     * @var string|null
-     */
-    public static string|null $type = null;
-
-    /**
-     * Date time from last collected by type and date time
-     *
-     * @var string|null
-     */
-    public static string|null $dateTime = null;
-
-    /**
-     * Files collected by checkpoint
-     *
-     * @var array|null
-     */
-    public static array|null $filesByCheckpoint = null;
-
-    /**
-     * Checkpoint from last collected by checkpoint
-     *
-     * @var string|null
-     */
-    public static string|null $checkpoint = null;
-
-    /**
      * Constructor
      *
      * @return void
      */
     public function __construct()
     {
+        $this->handleActions();
         $this->collectFiles();
+    }
+
+    /**
+     * Handle actions
+     *
+     * @return void
+     */
+    private function handleActions(): void
+    {
+        if (null === self::$fileData) {
+            if (isset($_POST['action']) && $_POST['action'] === 'deleteImage') {
+                $this->deleteImage();
+            }
+        }
     }
 
     /**
@@ -149,9 +116,9 @@ class FileController
      * Parse path of files
      *
      * @param array $array Collected file list
-     * @return array|mixed
+     * @return mixed
      */
-    private function parsePathsOfFiles(array $array)
+    private function parsePathsOfFiles(array $array): mixed
     {
         rsort($array);
         $result = array();
@@ -312,13 +279,11 @@ class FileController
      */
     public function collectFilesByType(string $type, int $limit = 1000): array
     {
-        self::$filesByType = [];
-        self::$filesByType['payloads'] = [];
-        self::$type = $type;
         if (!isset(self::$fileData[$type])) {
             return [];
         }
 
+        $filesByType['payloads'] = [];
         foreach (self::$payloads as $payload) {
             if ($payload['mode'] === $type) {
                 $split = explode('/outputs/' . $type . '/', $payload['file']);
@@ -327,50 +292,14 @@ class FileController
                     $split = explode('/init_images/', $payload['payload']['init_images']);
                     $payload['payload']['init_images'] = '/init_images/' . end($split);
                 }
-                self::$filesByType['payloads'][] = $payload;
-                if (count(self::$filesByType) >= $limit) {
+                $filesByType['payloads'][] = $payload;
+                if (count($filesByType) >= $limit) {
                     break;
                 }
             }
         }
 
-        return self::$filesByType;
-    }
-
-    /**
-     * Collect set of checkpoint files
-     *
-     * @param int $limit Limit per type
-     * @return array
-     */
-    public function collectCheckpointFiles(int $limit = 10): array
-    {
-        self::$checkpointFiles = [];
-
-        foreach (self::$payloads as $payload) {
-            if (isset($payload['payload']['override_settings']['sd_model_checkpoint'])) {
-                $checkpoint = $payload['payload']['override_settings']['sd_model_checkpoint'];
-                $type = $payload['mode'];
-                if (!isset(self::$checkpointFiles[$checkpoint])) {
-                    self::$checkpointFiles[$checkpoint] = [];
-                }
-                if (!isset(self::$checkpointFiles[$checkpoint]['payloads'])) {
-                    self::$checkpointFiles[$checkpoint]['payloads'] = [];
-                }
-                if (count(self::$checkpointFiles[$checkpoint]['payloads']) >= $limit) {
-                    continue;
-                }
-                $split = explode('/outputs/' . $type . '/', $payload['file']);
-                $payload['file'] = '/outputs/' . $type . '/' . end($split);
-                if (isset($payload['payload']['init_images'])) {
-                    $split = explode('/init_images/', $payload['payload']['init_images']);
-                    $payload['payload']['init_images'] = '/init_images/' . end($split);
-                }
-                self::$checkpointFiles[$checkpoint]['payloads'][] = $payload;
-            }
-        }
-
-        return self::$checkpointFiles;
+        return $filesByType;
     }
 
     /**
@@ -378,24 +307,20 @@ class FileController
      *
      * @param string $type Type
      * @param string $dateTime Date time
-     * @return array|null
+     * @return array
      */
-    public function collectFilesByTypeAndDateTime(string $type, string $dateTime): array|null
+    public function collectFilesByTypeAndDateTime(string $type, string $dateTime): array
     {
         $split = explode('_', $dateTime);
         $dateTime = $split[0] . ' ' . str_replace('-', ':', $split[1]);
         if (!isset(self::$fileData[$type][$dateTime])) {
-            return null;
+            return [];
         }
 
-        self::$type = $type;
-        self::$dateTime = $dateTime;
-        self::$filesByTypeAndDateTime = [
+        return [
             'type' => $type,
             'payloads' => $this->getDataFromPayload($type, $dateTime)
         ];
-
-        return self::$filesByTypeAndDateTime;
     }
 
     /**
@@ -426,6 +351,42 @@ class FileController
     }
 
     /**
+     * Collect set of checkpoint files
+     *
+     * @param int $limit Limit per type
+     * @return array
+     */
+    public function collectCheckpointFiles(int $limit = 10): array
+    {
+        $checkpointFiles = [];
+
+        foreach (self::$payloads as $payload) {
+            if (isset($payload['payload']['override_settings']['sd_model_checkpoint'])) {
+                $checkpoint = $payload['payload']['override_settings']['sd_model_checkpoint'];
+                $type = $payload['mode'];
+                if (!isset($checkpointFiles[$checkpoint])) {
+                    $checkpointFiles[$checkpoint] = [];
+                }
+                if (!isset($checkpointFiles[$checkpoint]['payloads'])) {
+                    $checkpointFiles[$checkpoint]['payloads'] = [];
+                }
+                if (count($checkpointFiles[$checkpoint]['payloads']) >= $limit) {
+                    continue;
+                }
+                $split = explode('/outputs/' . $type . '/', $payload['file']);
+                $payload['file'] = '/outputs/' . $type . '/' . end($split);
+                if (isset($payload['payload']['init_images'])) {
+                    $split = explode('/init_images/', $payload['payload']['init_images']);
+                    $payload['payload']['init_images'] = '/init_images/' . end($split);
+                }
+                $checkpointFiles[$checkpoint]['payloads'][] = $payload;
+            }
+        }
+
+        return $checkpointFiles;
+    }
+
+    /**
      * Collect files by checkpoint
      *
      * @param string $checkpoint Checkpoint
@@ -451,18 +412,89 @@ class FileController
             }
         }
 
-        if (count($filesByCheckpoint)) {
-            self::$checkpoint = $checkpoint;
-            self::$filesByCheckpoint = [
-                'type' => $checkpoint,
-                'payloads' => $filesByCheckpoint
-            ];
-        } else {
-            self::$checkpoint = null;
-            self::$filesByCheckpoint = null;
+        return [
+            'type' => $checkpoint,
+            'payloads' => $filesByCheckpoint
+        ];
+    }
+
+    /**
+     * Delete image
+     *
+     * @return void
+     */
+    private function deleteImage(): void
+    {
+        if (!isset($_POST['image'])) {
+            new ErrorController(self::ERROR_DELETE_IMAGE);
+            $this->redirect();
         }
 
-        return self::$filesByCheckpoint;
+        $image = $_POST['image'];
+        $trimmed = trim($image, '/');
+        $split = explode('/', $trimmed);
+        $type = $split[1];
+        $dateTime = $split[2];
+
+        if (!file_exists(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/payloads.json')) {
+            new ErrorController(self::ERROR_DELETE_IMAGE);
+            $this->redirect();
+        }
+
+        $payloads = json_decode(
+            file_get_contents(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/payloads.json'),
+            true
+        );
+
+        foreach ($payloads as $index => $payload) {
+            $split = explode('/outputs/', $payload['file']);
+            $file = '/outputs/' . end($split);
+            if ($file === $image) {
+                unlink($payload['file']);
+                unset($payloads[$index]);
+                if (!count($payloads)) {
+                    $toolController = new ToolController();
+                    $toolController->deleteDirectory(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime);
+                    new SuccessController(self::SUCCESS_DELETE_IMAGE);
+                    $this->redirect(true);
+                }
+                break;
+            }
+        }
+
+        file_put_contents(
+            ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/payloads.json',
+            json_encode($payloads)
+        );
+
+        new SuccessController(self::SUCCESS_DELETE_IMAGE);
+        $this->redirect();
+    }
+
+    /**
+     * Redirect
+     *
+     * @param bool $home Redirect to home page
+     * @return void
+     */
+    public function redirect(bool $home = false): void
+    {
+        if ($home) {
+            $httpReferer = $_SERVER['HTTP_REFERER'];
+            if (str_starts_with($httpReferer, 'http://')) {
+                $httpReferer = str_replace('http://', '', $httpReferer);
+                $split = explode('/', $httpReferer);
+                $url = 'http://' . $split[0];
+            } elseif (str_starts_with($httpReferer, 'https://')) {
+                $httpReferer = str_replace('https://', '', $httpReferer);
+                $split = explode('/', $httpReferer);
+                $url = 'https://' . $split[0];
+            }
+            header('Location: ' . $url);
+        } else {
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+        }
+        exit();
     }
 
     /**
@@ -473,76 +505,5 @@ class FileController
     public function getFileData(): array|null
     {
         return self::$fileData;
-    }
-
-    /**
-     * Get collected files by type
-     *
-     * @param string $type
-     * @return array
-     */
-    public function getFilesByType(string $type): array
-    {
-        return self::$filesByType;
-    }
-
-    /**
-     * Get file set collected by checkpoint
-     *
-     * @return array
-     */
-    public function getCheckpointFiles(): array
-    {
-        return self::$checkpointFiles;
-    }
-
-    /**
-     * Get files collected by type and date time
-     *
-     * @return array|null
-     */
-    public function getFilesByTypeAndDateTime(): array|null
-    {
-        return self::$filesByTypeAndDateTime;
-    }
-
-    /**
-     * Get type from last collected by type or by type and date time
-     *
-     * @return string|null
-     */
-    public function getType(): string|null
-    {
-        return self::$type;
-    }
-
-    /**
-     * Get date time from last collected by type and date time
-     *
-     * @return string|null
-     */
-    public function getDateTime(): string|null
-    {
-        return self::$dateTime;
-    }
-
-    /**
-     * Get files collected by checkpoint
-     *
-     * @return array|null
-     */
-    public function getFilesByCheckpoint(): array|null
-    {
-        return self::$filesByCheckpoint;
-    }
-
-    /**
-     * Get checkpoint from last collected by checkpoint
-     *
-     * @return string|null
-     */
-    public function getCheckpoint(): string|null
-    {
-        return self::$checkpoint;
     }
 }

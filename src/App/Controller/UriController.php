@@ -31,58 +31,41 @@ class UriController
             $this->notFound();
         }
 
+        $promptController = new PromptController();
+        $initImagesController = new InitImageController();
+
         if (($requestIndex[1] === 'txt2img' || $requestIndex[1] === 'img2img' || $requestIndex[1] === 'loop') &&
             !isset($requestIndex[2])) {
-            $fileController = new FileController();
-            $files = $fileController->collectFilesByType($requestIndex[1]);
-            if ($files) {
-                $renderController = new RenderController();
-                $renderController->renderByType();
-            }
+            $renderController = new RenderController();
+            $renderController->renderByType($requestIndex[1]);
         } elseif (($requestIndex[1] === 'txt2img' || $requestIndex[1] === 'img2img' || $requestIndex[1] === 'loop') &&
             isset($requestIndex[2])) {
-            $fileController = new FileController();
-            $files = $fileController->collectFilesByTypeAndDateTime($requestIndex[1], $requestIndex[2]);
-            if ($files) {
-                $renderController = new RenderController();
-                $renderController->renderByTypeAndDateTime();
-            }
+            $renderController = new RenderController();
+            $renderController->renderByTypeAndDateTime($requestIndex[1], $requestIndex[2]);
         } elseif ($requestIndex[1] === 'checkpoints' && !isset($requestIndex[2])) {
-            $fileController = new FileController();
-            $files = $fileController->collectCheckpointFiles();
-            if ($files) {
-                $renderController = new RenderController();
-                $renderController->renderCheckpoints();
-            }
+            $renderController = new RenderController();
+            $renderController->renderCheckpoints();
         } elseif ($requestIndex[1] === 'checkpoints' && isset($requestIndex[2])) {
-            $fileController = new FileController();
-            $files = $fileController->collectFilesByCheckpoint($requestIndex[2]);
-            if ($files) {
-                $renderController = new RenderController();
-                $renderController->renderByCheckpoint();
-            }
+            $renderController = new RenderController();
+            $renderController->renderByCheckpoint($requestIndex[2]);
         } elseif ($requestIndex[1] === 'prompt-merger' && !isset($requestIndex[2])) {
-            $promptController = new PromptController();
             $prompts = $promptController->getPromptDirectories();
             if ($prompts) {
                 $renderController = new RenderController();
                 $renderController->renderPrompts();
             }
         } elseif ($requestIndex[1] === 'prompt-merger' && isset($requestIndex[2])) {
-            $promptController = new PromptController();
             if ($promptController->promptDirectoryExists($requestIndex[2])) {
                 $renderController = new RenderController();
                 $renderController->renderPromptEditor($requestIndex[2]);
             }
         } elseif ($requestIndex[1] === 'initialize-images' && !isset($requestIndex[2])) {
-            $initImagesController = new InitImagesController();
             $initImages = $initImagesController->getInitImagesDirectories();
             if ($initImages) {
                 $renderController = new RenderController();
                 $renderController->renderInitImages();
             }
         } elseif ($requestIndex[1] === 'initialize-images' && isset($requestIndex[2])) {
-            $initImagesController = new InitImagesController();
             if ($initImagesController->initImagesDirectoryExists($requestIndex[2])) {
                 $renderController = new RenderController();
                 $renderController->renderInitImagesEditor($requestIndex[2]);

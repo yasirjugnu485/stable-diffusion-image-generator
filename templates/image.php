@@ -18,9 +18,20 @@
                 echo end($split);
                 ?>
             </h5>
-            <button class="btn btn-danger float-end">
-                <i class="bi bi-trash-fill"></i>
-            </button>
+            <div class="float-end">
+                <form method="post">
+                    <input type="hidden"
+                           name="action"
+                           value="deleteImage">
+                    <input type="hidden"
+                           name="image"
+                           value="<?php echo $image['file']; ?>">
+                    <button class="btn btn-danger"
+                            type="submit">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                </form>
+            </div>
         </div>
         <div class="card-footer bg-white">
             <div class="row">
