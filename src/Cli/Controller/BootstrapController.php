@@ -40,7 +40,6 @@ class BootstrapController implements BootstrapInterface
         if (null === self::$arguments) {
             self::$arguments = [];
 
-            $this->classLoader(ROOT_DIR . 'src/Shared');
             $this->classLoader(ROOT_DIR . 'src/Cli/Interface');
             $this->classLoader(ROOT_DIR . 'src/Cli');
 

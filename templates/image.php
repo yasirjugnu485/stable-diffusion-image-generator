@@ -144,6 +144,25 @@
                         <?php
                         }
                         ?>
+                    </p>
+                    <?php
+                    if (isset($image['payload']['refiner_checkpoint'])) {
+                        ?>
+                        <p>
+                            <strong>
+                                Refiner Checkpoint:
+                            </strong>
+                            <?php echo $image['payload']['refiner_checkpoint']; ?>
+                        </p>
+                        <p>
+                            <strong>
+                                Refiner switch at:
+                            </strong>
+                            <?php echo $image['payload']['refiner_switch_at']; ?>
+                        </p>
+                        <?php
+                    }
+                    ?>
                 </div>
             </div>
         </div>

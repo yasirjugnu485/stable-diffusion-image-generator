@@ -14,7 +14,7 @@ namespace Cli\Controller;
 
 use Cli\Exception\StableDiffusionServiceException;
 use Cli\Interface\OptionInterface;
-use Shared\Service\StableDiffusionService;
+use Cli\Service\StableDiffusionService;
 
 class OptionController implements OptionInterface
 {

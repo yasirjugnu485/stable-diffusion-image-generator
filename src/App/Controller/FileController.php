@@ -54,6 +54,8 @@ class FileController implements FileInterface
         if (null === self::$fileData) {
             if (isset($_POST['action']) && $_POST['action'] === 'deleteImage') {
                 $this->deleteImage();
+            } elseif (isset($_POST['action']) && $_POST['action'] === 'deleteByTypeAndDateTime') {
+                $this->deleteByTypeAndDateTime();
             }
         }
     }
@@ -469,6 +471,35 @@ class FileController implements FileInterface
 
         new SuccessController(self::SUCCESS_DELETE_IMAGE);
         $this->redirect();
+    }
+
+    /**
+     * Delete by type and date time
+     *
+     * @return void
+     */
+    private function deleteByTypeAndDateTime(): void
+    {
+        if (!isset($_POST['type']) || !isset($_POST['dateTime'])) {
+            new ErrorController(self::ERROR_DELETE_BY_TYPE_AND_DIRECTORY);
+            $this->redirect();
+        }
+
+        $type = $_POST['type'];
+        $split = explode('_', $_POST['dateTime']);
+        $dateTime = $split[0] . ' ' . str_replace('-', ':', $split[1]);
+
+        $this->collectFiles();
+        if (!isset(self::$fileData[$type][$dateTime])) {
+            new ErrorController(self::ERROR_DELETE_BY_TYPE_AND_DIRECTORY);
+            $this->redirect();
+        }
+
+        $toolController = new ToolController();
+        $toolController->deleteDirectory(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime);
+
+        new SuccessController(self::SUCCESS_DELETE_BY_TYPE_AND_DIRECTORY);
+        $this->redirect(true);
     }
 
     /**

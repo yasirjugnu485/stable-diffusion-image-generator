@@ -66,10 +66,70 @@ if (count($params['data'])) {
     </div>
     <?php
 }
+
+if (isset($params['type']) && isset($params['date_time'])) {
+    ?>
+    <div class="offcanvas offcanvas-end"
+         tabindex="-1"
+         id="offcanvasDeleteByTypeAndDateTime"
+         aria-labelledby="offcanvasDeleteByTypeAndDateTimeLabel"
+         style="min-width: 600px">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title"
+                id="offcanvasDeleteByTypeAndDateTimeLabel">Delete Directory
+            </h5>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close">
+            </button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="mb-4">
+                Be careful when deleting Images Directories. All generated Images in this directory will be
+                irretrievably lost.
+            </div>
+            <form method="post">
+                <input type="hidden"
+                       name="action"
+                       value="deleteByTypeAndDateTime">
+                <input type="hidden"
+                       name="type"
+                       value="<?php echo $params['type']; ?>">
+                <input type="hidden"
+                       name="dateTime"
+                       value="<?php echo $params['date_time']; ?>">
+                <div class="text-end">
+                    <button type="submit"
+                            class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i>
+                        Delete Directory
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <?php
+}
 ?>
 
 <div class="container mb-5" style="max-width: 1600px">
     <div class="row">
+        <?php
+        if (isset($params['type']) && isset($params['date_time'])) {
+            ?>
+            <div class="col-12 mb-5">
+                <button class="btn btn-danger"
+                        type="button"
+                        data-bs-toggle="offcanvas"
+                        href="#offcanvasDeleteByTypeAndDateTime">
+                    <i class="bi bi-trash me-1"></i>
+                    Delete Directory
+                </button>
+            </div>
+            <?php
+        }
+        ?>
         <div class="col-12">
             <?php include(ROOT_DIR . 'templates/breadcrumbs.php'); ?>
         </div>

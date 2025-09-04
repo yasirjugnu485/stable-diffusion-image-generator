@@ -152,6 +152,7 @@ class BaseModel
         $this->height = $config['height'];
         $this->width = $config['width'];
         $this->steps = $config['steps'];
+        $this->refinerSwitchAt = $config['refinerSwitchAt'];
         $this->restoreFaces = $config['restoreFaces'];
         $this->tiling = $config['tiling'];
         if ($config['enableHr']) {

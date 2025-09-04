@@ -15,7 +15,7 @@ namespace Cli\Controller;
 use Cli\Exception\PromptImageGeneratorException;
 use Cli\Exception\StableDiffusionServiceException;
 use Cli\Interface\CheckpointInterface;
-use Shared\Service\StableDiffusionService;
+use Cli\Service\StableDiffusionService;
 
 class CheckpointController implements CheckpointInterface
 {

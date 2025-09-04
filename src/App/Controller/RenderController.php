@@ -88,6 +88,8 @@ class RenderController
             ]
         ];
         $params['template'] = 'images_base.php';
+        $params['type'] = $type;
+        $params['date_time'] = $dateTimeName;
 
         $this->render($params);
     }
@@ -209,6 +211,21 @@ class RenderController
         $params['directory'] = $initImagesDirectory;
         $params['images'] = $initImagesImages;
         $params['template'] = 'init_images_editor.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render generator
+     *
+     * @return void
+     */
+    public function renderGenerator(): void
+    {
+        $params = $this->prepareParams();
+        $generatorController = new GeneratorController();
+        $params = array_merge($params, $generatorController->getData());
+        $params['template'] = 'generator.php';
 
         $this->render($params);
     }

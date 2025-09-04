@@ -70,6 +70,9 @@ class UriController
                 $renderController = new RenderController();
                 $renderController->renderInitImagesEditor($requestIndex[2]);
             }
+        } elseif ($requestIndex[1] === 'generator' && !isset($requestIndex[2])) {
+            $renderController = new RenderController();
+            $renderController->renderGenerator();
         }
 
         $this->notFound();

@@ -15,7 +15,7 @@ namespace Cli\Controller;
 use Cli\Exception\PromptImageGeneratorException;
 use Cli\Exception\StableDiffusionServiceException;
 use Cli\Interface\SamplerInterface;
-use Shared\Service\StableDiffusionService;
+use Cli\Service\StableDiffusionService;
 
 class SamplerController implements SamplerInterface
 {

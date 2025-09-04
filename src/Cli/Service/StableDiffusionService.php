@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Shared\Service;
+namespace Cli\Service;
 
 use Cli\Controller\ConfigController;
 use Cli\Exception\PromptImageGeneratorException;

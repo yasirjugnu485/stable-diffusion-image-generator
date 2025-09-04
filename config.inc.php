@@ -42,17 +42,6 @@ $this->startWebApplication = true;
 $this->numberOfImages = 10;
 
 /**
- * Wait for callback from stable diffusion and save images or only call the API to create the images
- *
- * @description If true, the script will wait for the callback from the stable diffusion API and save the images.
- *              If false, the script will only call the API to create the images.
- * @warning     Will automatically be enabled if loop is enabled.
- *
- * @var bool
- */
-$this->saveImages = true;
-
-/**
  * Loop txt2txt -> img2img or loop img2img -> img2img
  *
  * @description Creates a txt2txt -> img2img or img2img -> img2img loop, depending on the mode option. Creates the first
@@ -243,7 +232,7 @@ $this->hrResizeY = null;
  *
  * @var float|null
  */
-$this->hrScayle = 2;
+$this->hrScale = 2;
 
 /**
  * Hr sampler

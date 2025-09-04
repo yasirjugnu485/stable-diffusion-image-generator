@@ -17,7 +17,7 @@ use Cli\Exception\StableDiffusionServiceException;
 use Cli\Interface\ExecuteInterface;
 use Cli\Model\Img2ImgModel;
 use Cli\Model\Txt2ImgModel;
-use Shared\Service\StableDiffusionService;
+use Cli\Service\StableDiffusionService;
 
 class ExecuteController implements ExecuteInterface
 {
