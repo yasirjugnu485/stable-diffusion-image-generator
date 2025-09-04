@@ -47,8 +47,8 @@ class NavbarController
             self::$navbarData = [];
         }
 
-        $fileCollectorController = new FileCollectorController();
-        self::$navbarData['checkpoints'] = $fileCollectorController->collectUsedCheckpoints();
+        $fileController = new FileController();
+        self::$navbarData['checkpoints'] = $fileController->collectUsedCheckpoints();
     }
 
     /**
@@ -62,8 +62,8 @@ class NavbarController
             self::$navbarData = [];
         }
 
-        $fileCollectorController = new FileCollectorController();
-        $fileData = $fileCollectorController->getFileData();
+        $fileController = new FileController();
+        $fileData = $fileController->getFileData();
         self::$navbarData['types'] = [];
         foreach ($fileData as $type => $files) {
             self::$navbarData['types'][$type] = [];
@@ -85,8 +85,8 @@ class NavbarController
      */
     private function collectPrompts(): void
     {
-        $promptCollectorController = new PromptCollectorController();
-        self::$navbarData['prompts'] = $promptCollectorController->getPrompts();
+        $promptController = new PromptController();
+        self::$navbarData['prompts'] = $promptController->getPromptDirectories();
     }
 
     /**
@@ -96,8 +96,8 @@ class NavbarController
      */
     private function collectInitImages(): void
     {
-        $initImagesCollectorController = new InitImagesCollectorController();
-        self::$navbarData['init_images'] = $initImagesCollectorController->getInitImages();
+        $initImagesController = new InitImagesController();
+        self::$navbarData['init_images'] = $initImagesController->getInitImagesDirectories();
     }
 
     /**

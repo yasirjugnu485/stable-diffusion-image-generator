@@ -21,9 +21,9 @@ class HomeController
      */
     public function __construct()
     {
-        $fileCollectorController = new FileCollectorController();
-        $data = $fileCollectorController->getLastFiles();
-        $checkpoints = $fileCollectorController->collectUsedCheckpoints();
+        $fileController = new FileController();
+        $data = $fileController->getLastFiles();
+        $checkpoints = $fileController->collectUsedCheckpoints();
         $navbarController = new NavbarController();
         $navbar = $navbarController->getData();
 

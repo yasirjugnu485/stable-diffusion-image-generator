@@ -172,7 +172,7 @@
                             foreach ($params['navbar']['checkpoints'] as $entry) {
                                 ?>
                                 <li>
-                                    <a class="dropdown-item text-dark" href="/chekpoints/<?php echo $entry; ?>">
+                                    <a class="dropdown-item text-dark" href="/checkpoints/<?php echo $entry; ?>">
                                         <?php echo $entry; ?>
                                     </a>
                                 </li>
@@ -198,6 +198,7 @@
                        role="button"
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
+                        <i class="bi bi-files"></i>
                         Prompt Merger
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right<?php if (count($params['navbar']['prompts']) == 0) {
@@ -238,6 +239,7 @@
                        role="button"
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
+                        <i class="bi bi-images"></i>
                         Initialize Images
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right<?php if (count($params['navbar']['init_images']) == 0) {
@@ -270,6 +272,14 @@
                         }
                         ?>
                     </ul>
+                </li>
+
+                <li class="nav-item active">
+                    <a class="nav-link text-light"
+                       href="/generator">
+                        <i class="bi bi-lightning-fill"></i>
+                        Generator
+                    </a>
                 </li>
 
             </ul>

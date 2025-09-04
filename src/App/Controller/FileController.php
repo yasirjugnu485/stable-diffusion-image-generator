@@ -16,7 +16,7 @@ use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-class FileCollectorController
+class FileController
 {
     /**
      * File data

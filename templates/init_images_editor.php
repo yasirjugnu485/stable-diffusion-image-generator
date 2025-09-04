@@ -12,12 +12,12 @@ if ($params['directory'] !== 'demo') {
     ?>
     <div class="offcanvas offcanvas-end"
          tabindex="-1"
-         id="offcanvasDeletePromptMergerDirectory"
-         aria-labelledby="offcanvasDeletePromptMergerDirectoryLabel"
+         id="offcanvasDeleteInitImagesDirectory"
+         aria-labelledby="offcanvasDeleteInitImagesDirectoryLabel"
          style="min-width: 600px">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
-                id="offcanvasDeletePromptMergerDirectoryLabel">Delete Prompt Merger Directory
+                id="offcanvasDeleteInitImagesDirectoryLabel">Delete Initialize Images Directory
             </h5>
             <button type="button"
                     class="btn-close"
@@ -27,13 +27,14 @@ if ($params['directory'] !== 'demo') {
         </div>
         <div class="offcanvas-body">
             <div class="mb-4">
-                Be careful when deleting Prompt Merger Directories. All Prompt files will be irretrievably lost.
+                Be careful when deleting Initialize Images Directories. All Initialize Images will be irretrievably
+                lost.
             </div>
             <form method="post">
                 <div class="mb-3">
                     <input type="hidden"
                            name="action"
-                           value="deletePromptMergerDirectory">
+                           value="deleteInitImagesDirectory">
                     <input type="hidden"
                            name="directory"
                            value="<?php echo $params['directory']; ?>">
@@ -51,12 +52,12 @@ if ($params['directory'] !== 'demo') {
 
     <div class="offcanvas offcanvas-end"
          tabindex="-1"
-         id="offcanvasDeletePromptMergerFile"
-         aria-labelledby="offcanvasDeletePromptMergerFileLabel"
+         id="offcanvasDeleteInitImagesImage"
+         aria-labelledby="offcanvasDeleteImageLabel"
          style="min-width: 600px">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
-                id="offcanvasDeletePromptMergerFileLabel">Delete Prompt Merger File
+                id="offcanvasDeleteImageLabel">Delete Initialize Images Image
             </h5>
             <button type="button"
                     class="btn-close"
@@ -66,26 +67,27 @@ if ($params['directory'] !== 'demo') {
         </div>
         <div class="offcanvas-body">
             <div class="mb-4">
-                Be careful when deleting Prompt Merger Files. The prompts will be irretrievably lost.
+                Be careful when deleting Initialize Images Image. The Initialize Images Image will be irretrievably
+                lost.
             </div>
             <form method="post">
                 <div class="mb-3">
                     <input type="hidden"
                            name="action"
-                           value="deletePromptMergerFile">
+                           value="deleteInitImagesImage">
                     <input type="hidden"
                            name="directory"
                            value="<?php echo $params['directory']; ?>">
                     <input type="hidden"
-                           id="deletePromptMergerFile"
+                           id="deleteInitImagesImage"
                            name="file">
-                    <label for="deletePromptMergerFileInput"
+                    <label for="deleteInitImagesImageInput"
                            class="form-label">
-                        Prompt Merger File Name
+                        Delete Initialize Images Image Name
                     </label>
                     <input type="text"
                            class="form-control"
-                           id="deletePromptMergerFileInput"
+                           id="deleteInitImagesImageInput"
                            name="file"
                            disabled>
                 </div>
@@ -102,12 +104,12 @@ if ($params['directory'] !== 'demo') {
 
     <div class="offcanvas offcanvas-end"
          tabindex="-1"
-         id="offcanvasAddPromptMergerFile"
-         aria-labelledby="offcanvasAddPromptMergerFileLabel"
+         id="offcanvasAddImage"
+         aria-labelledby="offcanvasAddImageLabel"
          style="min-width: 600px">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
-                id="offcanvasAddPromptMergerFileLabel">Add new Prompt Merger File
+                id="offcanvasAddImageLabel">Add new Initialize Images Image
             </h5>
             <button type="button"
                     class="btn-close"
@@ -117,24 +119,35 @@ if ($params['directory'] !== 'demo') {
         </div>
         <div class="offcanvas-body">
             <div class="mb-4">
-                The Prompt Merger File name may only contain numbers, letters, _ and -.
+                The Initialize Images Image name may only contain numbers, letters, _ and -.
             </div>
-            <form method="post">
+            <form method="post"
+                  enctype='multipart/form-data'>
                 <div class="mb-3">
                     <input type="hidden"
                            name="action"
-                           value="addPromptMergerFile">
+                           value="addInitImagesImage">
                     <input type="hidden"
                            name="directory"
                            value="<?php echo $params['directory']; ?>">
-                    <label for="addPromptMergerFileName"
+                    <label for="addImageName"
                            class="form-label">
-                        Prompt Merger File Name
+                        Image Name
                     </label>
                     <input type="text"
-                           class="form-control"
-                           id="addPromptMergerFileName"
+                           class="form-control mb-3"
+                           id="addImageName"
                            name="name">
+                    <label for="addImageImage"
+                           class="form-label">
+                        Image (.png, .jpg, .jpeg)
+                    </label>
+                    <div class="input-group mb-3">
+                        <input type="file"
+                               class="form-control"
+                               id="addImageImage"
+                               name="image">
+                    </div>
                 </div>
                 <div class="text-end">
                     <button type="submit"
@@ -157,7 +170,7 @@ if ($params['directory'] !== 'demo') {
             ?>
             <div class="col-12">
                 <div class="alert alert-warning mb-5">
-                    The demo Prompt Merger Directory is part of the GIT repository and cannot be changed or deleted.
+                    The demo Initialize Images Directory is part of the GIT repository and cannot be changed or deleted.
                 </div>
             </div>
             <?php
@@ -190,7 +203,7 @@ if ($params['directory'] !== 'demo') {
                     <button class="btn btn-danger"
                             type="button"
                             data-bs-toggle="offcanvas"
-                            href="#offcanvasDeletePromptMergerDirectory">
+                            href="#offcanvasDeleteInitImagesDirectory">
                         <i class="bi bi-trash me-1"></i>
                         Delete
                     </button>
@@ -199,7 +212,7 @@ if ($params['directory'] !== 'demo') {
                     <button class="btn btn-primary"
                             type="button"
                             data-bs-toggle="offcanvas"
-                            href="#offcanvasAddPromptMergerFile">
+                            href="#offcanvasAddImage">
                         <i class="bi bi-plus-circle me-1"></i>
                         Add
                     </button>
@@ -213,58 +226,56 @@ if ($params['directory'] !== 'demo') {
             <?php echo $params['directory']; ?>
         </h3>
         <?php
-        if (count($params['files'])) {
+        if (count($params['images'])) {
             ?>
             <form method="post">
                 <input type="hidden"
                        name="action"
-                       value="editPromptMergerFiles">
+                       value="editInitImagesImages">
                 <input type="hidden"
                        name="directory"
                        value="<?php echo $params['directory']; ?>">
-                <div class="col-12">
+                <div class="row">
                     <?php
-                    foreach ($params['files'] as $file) {
+                    foreach ($params['images'] as $image) {
                         ?>
-                        <div class="card mb-4">
-                            <div class="card-header bg-dark text-light">
-                                <h5 class="float-start mt-2">
-                                    <?php echo $file['name']; ?>
-                                </h5>
-                                <?php
-                                if (count($params['files']) > 1 && $params['directory'] !== 'demo') {
-                                    ?>
-                                    <button class="btn btn-danger float-end"
-                                            type="button"
-                                            onclick="promptEditor.deleteFile('<?php echo $file['name']; ?>')">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </button>
+                        <div class="col-12 col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-dark text-light">
+                                    <h5 class="float-start mt-2">
+                                        <?php echo $image['name']; ?>
+                                    </h5>
                                     <?php
-                                }
-                                ?>
-                            </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label for="name<?php echo $file['name']; ?>"
-                                           class="form-label">
-                                        File name
-                                    </label>
-                                    <input type="text"
-                                           class="form-control"
-                                           id="name<?php echo $file['name']; ?>"
-                                           value="<?php echo $file['name']; ?>"
-                                           name="name[<?php echo $file['name']; ?>]">
+                                    if (count($params['images']) > 1 && $params['directory'] !== 'demo') {
+                                        ?>
+                                        <button class="btn btn-danger float-end"
+                                                type="button"
+                                                onclick="initImagesEditor.deleteInitImagesImage('<?php echo $image['name']; ?>', '<?php echo $image['file']; ?>')">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
-                                <div>
-                                    <label for="content<?php echo $file['name']; ?>"
-                                           class="form-label">
-                                        Prompts
-                                    </label>
-                                    <textarea
-                                            class="form-control"
-                                            id=content<?php echo $file['name']; ?>"
-                                            rows="20"
-                                            name="content[<?php echo $file['name']; ?>]"><?php echo $file['content']; ?></textarea>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <input type="hidden"
+                                               name="file[<?php echo $image['name']; ?>]"
+                                               value="<?php echo $image['file']; ?>">
+                                        <label for="name<?php echo $image['name']; ?>"
+                                               class="form-label">
+                                            Image name
+                                        </label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="name<?php echo $image['name']; ?>"
+                                               value="<?php echo $image['name']; ?>"
+                                               name="name[<?php echo $image['name']; ?>]">
+                                    </div>
+                                    <div>
+                                        <img class="w-100 border rounded"
+                                             src="/image.php?image=<?php echo urlencode($image['url']); ?>">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -292,7 +303,7 @@ if ($params['directory'] !== 'demo') {
             ?>
             <div class="col-12">
                 <div class="alert alert-warning">
-                    No Prompt Merger Files available yet
+                    No Initialize Images available yet
                 </div>
             </div>
             <?php
@@ -302,15 +313,15 @@ if ($params['directory'] !== 'demo') {
 </div>
 
 <script>
-    class PromptEditor {
-        deleteFile = (file) => {
-            document.getElementById('deletePromptMergerFile').value = file;
-            document.getElementById('deletePromptMergerFileInput').value = file;
-            let offcanvasDeletePromptMergerFile = document.getElementById('offcanvasDeletePromptMergerFile')
-            const offcanvas = new bootstrap.Offcanvas(offcanvasDeletePromptMergerFile)
+    class InitImagesEditor {
+        deleteInitImagesImage = (name, file) => {
+            document.getElementById('deleteInitImagesImage').value = file;
+            document.getElementById('deleteInitImagesImageInput').value = name;
+            let offcanvasDeleteInitImagesImage = document.getElementById('offcanvasDeleteInitImagesImage')
+            const offcanvas = new bootstrap.Offcanvas(offcanvasDeleteInitImagesImage)
             offcanvas.show()
         }
     }
 
-    const promptEditor = new PromptEditor();
+    const initImagesEditor = new InitImagesEditor();
 </script>

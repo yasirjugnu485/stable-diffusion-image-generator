@@ -43,10 +43,10 @@ class RenderController
     {
         $params = $this->prepareParams();
 
-        $fileCollectorController = new FileCollectorController();
-        $type = $fileCollectorController->getType();
+        $fileController = new FileController();
+        $type = $fileController->getType();
 
-        $params['data'] = $fileCollectorController->getFilesByType($type);
+        $params['data'] = $fileController->getFilesByType($type);
         $params['breadcrumbs'] = [
             [
                 'title' => $type,
@@ -68,13 +68,13 @@ class RenderController
     {
         $params = $this->prepareParams();
 
-        $fileCollectorController = new FileCollectorController();
-        $type = $fileCollectorController->getType();
-        $dateTime = $fileCollectorController->getDateTime();
+        $fileController = new FileController();
+        $type = $fileController->getType();
+        $dateTime = $fileController->getDateTime();
         $dateTimeName = str_replace(':', '-', $dateTime);
         $dateTimeName = str_replace(' ', '_', $dateTimeName);
 
-        $params['data'] = $fileCollectorController->getFilesByTypeAndDateTime();
+        $params['data'] = $fileController->getFilesByTypeAndDateTime();
         $params['breadcrumbs'] = [
             [
                 'title' => $type,
@@ -101,10 +101,10 @@ class RenderController
     {
         $params = $this->prepareParams();
 
-        $fileCollectorController = new FileCollectorController();
-        $checkpoint = $fileCollectorController->getCheckpoint();
+        $fileController = new FileController();
+        $checkpoint = $fileController->getCheckpoint();
 
-        $params['data'] = $fileCollectorController->getFilesByCheckpoint();
+        $params['data'] = $fileController->getFilesByCheckpoint();
         $params['breadcrumbs'] = [
             [
                 'title' => 'checkpoints',
@@ -131,9 +131,9 @@ class RenderController
     {
         $params = $this->prepareParams();
 
-        $fileCollectorController = new FileCollectorController();
-        $params['checkpoints'] = $fileCollectorController->collectUsedCheckpoints();
-        $params['data'] = $fileCollectorController->getCheckpointFiles();
+        $fileController = new FileController();
+        $params['checkpoints'] = $fileController->collectUsedCheckpoints();
+        $params['data'] = $fileController->getCheckpointFiles();
         $params['base_breadcrumbs'] = [
             [
                 'title' => 'checkpoints',
@@ -155,8 +155,8 @@ class RenderController
     public function renderPrompts(): void
     {
         $params = $this->prepareParams();
-        $promptCollectorController = new PromptCollectorController();
-        $params['prompts'] = $promptCollectorController->getPrompts();
+        $promptController = new PromptController();
+        $params['prompts'] = $promptController->getPromptDirectories();
         $params['template'] = 'prompts.php';
 
         $this->render($params);
@@ -170,8 +170,8 @@ class RenderController
     public function renderInitImages(): void
     {
         $params = $this->prepareParams();
-        $initImagesCollectorController = new InitImagesCollectorController();
-        $params['init_images'] = $initImagesCollectorController->getInitImages();
+        $initImagesController = new InitImagesController();
+        $params['init_images'] = $initImagesController->getInitImagesDirectories();
         $params['template'] = 'init_images.php';
 
         $this->render($params);
@@ -180,17 +180,35 @@ class RenderController
     /**
      * Render prompt editor
      *
-     * @param string $prompt Prompt
+     * @param string $promptDirectory Prompt directory
      * @return void
      */
-    public function renderPromptEditor(string $prompt): void
+    public function renderPromptEditor(string $promptDirectory): void
     {
         $params = $this->prepareParams();
-        $promptCollectorController = new PromptCollectorController();
-        $promptFiles = $promptCollectorController->getPromptFiles($prompt);
-        $params['prompt'] = $prompt;
+        $promptController = new PromptController();
+        $promptFiles = $promptController->getPromptFiles($promptDirectory);
+        $params['directory'] = $promptDirectory;
         $params['files'] = $promptFiles;
         $params['template'] = 'prompt_editor.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render initialize images editor
+     *
+     * @param string $initImagesDirectory Initialize images directory
+     * @return void
+     */
+    public function renderInitImagesEditor(string $initImagesDirectory): void
+    {
+        $params = $this->prepareParams();
+        $initImagesController = new InitImagesController();
+        $initImagesImages = $initImagesController->getInitImagesImages($initImagesDirectory);;
+        $params['directory'] = $initImagesDirectory;
+        $params['images'] = $initImagesImages;
+        $params['template'] = 'init_images_editor.php';
 
         $this->render($params);
     }

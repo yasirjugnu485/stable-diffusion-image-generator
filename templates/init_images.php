@@ -32,7 +32,7 @@
             <div class="mb-3">
                 <input type="hidden"
                        name="action"
-                       value="addInitImages">
+                       value="addInitImagesDirectory">
                 <label for="directory"
                        class="form-label">
                     Initialize Images Directory name
@@ -40,7 +40,7 @@
                 <input type="text"
                        class="form-control"
                        id="directory"
-                       name="initImages">
+                       name="directory">
             </div>
             <div class="text-end">
                 <button type="submit"
