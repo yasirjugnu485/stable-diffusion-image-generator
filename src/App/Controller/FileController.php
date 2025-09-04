@@ -452,7 +452,9 @@ class FileController implements FileInterface
             $split = explode('/outputs/', $payload['file']);
             $file = '/outputs/' . end($split);
             if ($file === $image) {
-                unlink($payload['file']);
+                if (file_exists($payload['file'])) {
+                    unlink($payload['file']);
+                }
                 unset($payloads[$index]);
                 if (!count($payloads)) {
                     $toolController = new ToolController();
