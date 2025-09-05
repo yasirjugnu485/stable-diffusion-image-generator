@@ -34,4 +34,11 @@ interface GeneratorInterface
      * @var string
      */
     const string ERROR_ON_LOAD_SAMPLERS = 'Error on load samplers. Stable Diffusion host ist not reachable. Check your config.app.php file and configure an reachable Stable Diffusion host.';
+
+    /**
+     * Error on load prompts
+     *
+     * @var string
+     */
+    const string ERROR_ON_LOAD_PROMPTS = 'No Prompt Merger Directories available. Use Prompt Merger to create your prompt generator.';
 }

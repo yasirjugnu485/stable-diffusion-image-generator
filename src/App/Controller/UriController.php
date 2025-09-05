@@ -73,6 +73,10 @@ class UriController
         } elseif ($requestIndex[1] === 'generator' && !isset($requestIndex[2])) {
             $renderController = new RenderController();
             $renderController->renderGenerator();
+        } elseif ($requestIndex[1] === 'generate' && !isset($requestIndex[2])) {
+            echo 'php ' . ROOT_DIR . 'run.php --config ' . ROOT_DIR . 'config.app.php';
+            exec('php ' . ROOT_DIR . 'run.php --config ' . ROOT_DIR . 'config.app.php');
+            exit();
         }
 
         $this->notFound();

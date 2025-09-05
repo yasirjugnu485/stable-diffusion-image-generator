@@ -72,7 +72,6 @@ class BootstrapController implements BootstrapInterface
     private function initArguments(): void
     {
         $possibleArguments = [
-            'run.php',
             '--help',
             '-h',
             '--start-web-application',
@@ -83,7 +82,7 @@ class BootstrapController implements BootstrapInterface
         ];
 
         if (isset($_SERVER['argv'])) {
-            for ($i = 0; $i < count($_SERVER['argv']); $i++) {
+            for ($i = 1; $i < count($_SERVER['argv']); $i++) {
                 if (!in_array($_SERVER['argv'][$i], $possibleArguments)) {
                     throw new PromptImageGeneratorException(sprintf(
                         self::ERROR_UNKNOWN_ARGUMENT,

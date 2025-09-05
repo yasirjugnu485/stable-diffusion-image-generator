@@ -1,0 +1,24 @@
+<?php
+$this->host = ['host'];
+$this->startWebApplication = true;
+$this->numberOfImages = ['numberOfImages'];
+$this->loop = ['loop'];
+$this->dryRun = false;
+$this->mode = ['mode'];
+$this->checkpoint = ['checkpoint'];
+$this->sampler = ['sampler'];
+$this->prompt = ['prompt'];
+$this->initImages = ['initImages'];
+$this->width = ['width'];
+$this->height = ['height'];
+$this->steps = ['steps'];
+$this->refinerCheckpoint = ['refinerCheckpoint'];
+$this->refinerSwitchAt = ['refinerSwitchAt'];
+$this->restoreFaces = ['restoreFaces'];
+$this->tiling = ['tiling'];
+$this->enableHr = ['enableHr'];
+$this->hrUpscaler  = ['hrUpscaler'];
+$this->hrResizeX = ['hrResizeX'];
+$this->hrResizeY  = ['hrResizeY'];
+$this->hrScale = ['hrScale'];
+$this->hrSamplerName = ['hrSamplerName'];

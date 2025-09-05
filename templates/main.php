@@ -12,11 +12,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/out/css/bootstrap.min.css">
     <link rel="stylesheet" href="/out/css/lightbox.css">
     <link rel="stylesheet" href="/out/css/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/out/css/multi-select-tag.min.css">
     <script src="/out/js/bootstrap.bundle.min.js"></script>
     <script src="/out/js/lightbox.js"></script>
+    <script src="/out/js/multi-select-tag.min.js"></script>
 </head>
 <body>
 <?php include(ROOT_DIR . 'templates/navbar.php'); ?>

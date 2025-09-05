@@ -19,7 +19,7 @@ declare(strict_types = 1);
  *
  * @description The host and port where the stable diffusion API is running.
  *
- * @var bool
+ * @var string
  */
 $this->host = 'http://127.0.0.1:7860';
 
@@ -185,12 +185,12 @@ $this->tiling = false;
 
 
 
-// Hires fix
+// Hires fix (Only txt2img)
 //----------------------------------------------------------------------------------------------------------------------
 /**
  * Enable hires fix
  *
- * @description Enable or disable hires fix.
+ * @description Enable or disable hires fix. Only available in txt2img mode.
  *
  * @var bool
  */

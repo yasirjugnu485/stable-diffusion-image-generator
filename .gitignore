@@ -6,4 +6,5 @@ config.local.php
 dry_run.json
 options.json
 samplers.json
+upscalers.json
 task_*

@@ -224,6 +224,11 @@ class RenderController
     {
         $params = $this->prepareParams();
         $generatorController = new GeneratorController();
+        if ($generatorController->getStartGeneration()) {
+            $params['template'] = 'generate.php';
+            $this->render($params);
+        }
+
         $params = array_merge($params, $generatorController->getData());
         $params['template'] = 'generator.php';
 

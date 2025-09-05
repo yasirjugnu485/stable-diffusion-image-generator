@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Interface\GeneratorInterface;
+use App\Model\ConfigModel;
 use App\Service\StableDiffusionService;
 
 class GeneratorController implements GeneratorInterface
@@ -30,6 +31,27 @@ class GeneratorController implements GeneratorInterface
      * @var array|null
      */
     private static array|null $samplers = null;
+
+    /**
+     * Prompt directories
+     *
+     * @var array|null
+     */
+    private static array|null $prompts = null;
+
+    /**
+     * Init images directories
+     *
+     * @var array|null
+     */
+    private static array|null $initImages = null;
+
+    /**
+     * Upscalers
+     *
+     * @var array|null = null
+     */
+    private static array|null $upscalers = null;
 
     /**
      * Error message
@@ -83,7 +105,19 @@ class GeneratorController implements GeneratorInterface
         $success = $this->collectSamplers($config['host']);
         if (!$success) {
             self::$error = self::ERROR_ON_LOAD_SAMPLERS;
+            return;
         }
+
+        $success = $this->collectPrompts();
+        if (!$success) {
+            self::$error = self::ERROR_ON_LOAD_PROMPTS;
+            return;
+        }
+
+        $this->collectInitImages();
+        $this->collectUpscalers($config['host']);
+
+        $this->handleAction();
     }
 
     /**
@@ -137,6 +171,55 @@ class GeneratorController implements GeneratorInterface
     }
 
     /**
+     * Collect prompts directories
+     *
+     * @return bool
+     */
+    private function collectPrompts(): bool
+    {
+        $promptController = new PromptController();
+        $prompts = $promptController->getPromptDirectories();
+        foreach ($prompts as $prompt) {
+            self::$prompts[] = $prompt;
+        }
+
+        return count(self::$prompts) > 0;
+    }
+
+    /**
+     * Collect initialize images directories
+     *
+     * @return void
+     */
+    private function collectInitImages(): void
+    {
+        $initImageController = new InitImageController();
+        $initImages = $initImageController->getInitImagesDirectories();
+        foreach ($initImages as $initImage) {
+            self::$initImages[] = $initImage;
+        }
+    }
+
+    /**
+     * Collect upscalers
+     *
+     * @param string $host Host
+     * @return void
+     */
+    private function collectUpscalers(string $host): void
+    {
+        $stableDiffusionService = new StableDiffusionService();
+        $upscalers = $stableDiffusionService->getUpscalers($host);
+        if (!$upscalers) {
+            self::$upscalers = [];
+        }
+
+        foreach ($upscalers as $upscaler) {
+            self::$upscalers[] = $upscaler['name'];
+        }
+    }
+
+    /**
      * Get data
      *
      * @return array
@@ -150,15 +233,33 @@ class GeneratorController implements GeneratorInterface
                 'error' => self::$error ? self::$error : self::ERROR_ON_LOAD_CONFIG,
             ];
         }
+        if (isset($configData['refinerSwitchAt'])) {
+            if (is_float($configData['refinerSwitchAt'])) {
+                $configData['refinerSwitchAt'] = $configData['refinerSwitchAt'] * 100;
+            } else {
+                $configData['refinerSwitchAt'] = 70;
+            }
+        }
+        if ($configData['refinerSwitchAt'] > 100) {
+            $configData['refinerSwitchAt'] = 100;
+        }
 
         $checkpoints = $this->getCheckpoints($configData);
         $samplers = $this->getSamplers($configData);
         $refinerCheckpoints = $this->getRefinerCheckpoints($configData);
+        $prompts = $this->getPrompts($configData);
+        $initImages = $this->getInitImages($configData);
+        if (!count(self::$upscalers)) {
+            $configData['upscaler'] = null;
+        }
 
         return [
             'config' => $configData,
             'checkpoints' => $checkpoints,
             'refinerCheckpoints' => $refinerCheckpoints,
+            'prompts' => $prompts,
+            'initImages' => $initImages,
+            'upscalers' => self::$upscalers,
             'samplers' => $samplers,
             'error' => self::$error,
         ];
@@ -249,5 +350,118 @@ class GeneratorController implements GeneratorInterface
         }
 
         return $refinerCheckpoints;
+    }
+
+    /**
+     * Get prompts
+     *
+     * @param array $configData Config data
+     * @return array
+     */
+    private function getPrompts(array $configData): array
+    {
+        $prompts = [];
+        foreach (self::$prompts as $prompt) {
+            $selected = false;
+            if (is_string($configData['prompt'])) {
+                if ($prompt === $configData['prompt']) {
+                    $selected = true;
+                }
+            } elseif (is_array($configData['prompt'])) {
+                if (in_array($prompt, $configData['prompt'])) {
+                    $selected = true;
+                }
+            }
+            $prompts[] = [
+                'name' => $prompt,
+                'selected' => $selected,
+            ];
+        }
+
+        return $prompts;
+    }
+
+    /**
+     * Get initialize images
+     *
+     * @param array $configData Config data
+     * @return array
+     */
+    private function getInitImages(array $configData): array
+    {
+        $initImages = [];
+        foreach (self::$initImages as $initImage) {
+            $selected = false;
+            if (is_string($configData['initImages'])) {
+                if ($initImage === $configData['initImages']) {
+                    $selected = true;
+                }
+            } elseif (is_array($configData['initImages'])) {
+                if (in_array($initImages, $configData['initImages'])) {
+                    $selected = true;
+                }
+            }
+            $initImages[] = [
+                'name' => $initImage,
+                'selected' => $selected,
+            ];
+        }
+
+        return $initImages;
+    }
+
+    /**
+     * Handle actions
+     *
+     * @return void
+     */
+    private function handleAction(): void
+    {
+        if (!self::$error) {
+            if (isset($_POST['action']) && $_POST['action'] === 'generate') {
+                $this->generate();
+            }
+        }
+    }
+
+    /**
+     * Generate
+     *
+     * @return void
+     */
+    private function generate(): void
+    {
+        $configModel = new ConfigModel();
+        $configModel->create();
+
+        $_SESSION['GeneratorController'] = true;
+
+        $this->redirect();
+    }
+
+    /**
+     * Redirect
+     *
+     * @return void
+     */
+    public function redirect(): void
+    {
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit();
+    }
+
+    /**
+     * Get start generating
+     *
+     * @return bool
+     */
+    public function getStartGeneration(): bool
+    {
+        if (!isset($_SESSION['GeneratorController'])) {
+            return false;
+        }
+
+        unset($_SESSION['GeneratorController']);
+        return true;
     }
 }
