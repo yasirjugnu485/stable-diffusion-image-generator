@@ -75,7 +75,8 @@ class UriController
             $renderController->renderGenerator();
         } elseif ($requestIndex[1] === 'generate' && !isset($requestIndex[2])) {
             echo 'php ' . ROOT_DIR . 'run.php --config ' . ROOT_DIR . 'config.app.php';
-            exec('php ' . ROOT_DIR . 'run.php --config ' . ROOT_DIR . 'config.app.php');
+            shell_exec('php ' . ROOT_DIR . 'run.php --config ' .
+                ROOT_DIR . 'config.app.php > /dev/null 2>/dev/null &');
             exit();
         }
 
