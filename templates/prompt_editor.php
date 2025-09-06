@@ -14,7 +14,7 @@ if ($params['directory'] !== 'demo') {
          tabindex="-1"
          id="offcanvasDeletePromptMergerDirectory"
          aria-labelledby="offcanvasDeletePromptMergerDirectoryLabel"
-         style="min-width: 600px">
+         style="width: 600px; max-width: 100%">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
                 id="offcanvasDeletePromptMergerDirectoryLabel">Delete Prompt Merger Directory
@@ -53,7 +53,7 @@ if ($params['directory'] !== 'demo') {
          tabindex="-1"
          id="offcanvasDeletePromptMergerFile"
          aria-labelledby="offcanvasDeletePromptMergerFileLabel"
-         style="min-width: 600px">
+         style="width: 600px; max-width: 100%">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
                 id="offcanvasDeletePromptMergerFileLabel">Delete Prompt Merger File
@@ -104,7 +104,7 @@ if ($params['directory'] !== 'demo') {
          tabindex="-1"
          id="offcanvasAddPromptMergerFile"
          aria-labelledby="offcanvasAddPromptMergerFileLabel"
-         style="min-width: 600px">
+         style="width: 600px; max-width: 100%">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
                 id="offcanvasAddPromptMergerFileLabel">Add new Prompt Merger File

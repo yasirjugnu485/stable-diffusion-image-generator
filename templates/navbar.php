@@ -13,7 +13,9 @@
     <div class="container-fluid">
         <a class="navbar-brand text-light"
            href="/">
-            <img src="/out/img/stable-diffusion.png" style="height: 2rem; margin-top: -0.25rem;">
+            <img src="/out/img/stable-diffusion.png"
+                 class="me-2"
+                 style="height: 2rem; margin-top: -0.25rem;">
             Image Generator
         </a>
         <button class="navbar-toggler"

@@ -13,7 +13,7 @@
      tabindex="-1"
      id="offcanvasAdd"
      aria-labelledby="offcanvasAddLabel"
-     style="min-width: 600px">
+     style="width: 600px; max-width: 100%">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title"
             id="offcanvasAddLabel">Add new Initialize Images Directory

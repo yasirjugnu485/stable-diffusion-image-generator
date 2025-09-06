@@ -14,7 +14,7 @@ if ($params['directory'] !== 'demo') {
          tabindex="-1"
          id="offcanvasDeleteInitImagesDirectory"
          aria-labelledby="offcanvasDeleteInitImagesDirectoryLabel"
-         style="min-width: 600px">
+         style="width: 600px; max-width: 100%">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
                 id="offcanvasDeleteInitImagesDirectoryLabel">Delete Initialize Images Directory
@@ -54,7 +54,7 @@ if ($params['directory'] !== 'demo') {
          tabindex="-1"
          id="offcanvasDeleteInitImagesImage"
          aria-labelledby="offcanvasDeleteImageLabel"
-         style="min-width: 600px">
+         style="width: 600px; max-width: 100%">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
                 id="offcanvasDeleteImageLabel">Delete Initialize Images Image
@@ -106,7 +106,7 @@ if ($params['directory'] !== 'demo') {
          tabindex="-1"
          id="offcanvasAddImage"
          aria-labelledby="offcanvasAddImageLabel"
-         style="min-width: 600px">
+         style="width: 600px; max-width: 100%">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
                 id="offcanvasAddImageLabel">Add new Initialize Images Image

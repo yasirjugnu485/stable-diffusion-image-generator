@@ -75,7 +75,7 @@ if (isset($params['type']) && isset($params['date_time'])) {
          tabindex="-1"
          id="offcanvasDeleteByTypeAndDateTime"
          aria-labelledby="offcanvasDeleteByTypeAndDateTimeLabel"
-         style="min-width: 600px">
+         style="width: 600px; max-width: 100%">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
                 id="offcanvasDeleteByTypeAndDateTimeLabel">Delete Directory
