@@ -104,7 +104,7 @@ class FileController implements FileInterface
         foreach ($iterator as $item) {
             $path = $item->getPathname();
             if ($item->isFile()) {
-                if (!str_ends_with($path, 'payloads.json')) {
+                if (!str_ends_with($path, 'data.json')) {
                     continue;
                 }
                 $result[] = str_replace($directory, '', $path);
@@ -211,7 +211,7 @@ class FileController implements FileInterface
                     return true;
                 }
             } else {
-                if (str_ends_with($fileOrArray, 'payloads.json')) {
+                if (str_ends_with($fileOrArray, 'data.json')) {
                     return true;
                 }
             }
@@ -231,10 +231,10 @@ class FileController implements FileInterface
             self::$payloads = [];
             foreach (self::$fileData as $type => $typeData) {
                 foreach ($typeData as $dateTime => $payloads) {
-                    if (file_exists(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/payloads.json')) {
+                    if (file_exists(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/data.json')) {
                         self::$payloads = array_merge(self::$payloads, json_decode(
                             file_get_contents(
-                                ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/payloads.json'),
+                                ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/data.json'),
                             true
                         ));
                     }
@@ -255,7 +255,7 @@ class FileController implements FileInterface
     private function getDataFromPayload(string $type, string $key): array
     {
         $payloads = json_decode(
-            file_get_contents(ROOT_DIR . 'outputs/' . $type . '/' . $key . '/payloads.json'), true
+            file_get_contents(ROOT_DIR . 'outputs/' . $type . '/' . $key . '/data.json'), true
         );
 
         foreach ($payloads as $index => $payload) {
@@ -438,13 +438,13 @@ class FileController implements FileInterface
         $type = $split[1];
         $dateTime = $split[2];
 
-        if (!file_exists(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/payloads.json')) {
+        if (!file_exists(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/data.json')) {
             new ErrorController(self::ERROR_DELETE_IMAGE);
             $this->redirect();
         }
 
         $payloads = json_decode(
-            file_get_contents(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/payloads.json'),
+            file_get_contents(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/data.json'),
             true
         );
 
@@ -467,7 +467,7 @@ class FileController implements FileInterface
         }
 
         file_put_contents(
-            ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/payloads.json',
+            ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/data.json',
             json_encode($payloads)
         );
 
