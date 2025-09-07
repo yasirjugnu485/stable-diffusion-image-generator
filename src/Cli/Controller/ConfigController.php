@@ -242,7 +242,7 @@ class ConfigController implements ConfigInterface
         new EchoController(self::ECHO_INIT_CONFIG);
 
         $date = new DateTime('NOW');
-        $this->dateTime = $date->format('Y-m-d H:i:s');
+        $this->dateTime = $date->format('Ymd-His');
 
         if (!file_exists(ROOT_DIR . 'config.inc.php')) {
             throw new PromptImageGeneratorException(self::ERROR_CONFIG_NOT_FOUND);

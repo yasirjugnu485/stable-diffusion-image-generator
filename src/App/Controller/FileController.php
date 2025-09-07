@@ -313,8 +313,6 @@ class FileController implements FileInterface
      */
     public function collectFilesByTypeAndDateTime(string $type, string $dateTime): array
     {
-        $split = explode('_', $dateTime);
-        $dateTime = $split[0] . ' ' . str_replace('-', ':', $split[1]);
         if (!isset(self::$fileData[$type][$dateTime])) {
             return [];
         }
