@@ -90,17 +90,12 @@ class ExecuteController implements ExecuteInterface
     {
         new EchoController(sprintf(self::ECHO_GENERATE_IMAGE_WITH_PROMPT, $prompt));
 
-        $promptController = new PromptController();
-        $lastPrompt = $promptController->getLastPrompt();
         $configController = new ConfigController();
         $config = $configController->getConfig();
 
         $txt2imgModel = new Txt2ImgModel();
         $txt2imgModel->setPrompt($prompt);
         $payload = $txt2imgModel->toJson();
-
-        $checkpointController = new CheckpointController();
-        $checkpoint = $checkpointController->getCurrentCheckpoint();
 
         $name = str_pad((string)$numberOfGeneratedImages, 10, '0', STR_PAD_LEFT);
         $directory = ROOT_DIR . 'outputs/';
@@ -163,8 +158,6 @@ class ExecuteController implements ExecuteInterface
             $currentInitImageFile
         ));
 
-        $promptController = new PromptController();
-        $lastPrompt = $promptController->getLastPrompt();
         $configController = new ConfigController();
         $config = $configController->getConfig();
 
@@ -172,9 +165,6 @@ class ExecuteController implements ExecuteInterface
         $img2imgModel->setPrompt($prompt);
         $img2imgModel->setInitImages([$nextInitImage]);
         $payload = $img2imgModel->toJson();
-
-        $checkpointController = new CheckpointController();
-        $checkpoint = $checkpointController->getCurrentCheckpoint();
 
         $name = str_pad((string)$numberOfGeneratedImages, 10, '0', STR_PAD_LEFT);
         $directory = ROOT_DIR . 'outputs/';

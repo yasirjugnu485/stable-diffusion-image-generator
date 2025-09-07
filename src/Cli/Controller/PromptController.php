@@ -157,14 +157,4 @@ class PromptController implements PromptInterface
 
         return implode(' ', $prompt);
     }
-
-    /**
-     * Get last prompt
-     *
-     * @return string
-     */
-    public function getLastPrompt(): string
-    {
-        return self::$lastPrompt;
-    }
 }
