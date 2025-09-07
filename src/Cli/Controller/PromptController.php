@@ -25,13 +25,6 @@ class PromptController implements PromptInterface
     private static array $promptData = [];
 
     /**
-     * Last prompt
-     *
-     * @var string|null
-     */
-    private static string|null $lastPrompt = null;
-
-    /**
      * Current prompt
      *
      * @var string|null
@@ -128,8 +121,6 @@ class PromptController implements PromptInterface
      */
     public function getNextPrompt(): string
     {
-        self::$lastPrompt = self::$currentPrompt;
-
         $prompt = [];
         foreach (self::$promptData[self::$currentPrompt] as $promptData) {
             $rand = array_rand($promptData);
