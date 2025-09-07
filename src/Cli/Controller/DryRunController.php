@@ -15,30 +15,30 @@ namespace Cli\Controller;
 class DryRunController
 {
     /**
-     * Used payloads for dry run
+     * Used data for dry run
      *
      * @var array|null
      */
-    private static array|null $payloads = null;
+    private static array|null $data = null;
 
     /**
-     * Add payload to dry run
+     * Add data to dry run
      *
-     * @param string $payload Payload
+     * @param string $data Data
      * @return void
      */
-    public function addPayload(string $payload): void
+    public function addData(string $data): void
     {
-        if (self::$payloads === null) {
-            self::$payloads = [];
+        if (self::$data === null) {
+            self::$data = [];
         }
 
-        $array = json_decode($payload, true);
+        $array = json_decode($data, true);
         if (isset($array['init_images'][0])) {
             $array['init_images'][0] = substr($array['init_images'][0], 0, 50) . '...';
         }
 
-        self::$payloads[] = $array;
+        self::$data[] = $array;
     }
 
     /**
@@ -48,10 +48,10 @@ class DryRunController
      */
     public function exit(): void
     {
-        if (self::$payloads) {
+        if (self::$data) {
             file_put_contents(
                 ROOT_DIR . 'dry_run.json',
-                json_encode(self::$payloads, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+                json_encode(self::$data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
             );
         }
     }

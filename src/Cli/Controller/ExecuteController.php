@@ -18,6 +18,7 @@ use Cli\Interface\ExecuteInterface;
 use Cli\Model\Img2ImgModel;
 use Cli\Model\Txt2ImgModel;
 use Cli\Service\StableDiffusionService;
+use Random\RandomException;
 
 class ExecuteController implements ExecuteInterface
 {
@@ -25,7 +26,7 @@ class ExecuteController implements ExecuteInterface
      * Execute CLI application
      *
      * @return void
-     * @throws PromptImageGeneratorException|StableDiffusionServiceException
+     * @throws PromptImageGeneratorException|StableDiffusionServiceException|RandomException
      */
     public function run(): void
     {
@@ -108,13 +109,13 @@ class ExecuteController implements ExecuteInterface
         } else {
             $directory .= 'txt2img/';
         }
-        $directory .= $config['dateTime'] . '/' . $checkpoint . '/' . $lastPrompt;
+        $directory .= $config['dateTime'];
         $file = $directory . '/' . $name . '.png';
         if (!is_dir($directory)) {
             mkdir($directory, 0777, true);
         }
-        $payloadController = new PayloadController();
-        $payloadController->add($file, 'txt2img', $payload);
+        $dataController = new DataController();
+        $dataController->add($file, 'txt2img', $payload);
 
         if (!$config['dryRun']) {
             $stableDiffusionService = new StableDiffusionService();
@@ -134,7 +135,7 @@ class ExecuteController implements ExecuteInterface
                 new EchoController(sprintf(self::ERROR_GENERATE_IMAGE_WITH_PROMPT, $prompt));
             }
         } else {
-            $this->addPayloadToDryRun($payload);
+            $this->addDataToDryRun($payload);
         }
     }
 
@@ -182,13 +183,13 @@ class ExecuteController implements ExecuteInterface
         } else {
             $directory .= 'img2img/';
         }
-        $directory .= $config['dateTime'] . '/' . $checkpoint . '/' . $lastPrompt;
+        $directory .= $config['dateTime'];
         $file = $directory . '/' . $name . '.png';
         if (!is_dir($directory)) {
             mkdir($directory, 0777, true);
         }
-        $payloadController = new PayloadController();
-        $payloadController->add($file, 'img2img', $payload, $currentInitImageFile);
+        $dataController = new DataController();
+        $dataController->add($file, 'img2img', $payload, $currentInitImageFile);
 
         if (!$config['dryRun']) {
             $stableDiffusionService = new StableDiffusionService();
@@ -212,7 +213,7 @@ class ExecuteController implements ExecuteInterface
                 ));
             }
         } else {
-            $this->addPayloadToDryRun($payload);
+            $this->addDataToDryRun($payload);
         }
     }
 
@@ -230,15 +231,15 @@ class ExecuteController implements ExecuteInterface
     }
 
     /**
-     * Add payload to dry run
+     * Add data to dry run
      *
      * @param string $payload Payload
      * @return void
      */
-    private function addPayloadToDryRun(string $payload): void
+    private function addDataToDryRun(string $payload): void
     {
         $dryRunController = new DryRunController();
-        $dryRunController->addPayload($payload);
+        $dryRunController->addData($payload);
     }
 
     /**

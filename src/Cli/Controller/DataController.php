@@ -14,46 +14,46 @@ namespace Cli\Controller;
 
 use Cli\Exception\PromptImageGeneratorException;
 
-class PayloadController
+class DataController
 {
     /**
-     * Payload
+     * Collected data
      *
      * @var array
      */
-    private static array $payload = [];
+    private static array $data = [];
 
     /**
-     * Add to payload
+     * Add to data
      *
      * @param string $file File
      * @param string $mode Mode
-     * @param string $payload Payload
+     * @param string $data Data
      * @param string|null $img2imgFile Img2img file
      * @return void
      * @throws PromptImageGeneratorException
      */
-    public function add(string $file, string $mode, string $payload, string|null $img2imgFile = null): void
+    public function add(string $file, string $mode, string $data, string|null $img2imgFile = null): void
     {
-        $payload = json_decode($payload, true);
-        if (isset($payload['init_images'])) {
-            unset($payload['init_images']);
+        $data = json_decode($data, true);
+        if (isset($data['init_images'])) {
+            unset($data['init_images']);
         }
         if (null !== $img2imgFile) {
-            $payload['init_images'] = $img2imgFile;
+            $data['init_images'] = $img2imgFile;
         }
 
-        self::$payload[] = [
+        self::$data[] = [
             'file' => $file,
             'mode' => $mode,
-            'payload' => $payload,
+            'data' => $data,
         ];;
 
         $this->save();
     }
 
     /**
-     * Save payload
+     * Save collected data
      *
      * @return void
      * @throws PromptImageGeneratorException
@@ -75,8 +75,8 @@ class PayloadController
             mkdir($directory, 0777, true);
         }
 
-        $file = $directory . '/payloads.json';
+        $file = $directory . '/data.json';
 
-        file_put_contents($file, json_encode(self::$payload, JSON_PRETTY_PRINT));
+        file_put_contents($file, json_encode(self::$data, JSON_PRETTY_PRINT));
     }
 }
