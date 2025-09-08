@@ -15,20 +15,6 @@ namespace App\Interface;
 interface FileInterface
 {
     /**
-     * Error delete image
-     *
-     * @var string
-     */
-    const string ERROR_DELETE_IMAGE = 'Error on deleting Image';
-
-    /**
-     * Success delete image
-     *
-     * @var string
-     */
-    const string SUCCESS_DELETE_IMAGE = 'The Image has been deleted successfully';
-
-    /**
      * Error delete image by type and date time
      *
      * @var string

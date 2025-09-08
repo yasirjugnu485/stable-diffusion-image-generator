@@ -176,6 +176,42 @@ class ConfigModel
     private string|null $hrSamplerName = null;
 
     /**
+     * Load config.inc.php
+     *
+     * @return void
+     */
+    public function loadConfigInc(): void
+    {
+        if (file_exists(ROOT_DIR . 'config.inc.php')) {
+            include ROOT_DIR . 'config.inc.php';
+        }
+    }
+
+    /**
+     * Load config.local.php
+     *
+     * @return void
+     */
+    public function loadConfigLocal(): void
+    {
+        if (file_exists(ROOT_DIR . 'config.local.php')) {
+            include ROOT_DIR . 'config.local.php';
+        }
+    }
+
+    /**
+     * Load config.app.php
+     *
+     * @return void
+     */
+    public function loadConfigApp(): void
+    {
+        if (file_exists(ROOT_DIR . 'config.app.php')) {
+            include ROOT_DIR . 'config.app.php';
+        }
+    }
+
+    /**
      * Create
      *
      * @return void
@@ -352,7 +388,7 @@ class ConfigModel
      *
      * @return void
      */
-    private function buildConfigApp(): void
+    public function buildConfigApp(): void
     {
         $config = file_get_contents(ROOT_DIR . 'templates/config.php');
         $classVars = get_object_vars($this);
@@ -463,5 +499,16 @@ class ConfigModel
     private function buildNullVariable(string $key, string &$config): void
     {
         $config = str_replace("['" . $key . "']", 'null', $config);
+    }
+
+    /**
+     * Set host
+     *
+     * @param string $host Host
+     * @return void
+     */
+    public function setHost(string $host): void
+    {
+        $this->host = $host;
     }
 }

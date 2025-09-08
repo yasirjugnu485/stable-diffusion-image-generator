@@ -284,6 +284,14 @@
                     </a>
                 </li>
 
+                <li class="nav-item active">
+                    <a class="nav-link text-light"
+                       href="/settings">
+                        <i class="bi bi-gear-fill"></i>
+                        Settings
+                    </a>
+                </li>
+
             </ul>
         </div>
 

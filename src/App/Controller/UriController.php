@@ -78,6 +78,9 @@ class UriController
             shell_exec('php ' . ROOT_DIR . 'run.php --config ' .
                 ROOT_DIR . 'config.app.php > /dev/null 2>/dev/null &');
             exit();
+        } elseif ($requestIndex[1] === 'settings' && !isset($requestIndex[2])) {
+            $renderController = new RenderController();
+            $renderController->renderSettings();
         }
 
         $this->notFound();

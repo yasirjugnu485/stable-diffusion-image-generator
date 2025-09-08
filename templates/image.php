@@ -9,7 +9,8 @@
  */
 
 ?>
-<div class="col-12 mb-4">
+<div class="col-12 mb-4"
+     id="image-<?php echo $index; ?>">
     <div class="card border border-dark">
         <div class="card-header bg-dark text-light">
             <h5 class="float-start mb-0 mt-1">
@@ -19,18 +20,14 @@
                 ?>
             </h5>
             <div class="float-end">
-                <form method="post">
-                    <input type="hidden"
-                           name="action"
-                           value="deleteImage">
-                    <input type="hidden"
-                           name="image"
-                           value="<?php echo $image['file']; ?>">
-                    <button class="btn btn-danger"
-                            type="submit">
-                        <i class="bi bi-trash-fill"></i>
-                    </button>
-                </form>
+                <button class="btn btn-danger"
+                        type="button"
+                        onclick="offcanvasDeleteImage.deleteClick(
+                            <?php echo $index; ?>,
+                            '<?php echo $image['file']; ?>'
+                            )">
+                    <i class="bi bi-trash-fill"></i>
+                </button>
             </div>
         </div>
         <div class="card-footer bg-white">
@@ -150,9 +147,11 @@
                         ?>
                         <p>
                             <strong>
-                                Refiner Checkpoint:
+                                Refiner Checkpoint (Model):
                             </strong>
-                            <?php echo $image['data']['refiner_checkpoint']; ?>
+                            <a href="/checkpoints/<?php echo $image['data']['refiner_checkpoint']; ?>">
+                                <?php echo $image['data']['refiner_checkpoint']; ?>
+                            </a>
                         </p>
                         <p>
                             <strong>

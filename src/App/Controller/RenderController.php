@@ -236,6 +236,21 @@ class RenderController
     }
 
     /**
+     * Render settings
+     *
+     * @return void
+     */
+    public function renderSettings(): void
+    {
+        $params = $this->prepareParams();
+        $settingsController = new SettingsController();
+        $params = array_merge($params, $settingsController->getSettings());
+        $params['template'] = 'settings.php';
+
+        $this->render($params);
+    }
+
+    /**
      * Render
      *
      * @param array $params Parameters

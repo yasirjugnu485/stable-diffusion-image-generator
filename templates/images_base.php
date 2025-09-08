@@ -69,6 +69,10 @@ if (count($params['data'])) {
     <?php
 }
 
+if (count($params['data'])) {
+    include(ROOT_DIR . 'templates/offcanvas_delete_image.php');
+}
+
 if (isset($params['type']) && isset($params['date_time'])) {
     ?>
     <div class="offcanvas offcanvas-end"

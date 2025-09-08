@@ -426,8 +426,7 @@ class FileController implements FileInterface
     private function deleteImage(): void
     {
         if (!isset($_POST['image'])) {
-            new ErrorController(self::ERROR_DELETE_IMAGE);
-            $this->redirect();
+            die();
         }
 
         $image = $_POST['image'];
@@ -437,8 +436,7 @@ class FileController implements FileInterface
         $dateTime = $split[2];
 
         if (!file_exists(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/data.json')) {
-            new ErrorController(self::ERROR_DELETE_IMAGE);
-            $this->redirect();
+            die();
         }
 
         $payloads = json_decode(
@@ -457,8 +455,7 @@ class FileController implements FileInterface
                 if (!count($payloads)) {
                     $toolController = new ToolController();
                     $toolController->deleteDirectory(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime);
-                    new SuccessController(self::SUCCESS_DELETE_IMAGE);
-                    $this->redirect(true);
+                    die();
                 }
                 break;
             }
@@ -469,8 +466,7 @@ class FileController implements FileInterface
             json_encode($payloads)
         );
 
-        new SuccessController(self::SUCCESS_DELETE_IMAGE);
-        $this->redirect();
+        die();
     }
 
     /**

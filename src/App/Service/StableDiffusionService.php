@@ -191,6 +191,42 @@ class StableDiffusionService
     }
 
     /**
+     * Ping
+     *
+     * @param string $host Host
+     * @return bool
+     */
+    public function ping(string $host): bool
+    {
+        $url = $host . '/sdapi/v1/ping';
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => [
+                'content-type: application/json',
+                'Connection: Keep-Alive'
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $error = curl_error($curl);
+        if ($error) {
+            return false;
+        }
+
+        return (bool)$response;
+    }
+
+    /**
      * Get current progress state
      *
      * @param string $host Host

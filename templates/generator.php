@@ -70,7 +70,7 @@ if (!isset($params['error']) || !$params['error']) {
                                    value="<?php echo $params['config']['host']; ?>"
                                    disabled>
                             <div class="form-text text-warning">
-                                The Host can only be configured in the config.app.php file.
+                                The Host can only be configured at the settings.
                             </div>
                         </div>
 
@@ -611,7 +611,8 @@ if (!isset($params['error']) || !$params['error']) {
 ?>
 
 <script>
-    class Generator {
+    class Generator
+    {
         constructor() {
             this.checkpointSelector = new MultiSelectTag('checkpoint', {
                 maxSelection: 100,

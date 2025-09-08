@@ -9,7 +9,8 @@
 </div>
 
 <script>
-    class Generate {
+    class Generate
+    {
         async startGenerating() {
             const url = "/generate";
             const response = await fetch(url);

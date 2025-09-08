@@ -219,7 +219,7 @@ class ConfigController
         }
 
         include ROOT_DIR . '/config.app.php';
-        $this->generateConfigdata();
+        $this->generateConfigData();
     }
 
     /**
@@ -232,7 +232,7 @@ class ConfigController
         if (file_exists(ROOT_DIR . '/config.local.php')) {
             copy(ROOT_DIR . '/config.local.php', ROOT_DIR . '/config.app.php');
             include ROOT_DIR . '/config.app.php';
-            $this->generateConfigdata();
+            $this->generateConfigData();
             return true;
         }
 
@@ -249,7 +249,7 @@ class ConfigController
         if (file_exists(ROOT_DIR . '/config.inc.php')) {
             copy(ROOT_DIR . '/config.inc.php', ROOT_DIR . '/config.app.php');
             include ROOT_DIR . '/config.app.php';
-            $this->generateConfigdata();
+            $this->generateConfigData();
             return true;
         }
 
@@ -261,7 +261,7 @@ class ConfigController
      *
      * @return void
      */
-    private function generateConfigdata(): void
+    private function generateConfigData(): void
     {
         $classVars = get_object_vars($this);
         foreach ($classVars as $key => $value) {
