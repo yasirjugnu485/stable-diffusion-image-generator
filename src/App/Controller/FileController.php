@@ -339,9 +339,9 @@ class FileController implements FileInterface
 
         $checkpoints = [];
         foreach (self::$payloads as $payload) {
-            if (isset($payload['payload']['override_settings']['sd_model_checkpoint'])) {
-                if (!in_array($payload['payload']['override_settings']['sd_model_checkpoint'], $checkpoints)) {
-                    $checkpoints[] = $payload['payload']['override_settings']['sd_model_checkpoint'];
+            if (isset($payload['data']['override_settings']['sd_model_checkpoint'])) {
+                if (!in_array($payload['data']['override_settings']['sd_model_checkpoint'], $checkpoints)) {
+                    $checkpoints[] = $payload['data']['override_settings']['sd_model_checkpoint'];
                 }
             }
         }
@@ -361,8 +361,8 @@ class FileController implements FileInterface
         $checkpointFiles = [];
 
         foreach (self::$payloads as $payload) {
-            if (isset($payload['payload']['override_settings']['sd_model_checkpoint'])) {
-                $checkpoint = $payload['payload']['override_settings']['sd_model_checkpoint'];
+            if (isset($payload['data']['override_settings']['sd_model_checkpoint'])) {
+                $checkpoint = $payload['data']['override_settings']['sd_model_checkpoint'];
                 $type = $payload['mode'];
                 if (!isset($checkpointFiles[$checkpoint])) {
                     $checkpointFiles[$checkpoint] = [];
@@ -375,9 +375,9 @@ class FileController implements FileInterface
                 }
                 $split = explode('/outputs/' . $type . '/', $payload['file']);
                 $payload['file'] = '/outputs/' . $type . '/' . end($split);
-                if (isset($payload['payload']['init_images'])) {
-                    $split = explode('/init_images/', $payload['payload']['init_images']);
-                    $payload['payload']['init_images'] = '/init_images/' . end($split);
+                if (isset($payload['data']['init_images'])) {
+                    $split = explode('/init_images/', $payload['data']['init_images']);
+                    $payload['data']['init_images'] = '/init_images/' . end($split);
                 }
                 $checkpointFiles[$checkpoint]['payloads'][] = $payload;
             }
@@ -397,15 +397,15 @@ class FileController implements FileInterface
         $filesByCheckpoint = [];
         $payloads = $this->collectPayloads();
         foreach ($payloads as $payload) {
-            if (isset($payload['payload']['override_settings']['sd_model_checkpoint'])) {
-                if ($payload['payload']['override_settings']['sd_model_checkpoint'] === $checkpoint) {
+            if (isset($payload['data']['override_settings']['sd_model_checkpoint'])) {
+                if ($payload['data']['override_settings']['sd_model_checkpoint'] === $checkpoint) {
                     if (isset($payload['file'])) {
                         $split = explode('/outputs/', $payload['file']);
                         $payload['file'] = '/outputs/' . end($split);
                     }
-                    if (isset($payload['payload']['init_images'])) {
-                        $split = explode('/init_images/', $payload['payload']['init_images']);
-                        $payload['payload']['init_images'] = '/init_images/' . end($split);
+                    if (isset($payload['data']['init_images'])) {
+                        $split = explode('/init_images/', $payload['data']['init_images']);
+                        $payload['data']['init_images'] = '/init_images/' . end($split);
                     }
                     $filesByCheckpoint[] = $payload;
                 }
