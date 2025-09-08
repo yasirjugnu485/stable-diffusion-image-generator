@@ -58,16 +58,16 @@
                     ?>
                 </div>
                 <?php
-                if (isset($image['payload']['init_images']) && file_exists(ROOT_DIR . $image['payload']['init_images'])) {
+                if (isset($image['data']['init_images']) && file_exists(ROOT_DIR . $image['data']['init_images'])) {
                     ?>
-                    <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0 d-block<?php if (!isset($image['payload']['init_images']) || !file_exists(ROOT_DIR . $image['payload']['init_images'])) {
+                    <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0 d-block<?php if (!isset($image['data']['init_images']) || !file_exists(ROOT_DIR . $image['data']['init_images'])) {
                         echo ' d-none';
                     } ?>">
                         <h4>
                             Initial image
                         </h4>
                         <img class="w-100 border rounded"
-                             src="/image.php?image=<?php echo urlencode($image['payload']['init_images']); ?>">
+                             src="/image.php?image=<?php echo urlencode($image['data']['init_images']); ?>">
                     </div>
                     <?php
                 }
@@ -96,69 +96,69 @@
                         </p>
                         <?php
                     }
-                    if (isset($image['payload']['override_settings']['sd_model_checkpoint'])) {
+                    if (isset($image['data']['override_settings']['sd_model_checkpoint'])) {
                         ?>
                         <p>
                             <strong>
                                 Checkpoint (Model):
                             </strong>
-                            <a href="/checkpoints/<?php echo $image['payload']['override_settings']['sd_model_checkpoint']; ?>">
-                                <?php echo $image['payload']['override_settings']['sd_model_checkpoint']; ?>
+                            <a href="/checkpoints/<?php echo $image['data']['override_settings']['sd_model_checkpoint']; ?>">
+                                <?php echo $image['data']['override_settings']['sd_model_checkpoint']; ?>
                             </a>
                         </p>
                         <?php
                     }
-                    if (isset($image['payload']['prompt'])) {
+                    if (isset($image['data']['prompt'])) {
                         ?>
                         <p>
                             <strong>
                                 Prompt:
                             </strong>
                             <?php
-                            echo $image['payload']['prompt'];
+                            echo $image['data']['prompt'];
                             ?>
                         </p>
                         <?php
                     }
-                    if (isset($image['payload']['steps'])) {
+                    if (isset($image['data']['steps'])) {
                         ?>
                         <p>
                             <strong>
                                 Steps:
                             </strong>
                             <?php
-                            echo $image['payload']['steps'];
+                            echo $image['data']['steps'];
                             ?>
                         </p>
                         <?php
                     }
-                    if (isset($image['payload']['width']) && isset($image['payload']['height'])) {
+                    if (isset($image['data']['width']) && isset($image['data']['height'])) {
                     ?>
                     <p>
                         <strong>
                             Size:
                         </strong>
                         <?php
-                        echo $image['payload']['width'] . ' x ' . $image['payload']['height'];
+                        echo $image['data']['width'] . ' x ' . $image['data']['height'];
                         ?>
                         <?php
                         }
                         ?>
                     </p>
                     <?php
-                    if (isset($image['payload']['refiner_checkpoint'])) {
+                    if (isset($image['data']['refiner_checkpoint'])) {
                         ?>
                         <p>
                             <strong>
                                 Refiner Checkpoint:
                             </strong>
-                            <?php echo $image['payload']['refiner_checkpoint']; ?>
+                            <?php echo $image['data']['refiner_checkpoint']; ?>
                         </p>
                         <p>
                             <strong>
                                 Refiner switch at:
                             </strong>
-                            <?php echo $image['payload']['refiner_switch_at']; ?>
+                            <?php echo $image['data']['refiner_switch_at']; ?>
                         </p>
                         <?php
                     }
