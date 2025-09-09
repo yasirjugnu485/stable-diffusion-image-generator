@@ -13,6 +13,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/out/css/main.css">
     <link rel="stylesheet" href="/out/css/bootstrap.min.css">
     <link rel="stylesheet" href="/out/css/lightbox.css">
     <link rel="stylesheet" href="/out/css/bootstrap-icons.min.css">
@@ -23,6 +24,8 @@
 </head>
 <body>
 <?php include(ROOT_DIR . 'templates/navbar.php'); ?>
-<?php include($params['template']); ?>
+<?php include($params['template']);
+include(ROOT_DIR . 'templates/footer.php');
+?>
 </body>
 </html>

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Interface\SettingsInterface;
+use App\Interface\Interface\SettingsInterface;
 use App\Model\ConfigModel;
 use App\Service\StableDiffusionService;
 
@@ -71,7 +71,13 @@ class SettingsController implements SettingsInterface
         }
 
         $configModel = new ConfigModel();
-        $configModel->loadConfigApp();
+        $success = $configModel->loadConfigApp();
+        if (!$success) {
+            $success = $configModel->loadConfigLocal();
+            if (!$success) {
+                $configModel->loadConfigInc();
+            }
+        }
         $configModel->setHost($host);
         $configModel->buildConfigApp();
         sleep(3);

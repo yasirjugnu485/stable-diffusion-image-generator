@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Interface\GeneratorInterface;
+use App\Interface\Interface\GeneratorInterface;
 use App\Model\ConfigModel;
 use App\Service\StableDiffusionService;
 
@@ -420,6 +420,8 @@ class GeneratorController implements GeneratorInterface
         if (!self::$error) {
             if (isset($_POST['action']) && $_POST['action'] === 'generate') {
                 $this->generate();
+            } elseif (isset($_POST['action']) && $_POST['action'] === 'save') {
+                $this->save();
             }
         }
     }
@@ -435,6 +437,22 @@ class GeneratorController implements GeneratorInterface
         $configModel->create();
 
         $_SESSION['GeneratorController'] = true;
+
+        $this->redirect();
+    }
+
+    /**
+     * Save
+     *
+     * @return void
+     */
+    private function save(): void
+    {
+        $configModel = new ConfigModel();
+        $configModel->create();
+        sleep(3);
+
+        new SuccessController(self::SUCCESS_SAVE_CONFIG_APP_PHP);
 
         $this->redirect();
     }

@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Interface;
+namespace App\Interface\Interface;
 
 interface GeneratorInterface
 {
@@ -41,4 +41,11 @@ interface GeneratorInterface
      * @var string
      */
     const string ERROR_ON_LOAD_PROMPTS = 'No Prompt Merger Directories available. Use Prompt Merger to create your prompt generator.';
+
+    /**
+     * Success save config.app.php
+     *
+     * @var string
+     */
+    const string SUCCESS_SAVE_CONFIG_APP_PHP = 'The config.app.php has been saved successfully';
 }

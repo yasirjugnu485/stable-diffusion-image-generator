@@ -318,9 +318,9 @@ if ($params['directory'] !== 'demo') {
         deleteInitImagesImage = (name, file) => {
             document.getElementById('deleteInitImagesImage').value = file;
             document.getElementById('deleteInitImagesImageInput').value = name;
-            let offcanvasDeleteInitImagesImage = document.getElementById('offcanvasDeleteInitImagesImage')
-            const offcanvas = new bootstrap.Offcanvas(offcanvasDeleteInitImagesImage)
-            offcanvas.show()
+            let offcanvasDeleteInitImagesImage = document.getElementById('offcanvasDeleteInitImagesImage');
+            const offcanvas = new bootstrap.Offcanvas(offcanvasDeleteInitImagesImage);
+            offcanvas.show();
         }
     }
 

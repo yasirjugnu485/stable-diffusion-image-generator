@@ -44,40 +44,53 @@ if ((isset($params['error']) && $params['error']) || (isset($params['success']) 
     <div class="row">
         <div class="col-12 text-dark">
 
-            <h3 class="mb-5">
+            <h3 class="mb-3">
                 <i class="bi bi-gear-fill"></i>
                 Settings
             </h3>
+
             <form method="post"
                   id="form">
                 <input type="hidden"
                        name="action"
                        value="saveSettings">
-                <div class="row">
-                    <div class="col-12 col-md-6">
-                        <label for="host"
-                               class="form-label">
-                            Host
-                        </label>
-                        <input type="text"
-                               class="form-control"
-                               id="host"
-                               name="host"
-                               placeholder="Host"
-                               required
-                               value="<?php echo $params['host']; ?>">
+
+                <div class="card mb-4">
+                    <div class="card-header bg-dark text-light">
+                        <h5 class="mt-2">
+                            Default Settings
+                        </h5>
+                    </div>
+                    <div class="card-body text-dark mb-4">
+                        <div class="row">
+
+                            <div class="col-12 col-md-6">
+                                <label for="host"
+                                       class="form-label">
+                                    Host
+                                </label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="host"
+                                       name="host"
+                                       placeholder="Host"
+                                       required
+                                       value="<?php echo $params['host']; ?>">
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 
-                <div class="text-end my-3">
+                <div class="text-end mb-5">
                     <button class="btn btn-primary"
                             type="button"
                             onclick="document.getElementById('form').submit()">
                         <i class="bi bi-floppy-fill me-1"></i>
                         Save
                     </button>
-
                 </div>
+
             </form>
         </div>
     </div>

@@ -307,9 +307,9 @@ if ($params['directory'] !== 'demo') {
         deleteFile = (file) => {
             document.getElementById('deletePromptMergerFile').value = file;
             document.getElementById('deletePromptMergerFileInput').value = file;
-            let offcanvasDeletePromptMergerFile = document.getElementById('offcanvasDeletePromptMergerFile')
-            const offcanvas = new bootstrap.Offcanvas(offcanvasDeletePromptMergerFile)
-            offcanvas.show()
+            let offcanvasDeletePromptMergerFile = document.getElementById('offcanvasDeletePromptMergerFile');
+            const offcanvas = new bootstrap.Offcanvas(offcanvasDeletePromptMergerFile);
+            offcanvas.show();
         }
     }
 

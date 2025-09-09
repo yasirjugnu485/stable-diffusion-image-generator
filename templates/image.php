@@ -23,9 +23,9 @@
                 <button class="btn btn-danger"
                         type="button"
                         onclick="offcanvasDeleteImage.deleteClick(
-                            <?php echo $index; ?>,
-                            '<?php echo $image['file']; ?>'
-                            )">
+                        <?php echo $index; ?>,
+                                '<?php echo $image['file']; ?>'
+                                )">
                     <i class="bi bi-trash-fill"></i>
                 </button>
             </div>

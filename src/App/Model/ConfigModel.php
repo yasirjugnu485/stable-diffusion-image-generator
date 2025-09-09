@@ -178,37 +178,46 @@ class ConfigModel
     /**
      * Load config.inc.php
      *
-     * @return void
+     * @return bool
      */
-    public function loadConfigInc(): void
+    public function loadConfigInc(): bool
     {
         if (file_exists(ROOT_DIR . 'config.inc.php')) {
             include ROOT_DIR . 'config.inc.php';
+            return true;
         }
+
+        return false;
     }
 
     /**
      * Load config.local.php
      *
-     * @return void
+     * @return bool
      */
-    public function loadConfigLocal(): void
+    public function loadConfigLocal(): bool
     {
         if (file_exists(ROOT_DIR . 'config.local.php')) {
             include ROOT_DIR . 'config.local.php';
+            return true;
         }
+
+        return false;
     }
 
     /**
      * Load config.app.php
      *
-     * @return void
+     * @return bool
      */
-    public function loadConfigApp(): void
+    public function loadConfigApp(): bool
     {
         if (file_exists(ROOT_DIR . 'config.app.php')) {
             include ROOT_DIR . 'config.app.php';
+            return true;
         }
+
+        return false;
     }
 
     /**
@@ -218,6 +227,14 @@ class ConfigModel
      */
     public function create(): void
     {
+        $success = $this->loadConfigApp();
+        if (!$success) {
+            $success = $this->loadConfigLocal();
+            if (!$success) {
+                $this->loadConfigInc();
+            }
+        }
+
         $this->collectPostParameters();
         $this->buildConfigApp();
     }
@@ -240,12 +257,16 @@ class ConfigModel
         if (isset($_POST['loop'])) {
             if ($_POST['loop'] === '1') {
                 $this->loop = true;
+            } else {
+                $this->loop = false;
             }
         }
 
         if (isset($_POST['mode'])) {
             if ($_POST['mode'] === 'img2img') {
                 $this->mode = 'img2img';
+            } elseif ($_POST['mode'] === 'txt2img') {
+                $this->mode = 'txt2img';
             }
         }
 
@@ -341,6 +362,8 @@ class ConfigModel
             if (isset($_POST['enableHr'])) {
                 if ($_POST['enableHr'] === '1') {
                     $this->enableHr = true;
+                } elseif ($_POST['enableHr'] === '0') {
+                    $this->enableHr = false;
                 }
             }
         }

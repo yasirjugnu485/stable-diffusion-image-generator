@@ -61,7 +61,7 @@
             document.getElementById('offcanvasDeleteImageFile').value = file;
             let offcanvasDeleteImage = document.getElementById('offcanvasDeleteImage');
             const offcanvas = new bootstrap.Offcanvas(offcanvasDeleteImage);
-            offcanvas.show()
+            offcanvas.show();
         }
 
         deleteExecute = () => {
