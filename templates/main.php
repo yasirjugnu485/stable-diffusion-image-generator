@@ -23,8 +23,12 @@
     <script src="/out/js/multi-select-tag.min.js"></script>
 </head>
 <body>
-<?php include(ROOT_DIR . 'templates/navbar.php'); ?>
-<?php include($params['template']);
+<div class="content">
+    <?php include(ROOT_DIR . 'templates/navbar.php'); ?>
+    <?php include($params['template']);
+    ?>
+</div>
+<?php
 include(ROOT_DIR . 'templates/footer.php');
 ?>
 </body>
