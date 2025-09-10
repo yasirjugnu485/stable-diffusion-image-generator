@@ -14,9 +14,7 @@
         <a class="navbar-brand text-light"
            href="/">
             <img src="/out/img/stable-diffusion.png"
-                 class="me-2"
                  style="height: 2rem; margin-top: -0.25rem;">
-            Image Generator
         </a>
         <button class="navbar-toggler"
                 type="button"
@@ -186,6 +184,36 @@
                                 No checkpoints available
                             </div>
                             <?php
+                        }
+                        ?>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-light"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        album
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item text-dark" href="/album">
+                                Overview
+                            </a>
+                        </li>
+                        <?php
+                        if (count($params['navbar']['albums'])) {
+                            foreach ($params['navbar']['albums'] as $entry) {
+                                ?>
+                                <li>
+                                    <a class="dropdown-item text-dark" href="/album/<?php echo $entry; ?>">
+                                        <?php echo str_replace('_', ' ', $entry); ?>
+                                    </a>
+                                </li>
+                                <?php
+                            }
                         }
                         ?>
                     </ul>

@@ -12,10 +12,29 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use FilesystemIterator;
 use Random\RandomException;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 class ToolController
 {
+    /**
+     * Get URL
+     *
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        if (str_starts_with($_SERVER['HTTP_REFERER'], 'https://')) {
+            $protocol = 'https://';
+        } else {
+            $protocol = 'http://';
+        }
+
+        return $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    }
+
     /**
      * Delete directory
      *
@@ -58,5 +77,61 @@ class ToolController
         }
 
         return $randomString;
+    }
+
+    /**
+     * Collect files from directory
+     *
+     * @param string $directory Directory
+     * @return array
+     */
+    public function collectFileList(string $directory): array
+    {
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        $result = [];
+        foreach ($iterator as $item) {
+            $path = $item->getPathname();
+            if ($item->isFile()) {
+                if (!str_ends_with($path, 'data.json')) {
+                    continue;
+                }
+                $result[] = str_replace($directory, '', $path);
+            }
+        }
+
+        return $this->parsePathsOfFiles($result);
+    }
+
+    /**
+     * Parse path of files
+     *
+     * @param array $array Collected file list
+     * @return mixed
+     */
+    private function parsePathsOfFiles(array $array): mixed
+    {
+        rsort($array);
+        $result = array();
+
+        foreach ($array as $item) {
+            $parts = explode('/', $item);
+            $current = &$result;
+            for ($i = 1, $max = count($parts); $i < $max; $i++) {
+                if (!isset($current[$parts[$i - 1]])) {
+                    $current[$parts[$i - 1]] = array();
+                }
+                $current = &$current[$parts[$i - 1]];
+            }
+            $last = end($parts);
+            if (!isset($current[$last]) && $last) {
+                $current[] = end($parts);
+            }
+        }
+
+        return $result;
     }
 }

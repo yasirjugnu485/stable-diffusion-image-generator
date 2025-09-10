@@ -43,9 +43,7 @@ class RenderController
     public function renderByType(string $type): void
     {
         $params = $this->prepareParams();
-
         $fileController = new FileController();
-
         $params['data'] = $fileController->collectFilesByType($type);
         $params['breadcrumbs'] = [
             [
@@ -69,9 +67,7 @@ class RenderController
     public function renderByTypeAndDateTime(string $type, string $dateTime): void
     {
         $params = $this->prepareParams();
-
         $fileController = new FileController();
-
         $dateTimeName = str_replace(':', '-', $dateTime);
         $dateTimeName = str_replace(' ', '_', $dateTimeName);
         $params['data'] = $fileController->collectFilesByTypeAndDateTime($type, $dateTime);
@@ -102,19 +98,58 @@ class RenderController
     public function renderCheckpoints(): void
     {
         $params = $this->prepareParams();
-
         $fileController = new FileController();
         $params['checkpoints'] = $fileController->collectUsedCheckpoints();
         $params['data'] = $fileController->collectCheckpointFiles();
         $params['base_breadcrumbs'] = [
             [
-                'title' => 'checkpoints',
+                'title' => 'Checkpoints',
                 'url' => '/checkpoints',
                 'active' => false
             ]
         ];
-
         $params['template'] = 'images_checkpoints.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render album
+     *
+     * @param array $requestIndex Request index
+     * @return void
+     */
+    public function renderAlbum(array $requestIndex): void
+    {
+        $params = $this->prepareParams();
+        $albumController = new AlbumController();
+        $params['sub_directories'] = $albumController->collectAlbumSubDirectories();
+        $params['data'] = $albumController->collectAlbumFiles();
+        unset($requestIndex[0]);
+        unset($requestIndex[0]);
+        unset($requestIndex[0]);
+        $params['request_index'] = $requestIndex;
+        $params['breadcrumbs'] = [];
+        $slug = '/';
+        foreach ($requestIndex as $index => $value) {
+            if ($index === 0) {
+                $slug .= 'album' . '/';
+                $params['breadcrumbs'][] = [
+                    'title' => 'Album',
+                    'url' => rtrim($slug, '/'),
+                    'active' => false
+                ];
+            } else {
+                $slug .= $value . '/';
+                $params['breadcrumbs'][] = [
+                    'title' => str_replace('_', ' ', $value),
+                    'url' => rtrim($slug, '/'),
+                    'active' => false
+                ];
+            }
+        }
+        $params['album'] = $slug;
+        $params['template'] = 'album.php';
 
         $this->render($params);
     }
@@ -128,9 +163,7 @@ class RenderController
     public function renderByCheckpoint(string $checkpoint): void
     {
         $params = $this->prepareParams();
-
         $fileController = new FileController();
-
         $params['data'] = $fileController->collectFilesByCheckpoint($checkpoint);
         $params['breadcrumbs'] = [
             [
@@ -228,7 +261,6 @@ class RenderController
             $params['template'] = 'generate.php';
             $this->render($params);
         }
-
         $params = array_merge($params, $generatorController->getData());
         $params['template'] = 'generator.php';
 

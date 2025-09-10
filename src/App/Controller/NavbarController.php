@@ -29,26 +29,13 @@ class NavbarController
     public function __construct()
     {
         if (self::$navbarData === null) {
-            $this->collectCheckpoints();
+            self::$navbarData = [];
             $this->collectNavbarData();
+            $this->collectCheckpoints();
             $this->collectPrompts();
             $this->collectInitImages();
+            $this->collectAlbums();
         }
-    }
-
-    /**
-     * Collect checkpoints
-     *
-     * @return void
-     */
-    private function collectCheckpoints(): void
-    {
-        if (self::$navbarData === null) {
-            self::$navbarData = [];
-        }
-
-        $fileController = new FileController();
-        self::$navbarData['checkpoints'] = $fileController->collectUsedCheckpoints();
     }
 
     /**
@@ -58,10 +45,6 @@ class NavbarController
      */
     private function collectNavbarData(): void
     {
-        if (self::$navbarData === null) {
-            self::$navbarData = [];
-        }
-
         $fileController = new FileController();
         $fileData = $fileController->getFileData();
         self::$navbarData['types'] = [];
@@ -76,6 +59,17 @@ class NavbarController
                 ];
             }
         }
+    }
+
+    /**
+     * Collect checkpoints
+     *
+     * @return void
+     */
+    private function collectCheckpoints(): void
+    {
+        $fileController = new FileController();
+        self::$navbarData['checkpoints'] = $fileController->collectUsedCheckpoints();
     }
 
     /**
@@ -98,6 +92,17 @@ class NavbarController
     {
         $initImagesController = new InitImageController();
         self::$navbarData['init_images'] = $initImagesController->getInitImagesDirectories();
+    }
+
+    /**
+     * Collect albums
+     *
+     * @return void
+     */
+    private function collectAlbums(): void
+    {
+        $albumController = new AlbumController();
+        self::$navbarData['albums'] = $albumController->collectRootDirectories();
     }
 
     /**

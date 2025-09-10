@@ -61,14 +61,15 @@ class FileController implements FileInterface
     }
 
     /**
-     * Collect all files and payloads
+     * Collect files
      *
      * @return void
      */
     private function collectFiles(): void
     {
         if (null === self::$fileData) {
-            $fileData = $this->collectFileList(ROOT_DIR . 'outputs/');
+            $toolController = new ToolController();
+            $fileData = $toolController->collectFileList(ROOT_DIR . 'outputs/');
             if (!isset($fileData['loop'])) {
                 $fileData['loop'] = [];
             }
@@ -85,62 +86,6 @@ class FileController implements FileInterface
         if (null === self::$payloads) {
             $this->collectPayloads();
         }
-    }
-
-    /**
-     * Collect files from directory
-     *
-     * @param string $directory Directory
-     * @return array
-     */
-    private function collectFileList(string $directory): array
-    {
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST
-        );
-
-        $result = [];
-        foreach ($iterator as $item) {
-            $path = $item->getPathname();
-            if ($item->isFile()) {
-                if (!str_ends_with($path, 'data.json')) {
-                    continue;
-                }
-                $result[] = str_replace($directory, '', $path);
-            }
-        }
-
-        return $this->parsePathsOfFiles($result);
-    }
-
-    /**
-     * Parse path of files
-     *
-     * @param array $array Collected file list
-     * @return mixed
-     */
-    private function parsePathsOfFiles(array $array): mixed
-    {
-        rsort($array);
-        $result = array();
-
-        foreach ($array as $item) {
-            $parts = explode('/', $item);
-            $current = &$result;
-            for ($i = 1, $max = count($parts); $i < $max; $i++) {
-                if (!isset($current[$parts[$i - 1]])) {
-                    $current[$parts[$i - 1]] = array();
-                }
-                $current = &$current[$parts[$i - 1]];
-            }
-            $last = end($parts);
-            if (!isset($current[$last]) && $last) {
-                $current[] = end($parts);
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -426,47 +371,31 @@ class FileController implements FileInterface
     private function deleteImage(): void
     {
         if (!isset($_POST['image'])) {
-            die();
+            exit();
         }
 
-        $image = $_POST['image'];
-        $trimmed = trim($image, '/');
-        $split = explode('/', $trimmed);
-        $type = $split[1];
-        $dateTime = $split[2];
-
-        if (!file_exists(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/data.json')) {
-            die();
+        $image = ltrim($_POST['image'], '/');
+        $splitImage = explode('/', $image);
+        $splitImage[count($splitImage) - 1] = 'data.json';
+        $dataFile = ROOT_DIR . implode('/' , $splitImage);
+        if (!file_exists($dataFile)) {
+            exit();
         }
+        $data = json_decode(file_get_contents($dataFile), true);
 
-        $payloads = json_decode(
-            file_get_contents(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/data.json'),
-            true
-        );
-
-        foreach ($payloads as $index => $payload) {
-            $split = explode('/outputs/', $payload['file']);
-            $file = '/outputs/' . end($split);
-            if ($file === $image) {
-                if (file_exists($payload['file'])) {
-                    unlink($payload['file']);
-                }
-                unset($payloads[$index]);
-                if (!count($payloads)) {
-                    $toolController = new ToolController();
-                    $toolController->deleteDirectory(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime);
-                    die();
+        $rootDir = str_replace('/public/../', '/', ROOT_DIR);
+        foreach ($data as $index => $entry) {
+            if (str_replace($rootDir, '', $entry['file']) === $image) {
+                unset($data[$index]);
+                file_put_contents($dataFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                if (file_exists(ROOT_DIR . $image)) {
+                    unlink(ROOT_DIR . $image);
                 }
                 break;
             }
         }
 
-        file_put_contents(
-            ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/data.json',
-            json_encode($payloads)
-        );
-
-        die();
+        exit();
     }
 
     /**

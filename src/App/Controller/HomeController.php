@@ -30,6 +30,8 @@ class HomeController
         $success = $successController->getSuccess();
         $errorController = new ErrorController();
         $error = $errorController->getError();
+        $albumController = new AlbumController();
+        $albumData = $albumController->getAlbumData();
 
         $breadcrumbs = [
             [
@@ -43,6 +45,7 @@ class HomeController
             'data' => $data,
             'navbar' => $navbar,
             'checkpoints' => $checkpoints,
+            'album_data' => $albumData,
             'title' => 'Home',
             'breadcrumbs' => $breadcrumbs,
             'template' => 'home.php',

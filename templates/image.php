@@ -28,6 +28,11 @@
                                 )">
                     <i class="bi bi-trash-fill"></i>
                 </button>
+                <button class="btn btn-primary ms-4"
+                        type="button"
+                        onclick="albumPicker.copy('<?php echo $image['file']; ?>')">
+                    <i class="bi bi-copy"></i>
+                </button>
             </div>
         </div>
         <div class="card-footer bg-white">

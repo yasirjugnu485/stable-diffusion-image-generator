@@ -11,3 +11,10 @@ body {
 .footer {
     flex-shrink: 0;
 }
+
+.card-album-picker {
+    background-color: transparent;
+}
+.card-album-picker:hover {
+    background-color: var(--bs-light);
+}

@@ -44,9 +44,6 @@
     </div>
 </div>
 
-
-
-
 <script>
     class OffcanvasDeleteImage
     {

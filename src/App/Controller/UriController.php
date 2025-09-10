@@ -27,51 +27,42 @@ class UriController
         }
 
         $requestIndex = explode('/', rtrim($requestUri, '/'));
-        if (count($requestIndex) > 3) {
-            $this->notFound();
-        }
 
+        $renderController = new RenderController();
         $promptController = new PromptController();
         $initImagesController = new InitImageController();
 
         if (($requestIndex[1] === 'txt2img' || $requestIndex[1] === 'img2img' || $requestIndex[1] === 'loop') &&
             !isset($requestIndex[2])) {
-            $renderController = new RenderController();
             $renderController->renderByType($requestIndex[1]);
         } elseif (($requestIndex[1] === 'txt2img' || $requestIndex[1] === 'img2img' || $requestIndex[1] === 'loop') &&
             isset($requestIndex[2])) {
-            $renderController = new RenderController();
             $renderController->renderByTypeAndDateTime($requestIndex[1], $requestIndex[2]);
         } elseif ($requestIndex[1] === 'checkpoints' && !isset($requestIndex[2])) {
-            $renderController = new RenderController();
             $renderController->renderCheckpoints();
         } elseif ($requestIndex[1] === 'checkpoints' && isset($requestIndex[2])) {
-            $renderController = new RenderController();
             $renderController->renderByCheckpoint($requestIndex[2]);
+        } elseif ($requestIndex[1] === 'album') {
+            $renderController->renderAlbum($requestIndex);
         } elseif ($requestIndex[1] === 'prompt-merger' && !isset($requestIndex[2])) {
             $prompts = $promptController->getPromptDirectories();
             if ($prompts) {
-                $renderController = new RenderController();
                 $renderController->renderPrompts();
             }
         } elseif ($requestIndex[1] === 'prompt-merger' && isset($requestIndex[2])) {
             if ($promptController->promptDirectoryExists($requestIndex[2])) {
-                $renderController = new RenderController();
                 $renderController->renderPromptEditor($requestIndex[2]);
             }
         } elseif ($requestIndex[1] === 'initialize-images' && !isset($requestIndex[2])) {
             $initImages = $initImagesController->getInitImagesDirectories();
             if ($initImages) {
-                $renderController = new RenderController();
                 $renderController->renderInitImages();
             }
         } elseif ($requestIndex[1] === 'initialize-images' && isset($requestIndex[2])) {
             if ($initImagesController->initImagesDirectoryExists($requestIndex[2])) {
-                $renderController = new RenderController();
                 $renderController->renderInitImagesEditor($requestIndex[2]);
             }
         } elseif ($requestIndex[1] === 'generator' && !isset($requestIndex[2])) {
-            $renderController = new RenderController();
             $renderController->renderGenerator();
         } elseif ($requestIndex[1] === 'generate' && !isset($requestIndex[2])) {
             echo 'php ' . ROOT_DIR . 'run.php --config ' . ROOT_DIR . 'config.app.php';
@@ -79,7 +70,6 @@ class UriController
                 ROOT_DIR . 'config.app.php > /dev/null 2>/dev/null &');
             exit();
         } elseif ($requestIndex[1] === 'settings' && !isset($requestIndex[2])) {
-            $renderController = new RenderController();
             $renderController->renderSettings();
         }
 

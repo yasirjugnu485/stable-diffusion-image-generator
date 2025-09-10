@@ -8,5 +8,6 @@
  * @license     GNU GENERAL PUBLIC LICENSE
  */
 
+include(ROOT_DIR . 'templates/album_picker.php');
 include(ROOT_DIR . 'templates/checkpoints.php');
 include(ROOT_DIR . 'templates/images_base.php');
