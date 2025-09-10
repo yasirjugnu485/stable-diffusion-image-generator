@@ -8,6 +8,10 @@
  * @license     GNU GENERAL PUBLIC LICENSE
  */
 
+if (count($params['data'])) {
+    include(ROOT_DIR . 'templates/album_picker.php');
+}
+
 if ((isset($params['error']) && $params['error']) || (isset($params['success']) && $params['success'])) {
     ?>
     <div class="container" style="max-width: 1600px">

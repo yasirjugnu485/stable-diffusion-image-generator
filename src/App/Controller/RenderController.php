@@ -27,8 +27,11 @@ class RenderController
         $success = $successController->getSuccess();
         $errorController = new ErrorController();
         $error = $errorController->getError();
+        $albumController = new AlbumController();
+        $albumData = $albumController->getAlbumData();
         return [
             'navbar' => $navbar,
+            'album_data' => $albumData,
             'success' => $success,
             'error' => $error,
         ];
