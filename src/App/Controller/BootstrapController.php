@@ -62,9 +62,9 @@ class BootstrapController
     public function run(): void
     {
         new FileController();
+        new AlbumController();
         new PromptController();
         new InitImageController();
-        new AlbumController();
         new UriController();
     }
 }

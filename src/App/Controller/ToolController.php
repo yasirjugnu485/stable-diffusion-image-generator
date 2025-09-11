@@ -20,11 +20,11 @@ use RecursiveIteratorIterator;
 class ToolController
 {
     /**
-     * Get URL
+     * Get current URL
      *
      * @return string
      */
-    public function getUrl(): string
+    public function getCurrentUrl(): string
     {
         if (str_starts_with($_SERVER['HTTP_REFERER'], 'https://')) {
             $protocol = 'https://';
@@ -36,33 +36,35 @@ class ToolController
     }
 
     /**
-     * Delete directory
+     * Recursively delete directory with all subdirectories and files
      *
      * @param string $directory Directory
      * @return void
      */
     public function deleteDirectory(string $directory): void
     {
-        if (is_dir($directory)) {
-            $files = scandir($directory);
-            foreach ($files as $file) {
-                if ($file !== '.' && $file !== '..') {
-                    $filePath = $directory . '/' . $file;
-                    if (is_dir($filePath)) {
-                        $this->deleteDirectory($filePath);
-                    } else {
-                        unlink($filePath);
-                    }
+        if (!is_dir($directory)) {
+            return;
+        }
+
+        $files = scandir($directory);
+        foreach ($files as $file) {
+            if ($file !== '.' && $file !== '..') {
+                $filePath = $directory . '/' . $file;
+                if (is_dir($filePath)) {
+                    $this->deleteDirectory($filePath);
+                } else {
+                    unlink($filePath);
                 }
             }
-            rmdir($directory);
         }
+        rmdir($directory);
     }
 
     /**
      * Generate random string
      *
-     * @param int $length
+     * @param int $length String length
      * @return string
      * @throws RandomException
      */
@@ -80,12 +82,12 @@ class ToolController
     }
 
     /**
-     * Collect files from directory
+     * Collect data.json files from directory
      *
      * @param string $directory Directory
      * @return array
      */
-    public function collectFileList(string $directory): array
+    public function collectDataFiles(string $directory): array
     {
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
@@ -103,16 +105,16 @@ class ToolController
             }
         }
 
-        return $this->parsePathsOfFiles($result);
+        return $this->parseDataFiles($result);
     }
 
     /**
-     * Parse path of files
+     * Parse data.json files
      *
-     * @param array $array Collected file list
+     * @param array $array Collected data.json files from directory
      * @return mixed
      */
-    private function parsePathsOfFiles(array $array): mixed
+    private function parseDataFiles(array $array): mixed
     {
         rsort($array);
         $result = array();
@@ -133,5 +135,94 @@ class ToolController
         }
 
         return $result;
+    }
+
+    /**
+     * Check if array contains data.json files
+     *
+     * @param array $array Files
+     * @return bool
+     */
+    public function containsDataFiles(array $array): bool
+    {
+        foreach ($array as $fileOrArray) {
+            if (is_array($fileOrArray)) {
+                if ($this->containsDataFiles($fileOrArray)) {
+                    return true;
+                }
+            } else {
+                if (str_ends_with($fileOrArray, 'data.json')) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Load images from data file
+     *
+     * @param string $dataFile Data file
+     * @return array
+     */
+    public function loadImagesFromDataFile(string $dataFile): array
+    {
+        if (!file_exists($dataFile)) {
+            return [];
+        }
+
+        $images = json_decode(file_get_contents($dataFile), true);
+        foreach ($images as $index => $image) {
+            if (isset($image['file'])) {
+                $images[$index]['file'] = str_replace(ROOT_DIR, '/', $image['file']);
+            }
+            if (isset($image['data']['init_images'])) {
+                $images[$index]['data']['init_images'] =
+                    str_replace(ROOT_DIR, '/', $image['data']['init_images']);
+            }
+        }
+
+        return $images;
+    }
+
+    /**
+     * Collect checkpoints from data.json files
+     *
+     * @param array $dataFiles data.json files
+     * @return array
+     */
+    public function collectCheckpointsFromDataFiles(array $dataFiles): array
+    {
+        $checkpoints = [];
+        foreach ($dataFiles as $dataFile) {
+            if (isset($dataFile['data']['override_settings']['sd_model_checkpoint'])) {
+                if (!in_array($dataFile['data']['override_settings']['sd_model_checkpoint'], $checkpoints)) {
+                    $checkpoints[] = $dataFile['data']['override_settings']['sd_model_checkpoint'];
+                }
+            }
+        }
+
+        return $checkpoints;
+    }
+
+    /**
+     * Collect refiner checkpoints from data.json files
+     *
+     * @param array $dataFiles data.json files
+     * @return array
+     */
+    public function collectRefinerCheckpointsFromDataFiles(array $dataFiles): array
+    {
+        $checkpoints = [];
+        foreach ($dataFiles as $dataFile) {
+            if (isset($dataFile['data']['refiner_checkpoint'])) {
+                if (!in_array($dataFile['data']['refiner_checkpoint'], $checkpoints)) {
+                    $checkpoints[] = $dataFile['data']['refiner_checkpoint'];
+                }
+            }
+        }
+
+        return $checkpoints;
     }
 }

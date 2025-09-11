@@ -18,3 +18,11 @@ body {
 .card-album-picker:hover {
     background-color: var(--bs-light);
 }
+
+.container {
+    max-width: 1600px !important;
+}
+
+.text-decoration-none {
+    text-decoration: none !important;
+}

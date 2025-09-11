@@ -94,7 +94,7 @@ class AlbumController implements AlbumInterface
     {
         if (self::$fileData === null) {
             $toolController = new ToolController();
-            self::$fileData = $toolController->collectFileList(ROOT_DIR . 'album/');
+            self::$fileData = $toolController->collectDataFiles(ROOT_DIR . 'album/');
         }
     }
 
@@ -272,7 +272,7 @@ class AlbumController implements AlbumInterface
         }
 
         $toolController = new ToolController();
-        $url = $toolController->getUrl();
+        $url = $toolController->getCurrentUrl();
 
         $subDirectories = [];
         foreach ($albumDirectories as $key => $value) {

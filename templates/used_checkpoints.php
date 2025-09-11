@@ -8,19 +8,20 @@
  * @license     GNU GENERAL PUBLIC LICENSE
  */
 
-if (count($checkpoints)) {
+if (isset($params['used_checkpoints']) && count($params['used_checkpoints'])) {
     ?>
-    <div class="container mb-5" style="max-width: 1600px">
+    <div class="container mb-5">
         <div class="row">
             <div class="col-12">
-                <h3>
+                <h4>
                     Used Checkpoints (Models)
-                </h3>
+                </h4>
                 <?php
-                foreach ($checkpoints as $checkpoint) {
+                foreach ($params['used_checkpoints'] as $checkpoint) {
                     ?>
-                    <a href="/checkpoints/<?php echo $checkpoint; ?>" style="text-decoration: none">
-                        <button class="btn btn-secondary mb-2">
+                    <a class="text-decoration-none"
+                       href="/checkpoints/<?php echo $checkpoint; ?>">
+                        <button class="btn btn-outline-secondary mb-2">
                             <?php echo $checkpoint; ?>
                         </button>
                     </a>

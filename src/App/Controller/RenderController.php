@@ -27,27 +27,53 @@ class RenderController
         $success = $successController->getSuccess();
         $errorController = new ErrorController();
         $error = $errorController->getError();
-        $albumController = new AlbumController();
-        $albumData = $albumController->getAlbumData();
+
         return [
             'navbar' => $navbar,
-            'album_data' => $albumData,
             'success' => $success,
             'error' => $error,
         ];
     }
 
     /**
-     * Render by type
+     * Render home
+     *
+     * @return void
+     */
+    public function renderHome(): void
+    {
+        $params = $this->prepareParams();
+        $fileController = new FileController();
+        $params['images'] = $fileController->getLastGeneratedImages();
+        $params['used_checkpoints'] = $fileController->getCheckpoints();
+        $albumController = new AlbumController();
+        $params['album_picker'] = $albumController->getAlbumData();
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ]
+        ];
+        $params['title'] = 'Stable Diffusion Image Generator';
+        $params['template'] = 'home.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render images by type
      *
      * @param string $type Type
      * @return void
      */
-    public function renderByType(string $type): void
+    public function renderImagesByType(string $type): void
     {
         $params = $this->prepareParams();
         $fileController = new FileController();
-        $params['data'] = $fileController->collectFilesByType($type);
+        $params['images'] = $fileController->getImagesByType($type);
+        $albumController = new AlbumController();
+        $params['album_picker'] = $albumController->getAlbumData();
         $params['breadcrumbs'] = [
             [
                 'title' => $type,
@@ -55,7 +81,8 @@ class RenderController
                 'active' => false
             ]
         ];
-        $params['template'] = 'images_base.php';
+        $params['title'] = $type;
+        $params['template'] = 'images_by_type.php';
 
         $this->render($params);
     }
@@ -67,13 +94,13 @@ class RenderController
      * @param string $dateTime Date time
      * @return void
      */
-    public function renderByTypeAndDateTime(string $type, string $dateTime): void
+    public function renderImagesByTypeAndDateTime(string $type, string $dateTime): void
     {
         $params = $this->prepareParams();
         $fileController = new FileController();
-        $dateTimeName = str_replace(':', '-', $dateTime);
-        $dateTimeName = str_replace(' ', '_', $dateTimeName);
-        $params['data'] = $fileController->collectFilesByTypeAndDateTime($type, $dateTime);
+        $params['images'] = $fileController->getImagesByTypeAndDateTime($type, $dateTime);
+        $albumController = new AlbumController();
+        $params['album_picker'] = $albumController->getAlbumData();
         $params['breadcrumbs'] = [
             [
                 'title' => $type,
@@ -82,28 +109,33 @@ class RenderController
             ],
             [
                 'title' => $dateTime,
-                'url' => '/' . $type . '/' . $dateTimeName,
+                'url' => '/' . $type . '/' . $dateTime,
                 'active' => true
             ]
         ];
-        $params['template'] = 'images_base.php';
-        $params['type'] = $type;
-        $params['date_time'] = $dateTimeName;
+        $params['title'] = $type . '/' . $dateTime;
+        $params['template'] = 'images_by_type_and_date_time.php';
 
         $this->render($params);
     }
 
     /**
-     * Render sets of checkpoints
+     * Render images by checkpoints
      *
      * @return void
      */
-    public function renderCheckpoints(): void
+    public function renderImagesByCheckpoints(): void
     {
         $params = $this->prepareParams();
         $fileController = new FileController();
-        $params['checkpoints'] = $fileController->collectUsedCheckpoints();
-        $params['data'] = $fileController->collectCheckpointFiles();
+        $params['used_checkpoints'] = $fileController->getCheckpoints();
+        $params['images_by_checkpoints'] = $fileController->getImagesByCheckpoints();
+        $params['images'] = [];
+        foreach ($params['images_by_checkpoints'] as $checkpoint => $images) {
+            $params['images'] = array_merge($params['images'], $images);
+        }
+        $albumController = new AlbumController();
+        $params['album_picker'] = $albumController->getAlbumData();
         $params['base_breadcrumbs'] = [
             [
                 'title' => 'Checkpoints',
@@ -111,7 +143,39 @@ class RenderController
                 'active' => false
             ]
         ];
-        $params['template'] = 'images_checkpoints.php';
+        $params['title'] = 'Checkpoints (Models)';
+        $params['template'] = 'images_by_checkpoints.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render images by checkpoint
+     *
+     * @param string $checkpoint Checkpoint
+     * @return void
+     */
+    public function renderImagesByCheckpoint(string $checkpoint): void
+    {
+        $params = $this->prepareParams();
+        $fileController = new FileController();
+        $params['images'] = $fileController->getImagesByCheckpoint($checkpoint);
+        $albumController = new AlbumController();
+        $params['album_picker'] = $albumController->getAlbumData();
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'checkpoints',
+                'url' => '/checkpoints',
+                'active' => false
+            ],
+            [
+                'title' => $checkpoint,
+                'url' => '/checkpoints/' . $checkpoint,
+                'active' => true
+            ]
+        ];
+        $params['title'] = $checkpoint;
+        $params['template'] = 'images_by_checkpoint.php';
 
         $this->render($params);
     }
@@ -153,34 +217,6 @@ class RenderController
         }
         $params['album'] = $slug;
         $params['template'] = 'album.php';
-
-        $this->render($params);
-    }
-
-    /**
-     * Render by checkpoint
-     *
-     * @param string $checkpoint Checkpoint
-     * @return void
-     */
-    public function renderByCheckpoint(string $checkpoint): void
-    {
-        $params = $this->prepareParams();
-        $fileController = new FileController();
-        $params['data'] = $fileController->collectFilesByCheckpoint($checkpoint);
-        $params['breadcrumbs'] = [
-            [
-                'title' => 'checkpoints',
-                'url' => '/checkpoints',
-                'active' => false
-            ],
-            [
-                'title' => $checkpoint,
-                'url' => '/checkpoints/' . $checkpoint,
-                'active' => true
-            ]
-        ];
-        $params['template'] = 'images_base.php';
 
         $this->render($params);
     }
@@ -281,6 +317,19 @@ class RenderController
         $settingsController = new SettingsController();
         $params = array_merge($params, $settingsController->getSettings());
         $params['template'] = 'settings.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render not found
+     *
+     * @return void
+     */
+    public function renderNotFound(): void
+    {
+        $params = $this->prepareParams();
+        $params['template'] = 'not_found.php';
 
         $this->render($params);
     }

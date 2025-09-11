@@ -13,9 +13,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Interface\Interface\FileInterface;
-use FilesystemIterator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 
 class FileController implements FileInterface
 {
@@ -27,11 +24,11 @@ class FileController implements FileInterface
     public static array|null $fileData = null;
 
     /**
-     * Payload files
+     * Data files
      *
      * @var array|null
      */
-    public static array|null $payloads = null;
+    public static array|null $dataFiles = null;
 
     /**
      * Constructor
@@ -41,7 +38,8 @@ class FileController implements FileInterface
     public function __construct()
     {
         $this->handleActions();
-        $this->collectFiles();
+        $this->collectFileData();
+        $this->collectDataFiles();
     }
 
     /**
@@ -61,47 +59,73 @@ class FileController implements FileInterface
     }
 
     /**
-     * Collect files
+     * Collect file data
      *
      * @return void
      */
-    private function collectFiles(): void
+    private function collectFileData(): void
     {
-        if (null === self::$fileData) {
-            $toolController = new ToolController();
-            $fileData = $toolController->collectFileList(ROOT_DIR . 'outputs/');
-            if (!isset($fileData['loop'])) {
-                $fileData['loop'] = [];
-            }
-            if (!isset($fileData['txt2img'])) {
-                $fileData['txt2img'] = [];
-            }
-            if (!isset($fileData['img2img'])) {
-                $fileData['img2img'] = [];
-            }
-
-            self::$fileData = $fileData;
+        if (self::$dataFiles !== null) {
+            return;
         }
 
-        if (null === self::$payloads) {
-            $this->collectPayloads();
+        $toolController = new ToolController();
+        $fileData = $toolController->collectDataFiles(ROOT_DIR . 'outputs/');
+        if (!isset($fileData['loop'])) {
+            $fileData['loop'] = [];
+        }
+        if (!isset($fileData['txt2img'])) {
+            $fileData['txt2img'] = [];
+        }
+        if (!isset($fileData['img2img'])) {
+            $fileData['img2img'] = [];
+        }
+
+        self::$fileData = $fileData;
+    }
+
+    /**
+     * Collect data files
+     *
+     * @return void
+     */
+    private function collectDataFiles(): void
+    {
+        if (self::$dataFiles !== null) {
+            return;
+        }
+
+        self::$dataFiles = [];
+        foreach (self::$fileData as $type => $typeData) {
+            foreach ($typeData as $dateTime => $unused) {
+                if (file_exists(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/data.json')) {
+                    $data = json_decode(
+                        file_get_contents(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/data.json'),
+                        true
+                    );
+                    if (!isset(self::$dataFiles[$type])) {
+                        self::$dataFiles[$type] = [];
+                    }
+                    self::$dataFiles[$type] = array_merge(self::$dataFiles[$type], $data);
+                }
+            }
         }
     }
 
     /**
-     * Get last generated files
+     * Get last generated images
      *
      * @return array
      */
-    public function getLastFiles(): array
+    public function getLastGeneratedImages(): array
     {
-        $result = [];
+        $toolsController = new ToolController();
 
         $newest = 0;
         $targetType = false;
         $targetKey = false;
         foreach (self::$fileData['txt2img'] as $key => $file) {
-            if (!$this->containsFiles(self::$fileData['txt2img'][$key])) {
+            if (!$toolsController->containsDataFiles(self::$fileData['txt2img'][$key])) {
                 continue;
             }
             $time = strtotime($key);
@@ -112,7 +136,7 @@ class FileController implements FileInterface
             }
         }
         foreach (self::$fileData['img2img'] as $key => $file) {
-            if (!$this->containsFiles(self::$fileData['img2img'][$key])) {
+            if (!$toolsController->containsDataFiles(self::$fileData['img2img'][$key])) {
                 continue;
             }
             $time = strtotime($key);
@@ -123,7 +147,7 @@ class FileController implements FileInterface
             }
         }
         foreach (self::$fileData['loop'] as $key => $file) {
-            if (!$this->containsFiles(self::$fileData['loop'][$key])) {
+            if (!$toolsController->containsDataFiles(self::$fileData['loop'][$key])) {
                 continue;
             }
             $time = strtotime($key);
@@ -135,159 +159,136 @@ class FileController implements FileInterface
         }
 
         if ($targetType && $targetKey) {
-            $result['type'] = $targetType;
-            $result['payloads'] = $this->getDataFromPayload($targetType, $targetKey);
+            $dataFile = ROOT_DIR . 'outputs/' . $targetType . '/' . $targetKey . '/data.json';
+            $imagesFromDataFile =  $toolsController->loadImagesFromDataFile($dataFile);
+            return array_reverse($imagesFromDataFile);
         }
 
-        return $result;
+        return [];
     }
 
     /**
-     * Check if array contains files
-     *
-     * @param array $array Files
-     * @return bool
-     */
-    private function containsFiles(array $array): bool
-    {
-        foreach ($array as $fileOrArray) {
-            if (is_array($fileOrArray)) {
-                if ($this->containsFiles($fileOrArray)) {
-                    return true;
-                }
-            } else {
-                if (str_ends_with($fileOrArray, 'data.json')) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Collect payloads
-     *
-     * @return array
-     */
-    private function collectPayloads(): array
-    {
-        if (null === self::$payloads) {
-            self::$payloads = [];
-            foreach (self::$fileData as $type => $typeData) {
-                foreach ($typeData as $dateTime => $payloads) {
-                    if (file_exists(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/data.json')) {
-                        self::$payloads = array_merge(self::$payloads, json_decode(
-                            file_get_contents(
-                                ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/data.json'),
-                            true
-                        ));
-                    }
-                }
-            }
-        }
-
-        return self::$payloads;
-    }
-
-    /**
-     * Get data from payloads by type and key
-     *
-     * @param string $type Type
-     * @param string $key Key
-     * @return array
-     */
-    private function getDataFromPayload(string $type, string $key): array
-    {
-        $payloads = json_decode(
-            file_get_contents(ROOT_DIR . 'outputs/' . $type . '/' . $key . '/data.json'), true
-        );
-
-        foreach ($payloads as $index => $payload) {
-            if (isset($payload['file'])) {
-                $split = explode('/outputs/' . $type . '/' . $key . '/', $payload['file']);
-                $payloads[$index]['file'] = '/outputs/' . $type . '/' . $key . '/' . end($split);
-            }
-            if (isset($payload['payload']['init_images'])) {
-                $split = explode('/init_images/', $payload['payload']['init_images']);
-                $payloads[$index]['payload']['init_images'] = '/init_images/' . end($split);
-            }
-        }
-
-        return $payloads;
-    }
-
-    /**
-     * Collect files by type
+     * Get images by type
      *
      * @param string $type Type
      * @param int $limit Limit
      * @return array
      */
-    public function collectFilesByType(string $type, int $limit = 1000): array
+    public function getImagesByType(string $type, int $limit = 1000): array
     {
-        if (!isset(self::$fileData[$type])) {
-            return [];
-        }
-
-        $filesByType['payloads'] = [];
-        foreach (self::$payloads as $payload) {
-            if ($payload['mode'] === $type) {
-                $split = explode('/outputs/' . $type . '/', $payload['file']);
-                $payload['file'] = '/outputs/' . $type . '/' . end($split);
-                if (isset($payload['payload']['init_images'])) {
-                    $split = explode('/init_images/', $payload['payload']['init_images']);
-                    $payload['payload']['init_images'] = '/init_images/' . end($split);
+        $images = [];
+        foreach (self::$dataFiles[$type] as $dataFile) {
+                $dataFile['file'] = str_replace(ROOT_DIR, '/', $dataFile['file']);
+                if (isset($dataFile['data']['init_images'])) {
+                    $dataFile['data']['init_images'] =
+                        str_replace(ROOT_DIR, '/', $dataFile['data']['init_images']);
                 }
-                $filesByType['payloads'][] = $payload;
-                if (count($filesByType) >= $limit) {
+                $images[] = $dataFile;
+                if (count($images) >= $limit) {
                     break;
                 }
             }
-        }
 
-        return $filesByType;
+        return array_reverse($images);
     }
 
     /**
-     * Collect files by type and date time
+     * Get images by type and date time
      *
      * @param string $type Type
      * @param string $dateTime Date time
      * @return array
      */
-    public function collectFilesByTypeAndDateTime(string $type, string $dateTime): array
+    public function getImagesByTypeAndDateTime(string $type, string $dateTime): array
     {
         if (!isset(self::$fileData[$type][$dateTime])) {
             return [];
         }
 
-        return [
-            'type' => $type,
-            'payloads' => $this->getDataFromPayload($type, $dateTime)
-        ];
+        $toolsController = new ToolController();
+        $dataFile = ROOT_DIR . 'outputs/' . $type . '/' . $dateTime . '/data.json';
+        return array_reverse($toolsController->loadImagesFromDataFile($dataFile));
     }
 
     /**
-     * Collect used checkpoints
+     * Get images by checkpoints
+     *
+     * @param int $limit Limit per type
+     * @return array
+     */
+    public function getImagesByCheckpoints(int $limit = 10): array
+    {
+        $checkpoints = [];
+        foreach (self::$dataFiles as $type => $images) {
+            foreach ($images as $image) {
+                if (isset($image['data']['override_settings']['sd_model_checkpoint'])) {
+                    $checkpoint = $image['data']['override_settings']['sd_model_checkpoint'];
+                    if (!isset($checkpoints[$checkpoint])) {
+                        $checkpoints[$checkpoint] = [];
+                    }
+                    if (count($checkpoints[$checkpoint]) >= $limit) {
+                        continue;
+                    }
+                    $image['file'] = str_replace(ROOT_DIR, '/', $image['file']);
+                    if (isset($image['data']['init_images'])) {
+                        $images['data']['init_images'] =
+                            str_replace(ROOT_DIR, '/', $image['data']['init_images']);
+                    }
+                    $checkpoints[$checkpoint][] = $image;
+                }
+            }
+        }
+
+        return $checkpoints;
+    }
+
+    /**
+     * Get images by checkpoint
+     *
+     * @param string $checkpoint Checkpoint
+     * @param int $limit Limit
+     * @return array|null
+     */
+    public function getImagesByCheckpoint(string $checkpoint, int $limit = 1000): array|null
+    {
+        $images = [];
+        foreach (self::$dataFiles as $type => $dataFile) {
+            foreach ($dataFile as $image) {
+                if ((isset($image['data']['override_settings']['sd_model_checkpoint']) &&
+                    $image['data']['override_settings']['sd_model_checkpoint'] === $checkpoint) ||
+                        (isset($image['data']['refiner_checkpoint']) &&
+                        $image['data']['refiner_checkpoint'] === $checkpoint))
+                {
+                    $image['file'] = str_replace(ROOT_DIR, '/', $image['file']);
+                    if (isset($image['data']['init_images'])) {
+                        $image['data']['init_images'] =
+                            str_replace(ROOT_DIR, '/', $image['data']['init_images']);
+                    }
+                    $images[] = $image;
+                    if (count($images) >= $limit) {
+                        break 2;
+                    }
+                } elseif (isset($image['data']['refiner_checkpoint'])) {
+
+                }
+            }
+        }
+
+        return $images;
+    }
+
+    /**
+     * Get used and used refiner checkpoints
      *
      * @return array
      */
-    public function collectUsedCheckpoints(): array
+    public function getCheckpoints(): array
     {
-        if (null === self::$payloads) {
-            $this->collectPayloads();
-        }
-        if (!count(self::$payloads)) {
-            return [];
-        }
-
-        $checkpoints = [];
-        foreach (self::$payloads as $payload) {
-            if (isset($payload['data']['override_settings']['sd_model_checkpoint'])) {
-                if (!in_array($payload['data']['override_settings']['sd_model_checkpoint'], $checkpoints)) {
-                    $checkpoints[] = $payload['data']['override_settings']['sd_model_checkpoint'];
-                }
+        $checkpoints = $this->getUsedCheckpoints();
+        $usedRefinedCheckpoints = $this->getUsedRefinerCheckpoints();
+        foreach ($usedRefinedCheckpoints as $usedRefinedCheckpoint) {
+            if (!in_array($usedRefinedCheckpoint, $checkpoints)) {
+                $checkpoints[] = $usedRefinedCheckpoint;
             }
         }
         sort($checkpoints);
@@ -296,72 +297,52 @@ class FileController implements FileInterface
     }
 
     /**
-     * Collect set of checkpoint files
+     * Get used checkpoints
      *
-     * @param int $limit Limit per type
      * @return array
      */
-    public function collectCheckpointFiles(int $limit = 10): array
+    public function getUsedCheckpoints(): array
     {
-        $checkpointFiles = [];
-
-        foreach (self::$payloads as $payload) {
-            if (isset($payload['data']['override_settings']['sd_model_checkpoint'])) {
-                $checkpoint = $payload['data']['override_settings']['sd_model_checkpoint'];
-                $type = $payload['mode'];
-                if (!isset($checkpointFiles[$checkpoint])) {
-                    $checkpointFiles[$checkpoint] = [];
-                }
-                if (!isset($checkpointFiles[$checkpoint]['payloads'])) {
-                    $checkpointFiles[$checkpoint]['payloads'] = [];
-                }
-                if (count($checkpointFiles[$checkpoint]['payloads']) >= $limit) {
-                    continue;
-                }
-                $split = explode('/outputs/' . $type . '/', $payload['file']);
-                $payload['file'] = '/outputs/' . $type . '/' . end($split);
-                if (isset($payload['data']['init_images'])) {
-                    $split = explode('/init_images/', $payload['data']['init_images']);
-                    $payload['data']['init_images'] = '/init_images/' . end($split);
-                }
-                $checkpointFiles[$checkpoint]['payloads'][] = $payload;
-            }
+        if (self::$dataFiles) {
+            $this->collectDataFiles();
         }
 
-        return $checkpointFiles;
+        $toolsController = new ToolController();
+        $checkpoints = [];
+        foreach (self::$dataFiles as $type => $dataFile) {
+            $checkpoints =
+                array_merge($checkpoints, $toolsController->collectCheckpointsFromDataFiles($dataFile));
+        }
+        sort($checkpoints);
+
+        return $checkpoints;
     }
 
     /**
-     * Collect files by checkpoint
+     * Get used refiner checkpoints
      *
-     * @param string $checkpoint Checkpoint
-     * @return array|null
+     * @return array
      */
-    public function collectFilesByCheckpoint(string $checkpoint): array|null
+    public function getUsedRefinerCheckpoints(): array
     {
-        $filesByCheckpoint = [];
-        $payloads = $this->collectPayloads();
-        foreach ($payloads as $payload) {
-            if (isset($payload['data']['override_settings']['sd_model_checkpoint'])) {
-                if ($payload['data']['override_settings']['sd_model_checkpoint'] === $checkpoint) {
-                    if (isset($payload['file'])) {
-                        $split = explode('/outputs/', $payload['file']);
-                        $payload['file'] = '/outputs/' . end($split);
-                    }
-                    if (isset($payload['data']['init_images'])) {
-                        $split = explode('/init_images/', $payload['data']['init_images']);
-                        $payload['data']['init_images'] = '/init_images/' . end($split);
-                    }
-                    $filesByCheckpoint[] = $payload;
-                }
-            }
+        if (self::$dataFiles) {
+            $this->collectDataFiles();
         }
+        $toolsController = new ToolController();
+        $checkpoints = [];
+        foreach (self::$dataFiles as $type => $dataFile) {
+            $checkpoints =
+                array_merge($checkpoints, $toolsController->collectRefinerCheckpointsFromDataFiles($dataFile));
+        }
+        sort($checkpoints);
 
-        return [
-            'type' => $checkpoint,
-            'payloads' => $filesByCheckpoint
-        ];
+        return $checkpoints;
     }
+
+
+
+
+
 
     /**
      * Delete image

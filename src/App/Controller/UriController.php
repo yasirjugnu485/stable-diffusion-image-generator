@@ -21,27 +21,25 @@ class UriController
      */
     public function __construct()
     {
-        $requestUri = $_SERVER['REQUEST_URI'];
-        if ($requestUri === '' || $requestUri === '/') {
-            $this->home();
-        }
-
-        $requestIndex = explode('/', rtrim($requestUri, '/'));
-
         $renderController = new RenderController();
         $promptController = new PromptController();
         $initImagesController = new InitImageController();
 
-        if (($requestIndex[1] === 'txt2img' || $requestIndex[1] === 'img2img' || $requestIndex[1] === 'loop') &&
+        $requestUri = $_SERVER['REQUEST_URI'];
+        $requestIndex = explode('/', rtrim($requestUri, '/'));
+
+        if ($requestUri === '' || $requestUri === '/') {
+            $renderController->renderHome();
+        } elseif (($requestIndex[1] === 'txt2img' || $requestIndex[1] === 'img2img' || $requestIndex[1] === 'loop') &&
             !isset($requestIndex[2])) {
-            $renderController->renderByType($requestIndex[1]);
+            $renderController->renderImagesByType($requestIndex[1]);
         } elseif (($requestIndex[1] === 'txt2img' || $requestIndex[1] === 'img2img' || $requestIndex[1] === 'loop') &&
             isset($requestIndex[2])) {
-            $renderController->renderByTypeAndDateTime($requestIndex[1], $requestIndex[2]);
+            $renderController->renderImagesByTypeAndDateTime($requestIndex[1], $requestIndex[2]);
         } elseif ($requestIndex[1] === 'checkpoints' && !isset($requestIndex[2])) {
-            $renderController->renderCheckpoints();
+            $renderController->renderImagesByCheckpoints();
         } elseif ($requestIndex[1] === 'checkpoints' && isset($requestIndex[2])) {
-            $renderController->renderByCheckpoint($requestIndex[2]);
+            $renderController->renderImagesByCheckpoint($requestIndex[2]);
         } elseif ($requestIndex[1] === 'album') {
             $renderController->renderAlbum($requestIndex);
         } elseif ($requestIndex[1] === 'prompt-merger' && !isset($requestIndex[2])) {
@@ -73,26 +71,6 @@ class UriController
             $renderController->renderSettings();
         }
 
-        $this->notFound();
-    }
-
-    /**
-     * Render home
-     *
-     * @return void
-     */
-    private function home(): void
-    {
-        new HomeController();
-    }
-
-    /**
-     * Render not found
-     *
-     * @return void
-     */
-    private function notFound(): void
-    {
-        new NotFoundController();
+        $renderController->renderNotFound();
     }
 }
