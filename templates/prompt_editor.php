@@ -302,8 +302,7 @@ if ($params['directory'] !== 'demo') {
 </div>
 
 <script>
-    class PromptEditor
-    {
+    class PromptEditor {
         deleteFile = (file) => {
             document.getElementById('deletePromptMergerFile').value = file;
             document.getElementById('deletePromptMergerFileInput').value = file;

@@ -313,8 +313,7 @@ if ($params['directory'] !== 'demo') {
 </div>
 
 <script>
-    class InitImagesEditor
-    {
+    class InitImagesEditor {
         deleteInitImagesImage = (name, file) => {
             document.getElementById('deleteInitImagesImage').value = file;
             document.getElementById('deleteInitImagesImageInput').value = name;

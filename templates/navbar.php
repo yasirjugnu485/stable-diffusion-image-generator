@@ -287,7 +287,8 @@
                             foreach ($params['navbar']['init_images'] as $initImage) {
                                 ?>
                                 <li>
-                                    <a class="dropdown-item text-dark" href="/initialize-images/<?php echo $initImage; ?>">
+                                    <a class="dropdown-item text-dark"
+                                       href="/initialize-images/<?php echo $initImage; ?>">
                                         <?php echo $initImage; ?>
                                     </a>
                                 </li>
