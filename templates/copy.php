@@ -14,16 +14,15 @@ if (isset($params['copy'])) {
     {
         foreach ($entry as $key => $value) {
             if (is_array($value)) {
-                $slug .= '/' . $key;
                 ?>
                 <div style="margin-left: <?php echo $marginLeft; ?>px;">
                     <div class="btn btn-outline-primary w-100 text-start p-2 mb-1"
-                         onclick="albumPicker.execute('<?php echo $slug; ?>');">
+                         onclick="albumPicker.execute('<?php echo $slug . '/' . $key; ?>');">
                         <?php echo str_replace('_', ' ', $key); ?>
                     </div>
                 </div>
                 <?php
-                create_entries($slug, $marginLeft + 20, $value);
+                create_entries($slug . '/' . $key, $marginLeft + 20, $value);
             }
         }
     }
@@ -46,22 +45,43 @@ if (isset($params['copy'])) {
             </button>
         </div>
         <div class="offcanvas-body">
-            <h5>
-                Albums
-            </h5>
-            <?php
-            if (count($params['copy']['albums'])) {
-                $slug = '/album';
-                $marginLeft = 0;
-                create_entries($slug, $marginLeft, $params['copy']['albums']);
-            } else {
-                ?>
-                <div class="alert alert-warning">
-                    There are no Albums available
-                </div>
+            <div class="mb-5">
+                <h5>
+                    Albums
+                </h5>
                 <?php
-            }
-            ?>
+                if (count($params['copy']['albums'])) {
+                    $slug = '/album';
+                    $marginLeft = 0;
+                    create_entries($slug, $marginLeft, $params['copy']['albums']);
+                } else {
+                    ?>
+                    <div class="alert alert-warning">
+                        There are no Albums available
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+
+            <div>
+                <h5>
+                    Initialize Image Directories
+                </h5>
+                <?php
+                if (count($params['copy']['init_images'])) {
+                    $slug = '/init_images';
+                    $marginLeft = 0;
+                    create_entries($slug, $marginLeft, $params['copy']['init_images']);
+                } else {
+                    ?>
+                    <div class="alert alert-warning">
+                        There are no Initialize Images Directories available
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
         </div>
     </div>
 

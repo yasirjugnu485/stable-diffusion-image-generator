@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cli\Controller\InitImagesController;
+
 class RenderController
 {
     /**
@@ -48,6 +50,12 @@ class RenderController
         $params['used_checkpoints'] = $fileController->getCheckpoints();
         $albumController = new AlbumController();
         $params['copy']['albums'] = $albumController->getAlbumData();
+        $initImageController = new InitImageController();
+        $initImagesData = $initImageController->getInitImagesData();
+        if (isset($initImagesData['demo'])) {
+            unset($initImagesData['demo']);
+        }
+        $params['copy']['init_images'] = $initImagesData;
         $params['breadcrumbs'] = [
             [
                 'title' => 'Home',
@@ -74,6 +82,12 @@ class RenderController
         $params['images'] = $fileController->getImagesByType($type);
         $albumController = new AlbumController();
         $params['copy']['albums'] = $albumController->getAlbumData();
+        $initImageController = new InitImageController();
+        $initImagesData = $initImageController->getInitImagesData();
+        if (isset($initImagesData['demo'])) {
+            unset($initImagesData['demo']);
+        }
+        $params['copy']['init_images'] = $initImagesData;
         $params['breadcrumbs'] = [
             [
                 'title' => $type,
@@ -97,10 +111,18 @@ class RenderController
     public function renderImagesByTypeAndDateTime(string $type, string $dateTime): void
     {
         $params = $this->prepareParams();
+        $params['type'] = $type;
+        $params['date_time'] = $dateTime;
         $fileController = new FileController();
         $params['images'] = $fileController->getImagesByTypeAndDateTime($type, $dateTime);
         $albumController = new AlbumController();
         $params['copy']['albums'] = $albumController->getAlbumData();
+        $initImageController = new InitImageController();
+        $initImagesData = $initImageController->getInitImagesData();
+        if (isset($initImagesData['demo'])) {
+            unset($initImagesData['demo']);
+        }
+        $params['copy']['init_images'] = $initImagesData;
         $params['breadcrumbs'] = [
             [
                 'title' => $type,
@@ -136,6 +158,12 @@ class RenderController
         }
         $albumController = new AlbumController();
         $params['copy']['albums'] = $albumController->getAlbumData();
+        $initImageController = new InitImageController();
+        $initImagesData = $initImageController->getInitImagesData();
+        if (isset($initImagesData['demo'])) {
+            unset($initImagesData['demo']);
+        }
+        $params['copy']['init_images'] = $initImagesData;
         $params['base_breadcrumbs'] = [
             [
                 'title' => 'Checkpoints',
@@ -162,6 +190,12 @@ class RenderController
         $params['images'] = $fileController->getImagesByCheckpoint($checkpoint);
         $albumController = new AlbumController();
         $params['copy']['albums'] = $albumController->getAlbumData();
+        $initImageController = new InitImageController();
+        $initImagesData = $initImageController->getInitImagesData();
+        if (isset($initImagesData['demo'])) {
+            unset($initImagesData['demo']);
+        }
+        $params['copy']['init_images'] = $initImagesData;
         $params['breadcrumbs'] = [
             [
                 'title' => 'checkpoints',
@@ -197,6 +231,12 @@ class RenderController
         $params['sub_directories'] = $albumController->getAlbumSubdirectories();
         $params['images'] = $albumController->getAlbumImages();
         $params['copy']['albums'] = $albumController->getAlbumData();
+        $initImageController = new InitImageController();
+        $initImagesData = $initImageController->getInitImagesData();
+        if (isset($initImagesData['demo'])) {
+            unset($initImagesData['demo']);
+        }
+        $params['copy']['init_images'] = $initImagesData;
         $params['request_index'] = $requestIndex;
         $params['breadcrumbs'] = [];
         $slug = '/';

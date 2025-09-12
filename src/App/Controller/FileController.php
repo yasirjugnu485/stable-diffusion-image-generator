@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Interface\Interface\FileInterface;
+use Cli\Controller\RefinerController;
 
 class FileController implements FileInterface
 {
@@ -52,8 +53,8 @@ class FileController implements FileInterface
         if (null === self::$fileData) {
             if (isset($_POST['action']) && $_POST['action'] === 'deleteImage') {
                 $this->deleteImage();
-            } elseif (isset($_POST['action']) && $_POST['action'] === 'deleteByTypeAndDateTime') {
-                $this->deleteByTypeAndDateTime();
+            } elseif (isset($_POST['action']) && $_POST['action'] === 'deleteDirectory') {
+                $this->deleteDirectory();
             }
         }
     }
@@ -85,7 +86,7 @@ class FileController implements FileInterface
     }
 
     /**
-     * Collect data files // TODO: Check
+     * Collect data files
      *
      * @return void
      */
@@ -176,6 +177,10 @@ class FileController implements FileInterface
      */
     public function getImagesByType(string $type, int $limit = 1000): array
     {
+        if (!isset(self::$dataFiles[$type])) {
+            new RedirectController('/');
+        }
+
         $images = [];
         foreach (self::$dataFiles[$type] as $dataFile) {
                 $dataFile['file'] = str_replace(ROOT_DIR, '/', $dataFile['file']);
@@ -202,7 +207,7 @@ class FileController implements FileInterface
     public function getImagesByTypeAndDateTime(string $type, string $dateTime): array
     {
         if (!isset(self::$fileData[$type][$dateTime])) {
-            return [];
+            new RedirectController('/' . $type);
         }
 
         $toolsController = new ToolController();
@@ -251,6 +256,8 @@ class FileController implements FileInterface
      */
     public function getImagesByCheckpoint(string $checkpoint, int $limit = 1000): array|null
     {
+
+
         $images = [];
         foreach (self::$dataFiles as $type => $dataFile) {
             foreach ($dataFile as $image) {
@@ -268,10 +275,19 @@ class FileController implements FileInterface
                     if (count($images) >= $limit) {
                         break 2;
                     }
-                } elseif (isset($image['data']['refiner_checkpoint'])) {
-
+                } elseif (isset($image['data']['refiner_checkpoint']) &&
+                    $image['data']['refiner_checkpoint'] === $checkpoint) {
+                    $image['file'] = str_replace(ROOT_DIR, '/', $image['file']);
+                    if (isset($image['data']['init_images'])) {
+                        $image['data']['init_images'] =
+                            str_replace(ROOT_DIR, '/', $image['data']['init_images']);
+                    }
+                    $images[] = $image;
                 }
             }
+        }
+        if (!count($images)) {
+            new RedirectController('/checkpoints');
         }
 
         return $images;
@@ -359,9 +375,8 @@ class FileController implements FileInterface
         }
         $data = json_decode(file_get_contents($dataFile), true);
 
-        $rootDir = str_replace('/public/../', '/', ROOT_DIR);
         foreach ($data as $index => $entry) {
-            if (str_replace($rootDir, '', $entry['file']) === $image) {
+            if (str_replace(ROOT_DIR, '', $entry['file']) === $image) {
                 unset($data[$index]);
                 file_put_contents($dataFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
                 if (file_exists(ROOT_DIR . $image)) {
@@ -374,44 +389,33 @@ class FileController implements FileInterface
         exit();
     }
 
-
-
-
-
-
     /**
-     * Delete by type and date time
+     * Delete directory
      *
      * @return void
      */
-    private function deleteByTypeAndDateTime(): void
+    private function deleteDirectory(): void
     {
         if (!isset($_POST['type']) || !isset($_POST['dateTime'])) {
             new ErrorController(self::ERROR_DELETE_BY_TYPE_AND_DIRECTORY);
-            $this->redirect();
+            new RedirectController();
         }
 
         $type = $_POST['type'];
-        $split = explode('_', $_POST['dateTime']);
-        $dateTime = $split[0] . ' ' . str_replace('-', ':', $split[1]);
+        $dateTime = $_POST['dateTime'];
 
-        $this->collectFiles();
+        $this->collectFileData();
         if (!isset(self::$fileData[$type][$dateTime])) {
             new ErrorController(self::ERROR_DELETE_BY_TYPE_AND_DIRECTORY);
-            $this->redirect();
+            new RedirectController();
         }
 
         $toolController = new ToolController();
         $toolController->deleteDirectory(ROOT_DIR . 'outputs/' . $type . '/' . $dateTime);
 
         new SuccessController(self::SUCCESS_DELETE_BY_TYPE_AND_DIRECTORY);
-        $this->redirect(true);
+        new RedirectController('/' . $type);
     }
-
-
-
-
-
 
     /**
      * Get file data

@@ -251,7 +251,6 @@ class ConfigController implements ConfigInterface
 
         $bootstrapController = new BootstrapController();
         $arguments = $bootstrapController->getArguments();
-        var_export($arguments);
 
         if (isset($arguments['--config'])) {
             include_once $arguments['--config'][0];

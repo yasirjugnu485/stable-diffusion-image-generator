@@ -263,6 +263,9 @@ class AlbumController implements AlbumInterface
 
         $source = ltrim($_POST['source'], '/');
         $destination = ltrim($_POST['destination'], '/');
+        if (!str_starts_with($destination, 'album/')) {
+            return;
+        }
 
         $sourceSplit = explode('/', $source);
         $sourceSplit[count($sourceSplit) - 1] = 'data.json';

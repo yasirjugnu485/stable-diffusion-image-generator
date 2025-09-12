@@ -23,7 +23,7 @@ class RedirectController
     public function __construct(string|null $url = null)
     {
         if ($url) {
-            $httpReferer = $_SERVER['HTTP_REFERER'];
+            $httpReferer = $_SERVER['HTTP_REFERER'] ?? 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
             if (str_starts_with($httpReferer, 'http://')) {
                 $httpReferer = str_replace('http://', '', $httpReferer);
                 $split = explode('/', $httpReferer);
@@ -34,7 +34,7 @@ class RedirectController
                 $url = 'https://' . $split[0] . $url;
             }
         } else {
-            $url = $_SERVER['HTTP_REFERER'];
+            $url = $_SERVER['HTTP_REFERER'] ?? 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         }
 
         header('Location: ' . $url);

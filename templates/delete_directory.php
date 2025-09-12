@@ -33,7 +33,7 @@ if (isset($params['type']) && isset($params['date_time'])) {
             <form method="post">
                 <input type="hidden"
                        name="action"
-                       value="deleteByTypeAndDateTime">
+                       value="deleteDirectory">
                 <input type="hidden"
                        name="type"
                        value="<?php echo $params['type']; ?>">

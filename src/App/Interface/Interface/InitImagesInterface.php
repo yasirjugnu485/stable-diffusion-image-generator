@@ -118,4 +118,18 @@ interface InitImagesInterface
      * @var string
      */
     const string SUCCESS_SAVE_INITIALIZE_IMAGES_IMAGES = 'Initialize Images Images saved successfully';
+
+    /**
+     * Error copy entry
+     *
+     * @var string
+     */
+    const string ERROR_COPY_ENTRY = 'Error on copying Entry';
+
+    /**
+     * Success copy entry
+     *
+     * @var string
+     */
+    const string SUCCESS_COPY_ENTRY = 'Entry copied successfully';
 }

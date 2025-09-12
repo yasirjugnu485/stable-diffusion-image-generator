@@ -58,6 +58,8 @@ class InitImageController implements InitImagesInterface
                 $this->deleteInitImagesImage();
             } elseif (isset($_POST['action']) && $_POST['action'] === 'deleteInitImagesDirectory') {
                 $this->deleteInitImagesDirectory();
+            } elseif (isset($_POST['action']) && $_POST['action'] === 'copyEntry') {
+                $this->copyEntry();
             }
         }
     }
@@ -386,6 +388,60 @@ class InitImageController implements InitImagesInterface
         }
 
         return $images;
+    }
+
+    /**
+     * Copy entry
+     *
+     * @return void
+     */
+    public function copyEntry(): void
+    {
+        if (!isset($_POST['source']) || !isset($_POST['destination'])) {
+            new ErrorController(self::ERROR_COPY_ENTRY);
+            new RedirectController();
+        }
+
+        $source = ltrim($_POST['source'], '/');
+        $destination = ltrim($_POST['destination'], '/');
+        if (!str_starts_with($destination, 'init_images/')) {
+            return;
+        }
+
+        $sourceFile = ROOT_DIR . $source;
+        if (!file_exists($sourceFile) || !is_dir(ROOT_DIR . $destination)) {
+            new ErrorController(self::ERROR_COPY_ENTRY);
+            new RedirectController();
+        }
+
+        $fileSplit  = explode('/', $sourceFile);
+        $fileName = end($fileSplit);
+
+        $fileNameSplit = explode('.', $fileName);
+        if (count($fileNameSplit) !== 2) {
+            new ErrorController(self::ERROR_COPY_ENTRY);
+            new RedirectController();
+        }
+
+        $name = $fileNameSplit[0];
+        $extension = $fileNameSplit[1];
+        $index = 0;
+        while (true) {
+            if ($index > 0) {
+                $newName = $name . '-' . $index . '.' . $extension;
+            } else {
+                $newName = $name . '.' . $extension;
+            }
+            if (file_exists(ROOT_DIR . $destination . '/' . $newName)) {
+                $index++;
+            } else {
+                copy($sourceFile, ROOT_DIR . $destination . '/' . $newName);
+                break;
+            }
+        }
+
+        new SuccessController(self::SUCCESS_COPY_ENTRY);
+        new RedirectController();
     }
 
     /**
