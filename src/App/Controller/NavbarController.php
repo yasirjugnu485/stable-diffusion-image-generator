@@ -102,7 +102,7 @@ class NavbarController
     private function collectAlbums(): void
     {
         $albumController = new AlbumController();
-        self::$navbarData['albums'] = $albumController->collectRootDirectories();
+        self::$navbarData['albums'] = $albumController->getRootDirectories();
     }
 
     /**

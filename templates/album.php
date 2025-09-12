@@ -8,6 +8,11 @@
  * @license     GNU GENERAL PUBLIC LICENSE
  */
 
+include(ROOT_DIR . 'templates/copy.php');
+include(ROOT_DIR . 'templates/delete_image.php');
+include(ROOT_DIR . 'templates/messages.php');
+include(ROOT_DIR . 'templates/breadcrumbs.php');
+
 ?>
 <div class="offcanvas offcanvas-end"
      tabindex="-1"
@@ -96,40 +101,8 @@ if ($params['album'] !== '/album') {
     </div>
     <?php
 }
-
-if ((isset($params['error']) && $params['error']) || (isset($params['success']) && $params['success'])) {
-    ?>
-    <div class="container" style="max-width: 1600px">
-        <div class="row">
-            <div class="col-12">
-                <?php
-                if (isset($params['error'])) {
-                    ?>
-                    <div class="col-12">
-                        <div class="alert alert-danger mb-5">
-                            <?php echo $params['error']; ?>
-                        </div>
-                    </div>
-                    <?php
-                }
-                if (isset($params['success'])) {
-                    ?>
-                    <div class="col-12">
-                        <div class="alert alert-success mb-5">
-                            <?php echo $params['success']; ?>
-                        </div>
-                    </div>
-                    <?php
-                }
-                ?>
-            </div>
-        </div>
-    </div>
-    <?php
-}
 ?>
-
-<div class="container" style="max-width: 1600px">
+<div class="container">
     <div class="row">
 
         <div class="col-12 mb-5">
@@ -183,6 +156,7 @@ if ((isset($params['error']) && $params['error']) || (isset($params['success']) 
 </div>
 
 <?php
+include(ROOT_DIR . 'templates/breadcrumbs.php');
 if ($params['album'] !== '/album') {
-    include(ROOT_DIR . 'templates/images_base.php');
+    include(ROOT_DIR . 'templates/images.php');
 }

@@ -20,18 +20,18 @@ use RecursiveIteratorIterator;
 class AlbumController implements AlbumInterface
 {
     /**
-     * Album data
-     *
-     * @var array|null
-     */
-    public static array|null $albumData = null;
-
-    /**
-     * File Data
+     * File data
      *
      * @var array|null
      */
     public static array|null $fileData = null;
+
+    /**
+     * Data files
+     *
+     * @var array|null
+     */
+    public static array|null $dataFiles = null;
 
     /**
      * Constructor
@@ -41,7 +41,8 @@ class AlbumController implements AlbumInterface
     public function __construct()
     {
         $this->handleActions();
-        $this->collectData();
+        $this->collectFileData();
+        $this->collectDataFiles();
     }
 
     /**
@@ -61,36 +62,26 @@ class AlbumController implements AlbumInterface
     }
 
     /**
-     * Collect data
+     * Collect file data
      *
      * @return void
      */
-    private function collectData(): void
+    private function collectFileData(): void
     {
-        $this->collectAlbumData();
-        $this->collectFiles();
-    }
-
-    /**
-     * Collect album data
-     *
-     * @return void
-     */
-    private function collectAlbumData(): void
-    {
-        if (self::$albumData !== null) {
+        if (self::$fileData === null) {
             return;
         }
 
-        self::$albumData = $this->collectFileList(ROOT_DIR . 'album/');
+        $toolController = new ToolController();
+        self::$fileData = $toolController->collectDataFiles(ROOT_DIR . 'album/');
     }
 
     /**
-     * Collect files
+     * Collect data files TODO: Check
      *
      * @return void
      */
-    private function collectFiles(): void
+    private function collectDataFiles(): void
     {
         if (self::$fileData === null) {
             $toolController = new ToolController();
@@ -99,59 +90,93 @@ class AlbumController implements AlbumInterface
     }
 
     /**
-     * Collect files from directory
+     * Get root directories
      *
-     * @param string $directory Directory
      * @return array
      */
-    private function collectFileList(string $directory): array
+    public function getRootDirectories(): array
     {
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST
-        );
-
-        $result = [];
-        foreach ($iterator as $item) {
-            $path = $item->getPathname();
-            if ($item->isFile()) {
-                if (!str_ends_with($path, 'data.json')) {
-                    continue;
-                }
-                $result[] = str_replace($directory, '', $path);
+        $rootDirectories = [];
+        $root = array_keys(self::$fileData);
+        foreach ($root as $value) {
+            if (is_int($value)) {
+                continue;
+            } elseif (!is_dir(ROOT_DIR . 'album/' . $value)) {
+                continue;
             }
+            $rootDirectories[] = $value;
         }
 
-        return $this->parsePathsOfFiles($result);
+        return $rootDirectories;
     }
 
     /**
-     * Parse path of files
+     * Get album subdirectories
      *
-     * @param array $array Collected file list
-     * @return mixed
+     * @return array
      */
-    private function parsePathsOfFiles(array $array): mixed
+    public function getAlbumSubdirectories(): array
     {
-        rsort($array);
-        $result = array();
-
-        foreach ($array as $item) {
-            $parts = explode('/', $item);
-            $current = &$result;
-            for ($i = 1, $max = count($parts); $i < $max; $i++) {
-                if (!isset($current[$parts[$i - 1]])) {
-                    $current[$parts[$i - 1]] = array();
-                }
-                $current = &$current[$parts[$i - 1]];
+        $requestUriPrefix = [];
+        $requestUri = $_SERVER['REQUEST_URI'];
+        $requestIndex = explode('/', rtrim($requestUri, '/'));
+        foreach ($requestIndex as  $value) {
+            if (count($requestUriPrefix) || $value !== 'album') {
+                $requestUriPrefix[] = $value;
             }
-            $last = end($parts);
-            if (!isset($current[$last]) && $last) {
-                $current[] = end($parts);
+        }
+        if (!count($requestUriPrefix)) {
+            new RedirectController('/album');
+        }
+        unset($requestUriPrefix[0]);
+        $albumDirectories = self::$fileData;
+        foreach ($requestUriPrefix as $value) {
+            if (array_key_exists($value, $albumDirectories)) {
+                $albumDirectories = $albumDirectories[$value];
             }
         }
 
-        return $result;
+        $toolController = new ToolController();
+        $url = $toolController->getCurrentUrl();
+
+        $subDirectories = [];
+        foreach ($albumDirectories as $key => $value) {
+            if (is_int($key)) {
+                continue;
+            }
+            $subDirectories[] = [
+                'name' => str_replace('_', ' ', $key),
+                'link' => rtrim($url, '/') . '/' . $key,
+            ];
+        }
+
+        return $subDirectories;
+    }
+
+    /**
+     * Get album images
+     *
+     * @return array
+     */
+    public function getAlbumImages(): array
+    {
+        $dataFile = ROOT_DIR . trim($_SERVER['REQUEST_URI'], '/') . '/data.json';
+        if (!file_exists($dataFile)) {
+            return [];
+        }
+
+        $images = [];
+        $dataFiles = json_decode(file_get_contents($dataFile), true);
+        foreach ($dataFiles as $dataFile) {
+            $dataFile['file'] = str_replace(ROOT_DIR, '/', $dataFile['file']);
+            if (isset($dataFile['data']['init_images'])) {
+                $dataFile['data']['init_images'] =
+                    str_replace(ROOT_DIR, '/', $dataFile['data']['init_images']);
+            }
+            $images[] = $dataFile;
+        }
+
+        return $images;
     }
 
     /**
@@ -222,97 +247,6 @@ class AlbumController implements AlbumInterface
 
         new SuccessController(self::SUCCESS_DELETE_ALBUM);
         new RedirectController('/album');
-    }
-
-    /**
-     * Collect root directories
-     *
-     * @return array
-     */
-    public function collectRootDirectories(): array
-    {
-        $rootDirectories = [];
-        $root = array_keys(self::$albumData);
-        foreach ($root as $value) {
-            if (is_int($value)) {
-                continue;
-            } elseif (!is_dir(ROOT_DIR . 'album/' . $value)) {
-                continue;
-            }
-            $rootDirectories[] = $value;
-        }
-
-        return $rootDirectories;
-    }
-
-    /**
-     * Collect album directories
-     *
-     * @return array
-     */
-    public function collectAlbumSubDirectories(): array
-    {
-        $requestUriPrefix = [];
-        $requestUri = $_SERVER['REQUEST_URI'];
-        $requestIndex = explode('/', rtrim($requestUri, '/'));
-        foreach ($requestIndex as  $value) {
-            if (count($requestUriPrefix) || $value !== 'album') {
-                $requestUriPrefix[] = $value;
-            }
-        }
-        if (!count($requestUriPrefix)) {
-            new RedirectController('/album');
-        }
-        unset($requestUriPrefix[0]);
-        $albumDirectories = self::$albumData;
-        foreach ($requestUriPrefix as $value) {
-            if (array_key_exists($value, $albumDirectories)) {
-                $albumDirectories = $albumDirectories[$value];
-            }
-        }
-
-        $toolController = new ToolController();
-        $url = $toolController->getCurrentUrl();
-
-        $subDirectories = [];
-        foreach ($albumDirectories as $key => $value) {
-            if (is_int($key)) {
-                continue;
-            }
-            $subDirectories[] = [
-                'name' => str_replace('_', ' ', $key),
-                'link' => rtrim($url, '/') . '/' . $key,
-            ];
-        }
-
-        return $subDirectories;
-    }
-
-    /**
-     * Collect album files
-     *
-     * @return array
-     */
-    public function collectAlbumFiles(): array
-    {
-        $dataFile = ROOT_DIR . trim($_SERVER['REQUEST_URI'], '/') . '/data.json';
-        if (!file_exists($dataFile)) {
-            return [];
-        }
-
-        $data = json_decode(file_get_contents($dataFile), true);
-        $payloads = [];
-        foreach ($data as $payload) {
-            if (isset($payload['file'])) {
-                $split = explode('/album/', $payload['file']);
-                $payload['file'] = '/album/' . end($split);
-            }
-            $payloads[] = $payload;
-        }
-
-        return [
-            'payloads' => $payloads
-        ];
     }
 
     /**
@@ -399,6 +333,6 @@ class AlbumController implements AlbumInterface
      */
     public function getAlbumData(): array|null
     {
-        return self::$albumData;
+        return self::$fileData;
     }
 }

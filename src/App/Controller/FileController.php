@@ -85,7 +85,7 @@ class FileController implements FileInterface
     }
 
     /**
-     * Collect data files
+     * Collect data files // TODO: Check
      *
      * @return void
      */
@@ -339,11 +339,6 @@ class FileController implements FileInterface
         return $checkpoints;
     }
 
-
-
-
-
-
     /**
      * Delete image
      *
@@ -379,6 +374,11 @@ class FileController implements FileInterface
         exit();
     }
 
+
+
+
+
+
     /**
      * Delete by type and date time
      *
@@ -408,31 +408,10 @@ class FileController implements FileInterface
         $this->redirect(true);
     }
 
-    /**
-     * Redirect
-     *
-     * @param bool $home Redirect to home page
-     * @return void
-     */
-    public function redirect(bool $home = false): void
-    {
-        if ($home) {
-            $httpReferer = $_SERVER['HTTP_REFERER'];
-            if (str_starts_with($httpReferer, 'http://')) {
-                $httpReferer = str_replace('http://', '', $httpReferer);
-                $split = explode('/', $httpReferer);
-                $url = 'http://' . $split[0];
-            } elseif (str_starts_with($httpReferer, 'https://')) {
-                $httpReferer = str_replace('https://', '', $httpReferer);
-                $split = explode('/', $httpReferer);
-                $url = 'https://' . $split[0];
-            }
-            header('Location: ' . $url);
-        } else {
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
-        }
-        exit();
-    }
+
+
+
+
 
     /**
      * Get file data

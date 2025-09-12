@@ -47,7 +47,7 @@ class RenderController
         $params['images'] = $fileController->getLastGeneratedImages();
         $params['used_checkpoints'] = $fileController->getCheckpoints();
         $albumController = new AlbumController();
-        $params['album_picker'] = $albumController->getAlbumData();
+        $params['copy']['albums'] = $albumController->getAlbumData();
         $params['breadcrumbs'] = [
             [
                 'title' => 'Home',
@@ -73,7 +73,7 @@ class RenderController
         $fileController = new FileController();
         $params['images'] = $fileController->getImagesByType($type);
         $albumController = new AlbumController();
-        $params['album_picker'] = $albumController->getAlbumData();
+        $params['copy']['albums'] = $albumController->getAlbumData();
         $params['breadcrumbs'] = [
             [
                 'title' => $type,
@@ -100,7 +100,7 @@ class RenderController
         $fileController = new FileController();
         $params['images'] = $fileController->getImagesByTypeAndDateTime($type, $dateTime);
         $albumController = new AlbumController();
-        $params['album_picker'] = $albumController->getAlbumData();
+        $params['copy']['albums'] = $albumController->getAlbumData();
         $params['breadcrumbs'] = [
             [
                 'title' => $type,
@@ -113,7 +113,7 @@ class RenderController
                 'active' => true
             ]
         ];
-        $params['title'] = $type . '/' . $dateTime;
+        $params['title'] = $type . ' :: ' . $dateTime;
         $params['template'] = 'images_by_type_and_date_time.php';
 
         $this->render($params);
@@ -135,7 +135,7 @@ class RenderController
             $params['images'] = array_merge($params['images'], $images);
         }
         $albumController = new AlbumController();
-        $params['album_picker'] = $albumController->getAlbumData();
+        $params['copy']['albums'] = $albumController->getAlbumData();
         $params['base_breadcrumbs'] = [
             [
                 'title' => 'Checkpoints',
@@ -143,7 +143,7 @@ class RenderController
                 'active' => false
             ]
         ];
-        $params['title'] = 'Checkpoints (Models)';
+        $params['title'] = 'Checkpoints';
         $params['template'] = 'images_by_checkpoints.php';
 
         $this->render($params);
@@ -161,7 +161,7 @@ class RenderController
         $fileController = new FileController();
         $params['images'] = $fileController->getImagesByCheckpoint($checkpoint);
         $albumController = new AlbumController();
-        $params['album_picker'] = $albumController->getAlbumData();
+        $params['copy']['albums'] = $albumController->getAlbumData();
         $params['breadcrumbs'] = [
             [
                 'title' => 'checkpoints',
@@ -174,7 +174,7 @@ class RenderController
                 'active' => true
             ]
         ];
-        $params['title'] = $checkpoint;
+        $params['title'] = 'Checkpoints :: ' . $checkpoint;
         $params['template'] = 'images_by_checkpoint.php';
 
         $this->render($params);
@@ -188,13 +188,15 @@ class RenderController
      */
     public function renderAlbum(array $requestIndex): void
     {
+        unset($requestIndex[0]);
+        unset($requestIndex[0]);
+        unset($requestIndex[0]);
+
         $params = $this->prepareParams();
         $albumController = new AlbumController();
-        $params['sub_directories'] = $albumController->collectAlbumSubDirectories();
-        $params['data'] = $albumController->collectAlbumFiles();
-        unset($requestIndex[0]);
-        unset($requestIndex[0]);
-        unset($requestIndex[0]);
+        $params['sub_directories'] = $albumController->getAlbumSubdirectories();
+        $params['images'] = $albumController->getAlbumImages();
+        $params['copy']['albums'] = $albumController->getAlbumData();
         $params['request_index'] = $requestIndex;
         $params['breadcrumbs'] = [];
         $slug = '/';
@@ -216,6 +218,7 @@ class RenderController
             }
         }
         $params['album'] = $slug;
+        $params['title'] = end($requestIndex);
         $params['template'] = 'album.php';
 
         $this->render($params);

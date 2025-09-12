@@ -163,7 +163,7 @@ if ($params['directory'] !== 'demo') {
 }
 ?>
 
-<div class="container" style="max-width: 1600px">
+<div class="container">
     <div class="row">
         <?php
         if ($params['directory'] === 'demo') {

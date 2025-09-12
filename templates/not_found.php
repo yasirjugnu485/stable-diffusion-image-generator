@@ -9,7 +9,7 @@
  */
 
 ?>
-<div class="container" style="max-width: 1600px">
+<div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-danger">

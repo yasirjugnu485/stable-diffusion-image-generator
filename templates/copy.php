@@ -8,7 +8,7 @@
  * @license     GNU GENERAL PUBLIC LICENSE
  */
 
-if (isset($params['album_picker'])) {
+if (isset($params['copy'])) {
 
     function create_entries(string $slug, int $marginLeft, array $entry)
     {
@@ -17,7 +17,7 @@ if (isset($params['album_picker'])) {
                 $slug .= '/' . $key;
                 ?>
                 <div style="margin-left: <?php echo $marginLeft; ?>px;">
-                    <div class="btn btn-outline-secondary w-100 text-start p-2 mb-1"
+                    <div class="btn btn-outline-primary w-100 text-start p-2 mb-1"
                          onclick="albumPicker.execute('<?php echo $slug; ?>');">
                         <?php echo str_replace('_', ' ', $key); ?>
                     </div>
@@ -36,7 +36,7 @@ if (isset($params['album_picker'])) {
          style="width: 600px; max-width: 100%">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
-                id="offcanvasAlbumPickerLabel">Select Album
+                id="offcanvasAlbumPickerLabel">Copy
             </h5>
             <button id="offcanvasAlbumPickerBtnClose"
                     type="button"
@@ -46,11 +46,14 @@ if (isset($params['album_picker'])) {
             </button>
         </div>
         <div class="offcanvas-body">
+            <h5>
+                Albums
+            </h5>
             <?php
-            if (count($params['album_picker'])) {
+            if (count($params['copy']['albums'])) {
                 $slug = '/album';
                 $marginLeft = 0;
-                create_entries($slug, $marginLeft, $params['album_picker']);
+                create_entries($slug, $marginLeft, $params['copy']['albums']);
             } else {
                 ?>
                 <div class="alert alert-warning">

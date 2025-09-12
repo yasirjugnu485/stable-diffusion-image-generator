@@ -53,7 +53,7 @@
     </div>
 </div>
 
-<div class="container" style="max-width: 1600px">
+<div class="container">
     <div class="row">
         <?php
         if (isset($params['error'])) {

@@ -10,7 +10,7 @@
 
 if ((isset($params['error']) && $params['error']) || (isset($params['success']) && $params['success'])) {
     ?>
-    <div class="container" style="max-width: 1600px">
+    <div class="container">
         <div class="row">
             <div class="col-12">
                 <?php
@@ -41,7 +41,7 @@ if ((isset($params['error']) && $params['error']) || (isset($params['success']) 
 
 if (!isset($params['error']) || !$params['error']) {
     ?>
-    <div class="container" style="max-width: 1600px">
+    <div class="container">
         <div class="row">
             <div class="col-12 text-dark">
 
