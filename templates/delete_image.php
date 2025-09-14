@@ -10,6 +10,7 @@
 
 if (isset($params['images']) && count($params['images'])) {
     ?>
+
     <div class="offcanvas offcanvas-end"
          tabindex="-1"
          id="offcanvasDeleteImage"
@@ -55,29 +56,37 @@ if (isset($params['images']) && count($params['images'])) {
             deleteClick = (index, file) => {
                 this.index = index;
                 this.file = file;
-                document.getElementById('offcanvasDeleteImageFile').value = file;
-                let offcanvasDeleteImage = document.getElementById('offcanvasDeleteImage');
+                document.getElementById("offcanvasDeleteImageFile").value = file;
+                let offcanvasDeleteImage = document.getElementById("offcanvasDeleteImage");
                 const offcanvas = new bootstrap.Offcanvas(offcanvasDeleteImage);
                 offcanvas.show();
             }
 
             deleteExecute = () => {
-                document.getElementById('offcanvasDeleteImageClose').click();
-                document.getElementById('image-' + this.index).remove();
+                document.getElementById("offcanvasDeleteImageClose").click();
+                document.getElementById("image-" + this.index).remove();
                 this.delete();
             }
 
             async delete() {
                 const url = window.location;
                 const formData = new FormData();
-                formData.append('action', 'deleteImage');
-                formData.append('image', this.file);
-                const response = await fetch(url,
-                    {
-                        'method': 'POST',
-                        'body': formData,
+                formData.append("action", "deleteImage");
+                formData.append("image", this.file);
+                await fetch(url, {
+                    method: "POST",
+                    body: formData,
+                }).then(response => {
+                    if (response.ok) {
+                        return response.json();
                     }
-                );
+                }).then(response => {
+                    if (response.success) {
+                        toast.success(response.message);
+                    } else {
+                        toast.error(response.message);
+                    }
+                });
             }
         }
 

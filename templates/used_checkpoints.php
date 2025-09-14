@@ -10,7 +10,7 @@
 
 if (isset($params['used_checkpoints']) && count($params['used_checkpoints'])) {
     ?>
-    <div class="container mb-5">
+    <div class="container mb-4">
         <div class="row">
             <div class="col-12">
                 <h4>

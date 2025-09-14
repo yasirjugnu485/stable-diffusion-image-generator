@@ -85,33 +85,40 @@ if (isset($params['copy'])) {
         </div>
     </div>
 
-    <form id="formAlbumPicker"
-          method="post">
-        <input id="albumPickerAction"
-               type="hidden"
-               name="action">
-        <input id="albumPickerSource"
-               type="hidden"
-               name="source">
-        <input id="albumPickerDestination"
-               type="hidden"
-               name="destination">
-    </form>
-
     <script>
         class AlbumPicker {
+            constructor() {
+                this.source = null;
+            }
+
             copy = (source) => {
-                document.getElementById("albumPickerAction").value = 'copyEntry';
-                document.getElementById("albumPickerSource").value = source;
+                this.source = source;
                 let offcanvasElement = document.getElementById("offcanvasAlbumPicker");
                 let offcanvas = new bootstrap.Offcanvas(offcanvasElement);
                 offcanvas.show();
             }
 
-            execute = (destination) => {
-                document.getElementById("albumPickerDestination").value = destination;
+            async execute(destination) {
+                const url = window.location;
+                let formData = new FormData;
+                formData.append("action", "copyEntry");
+                formData.append("source", this.source);
+                formData.append("destination", destination);
+                await fetch(url, {
+                    method: "POST",
+                    body: formData,
+                }).then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                }).then(response => {
+                    if (response.success) {
+                        toast.success(response.message);
+                    } else {
+                        toast.error(response.message);
+                    }
+                });
                 document.getElementById("offcanvasAlbumPickerBtnClose").click();
-                document.getElementById("formAlbumPicker").submit();
             }
         }
 

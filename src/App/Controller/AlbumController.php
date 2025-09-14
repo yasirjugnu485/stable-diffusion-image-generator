@@ -52,7 +52,9 @@ class AlbumController implements AlbumInterface
      */
     private function handleActions(): void
     {
-        if (isset($_POST['action']) && $_POST['action'] === 'addAlbum') {
+        if (isset($_POST['action']) && $_POST['action'] === 'renameAlbum') {
+            $this->renameAlbum();
+        } elseif (isset($_POST['action']) && $_POST['action'] === 'addAlbum') {
             $this->addAlbum();
         } elseif (isset($_POST['action']) && $_POST['action'] === 'deleteAlbum') {
             $this->deleteAlbum();
@@ -162,7 +164,11 @@ class AlbumController implements AlbumInterface
     {
         $dataFile = ROOT_DIR . trim($_SERVER['REQUEST_URI'], '/') . '/data.json';
         if (!file_exists($dataFile)) {
-            return [];
+            if ($_SERVER['REQUEST_URI'] !== '/album') {
+                new RedirectController('/album');
+            } else {
+                return [];
+            }
         }
 
         $images = [];
@@ -177,6 +183,65 @@ class AlbumController implements AlbumInterface
         }
 
         return $images;
+    }
+
+    /**
+     * Rename album
+     *
+     * @return void
+     */
+    private function renameAlbum(): void
+    {
+        if (!isset($_POST['album'])) {
+            new ErrorController(self::ERROR_RENAME_ALBUM);
+            new RedirectController();
+        }
+
+        $requestUri = trim($_SERVER['REQUEST_URI'], '/');
+        $requestIndex = explode('/', rtrim($requestUri, '/'));
+        if (!count($requestIndex)) {
+            new ErrorController(self::ERROR_RENAME_ALBUM);
+            new RedirectController();
+        }
+        $currentDirectory = ROOT_DIR . implode('/', $requestIndex);
+        if (!is_dir($currentDirectory)) {
+            new ErrorController(self::ERROR_RENAME_ALBUM);
+            new RedirectController();
+        }
+
+        $newName = trim($_POST['album']);
+        $newName = str_replace(' ', '_', $newName);
+        $match = preg_match('/^[a-zA-Z0-9_-]+$/', $newName);
+        if (!$newName || !$match) {
+            new ErrorController(self::ERROR_RENAME_WRONG_NAME);
+            new RedirectController();
+        }
+
+        $splitCurrentDirectory = explode('/', $currentDirectory);
+        array_pop($splitCurrentDirectory);
+        $newDirectory = implode('/', $splitCurrentDirectory) . '/' . $newName;
+        if ($currentDirectory === $newDirectory) {
+            new SuccessController(self::SUCCESS_RENAME_ALBUM);
+            new RedirectController();
+        } elseif (is_dir($newDirectory)) {
+            new ErrorController(self::ERROR_RENAME_ALBUM_EXISTS);
+            new RedirectController();
+        }
+
+        $entries = json_decode(file_get_contents($currentDirectory . '/data.json'), true);
+        foreach ($entries as $index => $entry) {
+            $entries[$index]['file'] = str_replace($currentDirectory, $newDirectory, $entry['file']);
+        }
+        file_put_contents($currentDirectory . '/data.json', json_encode($entries));
+
+        rename($currentDirectory, $newDirectory);
+
+        array_pop($requestIndex);
+        $requestIndex[] = $newName;
+        $newUri = '/' . implode('/', $requestIndex);
+
+        new SuccessController(self::SUCCESS_RENAME_ALBUM);
+        new RedirectController($newUri);
     }
 
     /**
@@ -208,7 +273,7 @@ class AlbumController implements AlbumInterface
         $directory = trim($_POST['album']);
         $directory = str_replace(' ', '_', $directory);
         $match = preg_match('/^[a-zA-Z0-9_-]+$/', $directory);
-        if (!$match) {
+        if (!$directory || !$match) {
             new ErrorController(self::ERROR_ADD_SUB_ALBUM_WRONG_NAME);
             return;
         } elseif (is_dir($slugPrefix . $directory) ||
@@ -257,8 +322,10 @@ class AlbumController implements AlbumInterface
     public function copyEntry(): void
     {
         if (!isset($_POST['source']) || !isset($_POST['destination'])) {
-            new ErrorController(self::ERROR_COPY_ENTRY);
-            new RedirectController();
+            new JsonResponseController([
+                'success' => false,
+                'message' => self::ERROR_COPY_ENTRY
+            ]);
         }
 
         $source = ltrim($_POST['source'], '/');
@@ -272,8 +339,10 @@ class AlbumController implements AlbumInterface
         $sourceFile = ROOT_DIR . implode('/', $sourceSplit);
         $destinationFile = ROOT_DIR . $destination . '/data.json';
         if (!file_exists($sourceFile) || !file_exists($destinationFile)) {
-            new ErrorController(self::ERROR_COPY_ENTRY);
-            new RedirectController();
+            new JsonResponseController([
+                'success' => false,
+                'message' => self::ERROR_COPY_ENTRY
+            ]);
         }
 
         $rootDir = str_replace('/public/../', '/', ROOT_DIR);
@@ -289,16 +358,20 @@ class AlbumController implements AlbumInterface
             }
         }
         if (!file_exists($entry['file'])) {
-            new ErrorController(self::ERROR_COPY_ENTRY);
-            new RedirectController();
+            new JsonResponseController([
+                'success' => false,
+                'message' => self::ERROR_COPY_ENTRY
+            ]);
         }
 
         $fileSplit = explode('/', $entry['file']);
         $fileName = $fileSplit[count($fileSplit) - 1];
         $fileNameSplit = explode('.', $fileName);
         if (count($fileNameSplit) !== 2) {
-            new ErrorController(self::ERROR_COPY_ENTRY);
-            new RedirectController();
+            new JsonResponseController([
+                'success' => false,
+                'message' => self::ERROR_COPY_ENTRY
+            ]);
         }
 
         $name = $fileNameSplit[0];
@@ -325,8 +398,10 @@ class AlbumController implements AlbumInterface
             json_encode($destinationData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
         );
 
-        new SuccessController(self::SUCCESS_COPY_ENTRY);
-        new RedirectController();
+        new JsonResponseController([
+            'success' => true,
+            'message' => self::SUCCESS_COPY_ENTRY
+        ]);
     }
 
     /**

@@ -11,16 +11,35 @@ body {
 .footer {
     flex-shrink: 0;
 }
-
 .card-album-picker {
     background-color: transparent;
 }
 .card-album-picker:hover {
     background-color: var(--bs-light);
 }
+.toast {
+    position: fixed;
+    z-index: 10;
+    top: 69px;
+    right: 12px;
+}
 
 .container {
     max-width: 1600px !important;
+}
+
+.logo {
+    height: 2.75rem;
+    margin-top: -0.25rem;
+}
+
+.brand-sm {
+    font-size: 0.85rem;
+    margin-top: -0.25rem;
+}
+.brand-lg {
+    font-size: 1.25rem;
+    margin-top: -0.25rem;
 }
 
 .text-decoration-none {

@@ -26,7 +26,8 @@ class ToolController
      */
     public function getCurrentUrl(): string
     {
-        if (str_starts_with($_SERVER['HTTP_REFERER'], 'https://')) {
+        $httpReferer = $_SERVER['HTTP_REFERER'] ?? 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        if (str_starts_with($httpReferer, 'https://')) {
             $protocol = 'https://';
         } else {
             $protocol = 'http://';

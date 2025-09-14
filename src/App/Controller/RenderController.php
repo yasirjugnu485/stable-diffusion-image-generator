@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Cli\Controller\InitImagesController;
-
 class RenderController
 {
     /**
@@ -47,6 +45,7 @@ class RenderController
         $params = $this->prepareParams();
         $fileController = new FileController();
         $params['images'] = $fileController->getLastGeneratedImages();
+        $params['used_modes'] = $fileController->getUsedModes();
         $params['used_checkpoints'] = $fileController->getCheckpoints();
         $albumController = new AlbumController();
         $params['copy']['albums'] = $albumController->getAlbumData();
@@ -63,7 +62,8 @@ class RenderController
                 'active' => true
             ]
         ];
-        $params['title'] = 'Stable Diffusion Image Generator';
+        $params['title'] = 'Home';
+        $params['images_title'] = 'Last Generated Images';
         $params['template'] = 'home.php';
 
         $this->render($params);
@@ -79,7 +79,9 @@ class RenderController
     {
         $params = $this->prepareParams();
         $fileController = new FileController();
+        $params['type'] = $type;
         $params['images'] = $fileController->getImagesByType($type);
+        $params['type_directories'] = $fileController->getTypeDirectories($type);
         $albumController = new AlbumController();
         $params['copy']['albums'] = $albumController->getAlbumData();
         $initImageController = new InitImageController();
@@ -90,12 +92,18 @@ class RenderController
         $params['copy']['init_images'] = $initImagesData;
         $params['breadcrumbs'] = [
             [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+            [
                 'title' => $type,
                 'url' => '/' . $type,
                 'active' => false
             ]
         ];
         $params['title'] = $type;
+        $params['images_title'] = 'Last Generated ' . $type . ' Images';
         $params['template'] = 'images_by_type.php';
 
         $this->render($params);
@@ -115,6 +123,7 @@ class RenderController
         $params['date_time'] = $dateTime;
         $fileController = new FileController();
         $params['images'] = $fileController->getImagesByTypeAndDateTime($type, $dateTime);
+        $params['type_directories'] = $fileController->getTypeDirectories($type);
         $albumController = new AlbumController();
         $params['copy']['albums'] = $albumController->getAlbumData();
         $initImageController = new InitImageController();
@@ -124,6 +133,11 @@ class RenderController
         }
         $params['copy']['init_images'] = $initImagesData;
         $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
             [
                 'title' => $type,
                 'url' => '/' . $type,
@@ -135,7 +149,8 @@ class RenderController
                 'active' => true
             ]
         ];
-        $params['title'] = $type . ' :: ' . $dateTime;
+        $params['title'] = $dateTime;
+        $params['images_title'] = $dateTime;
         $params['template'] = 'images_by_type_and_date_time.php';
 
         $this->render($params);
@@ -164,7 +179,12 @@ class RenderController
             unset($initImagesData['demo']);
         }
         $params['copy']['init_images'] = $initImagesData;
-        $params['base_breadcrumbs'] = [
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
             [
                 'title' => 'Checkpoints',
                 'url' => '/checkpoints',
@@ -172,6 +192,7 @@ class RenderController
             ]
         ];
         $params['title'] = 'Checkpoints';
+        $params['images_title'] = 'Checkpoints';
         $params['template'] = 'images_by_checkpoints.php';
 
         $this->render($params);
@@ -187,6 +208,7 @@ class RenderController
     {
         $params = $this->prepareParams();
         $fileController = new FileController();
+        $params['used_checkpoints'] = $fileController->getCheckpoints();
         $params['images'] = $fileController->getImagesByCheckpoint($checkpoint);
         $albumController = new AlbumController();
         $params['copy']['albums'] = $albumController->getAlbumData();
@@ -198,7 +220,12 @@ class RenderController
         $params['copy']['init_images'] = $initImagesData;
         $params['breadcrumbs'] = [
             [
-                'title' => 'checkpoints',
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+            [
+                'title' => 'Checkpoints',
                 'url' => '/checkpoints',
                 'active' => false
             ],
@@ -208,7 +235,8 @@ class RenderController
                 'active' => true
             ]
         ];
-        $params['title'] = 'Checkpoints :: ' . $checkpoint;
+        $params['title'] = $checkpoint;
+        $params['images_title'] = $checkpoint;
         $params['template'] = 'images_by_checkpoint.php';
 
         $this->render($params);
@@ -228,7 +256,7 @@ class RenderController
 
         $params = $this->prepareParams();
         $albumController = new AlbumController();
-        $params['sub_directories'] = $albumController->getAlbumSubdirectories();
+        $params['sub_albums'] = $albumController->getAlbumSubdirectories();
         $params['images'] = $albumController->getAlbumImages();
         $params['copy']['albums'] = $albumController->getAlbumData();
         $initImageController = new InitImageController();
@@ -238,10 +266,16 @@ class RenderController
         }
         $params['copy']['init_images'] = $initImagesData;
         $params['request_index'] = $requestIndex;
-        $params['breadcrumbs'] = [];
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+        ];
         $slug = '/';
         foreach ($requestIndex as $index => $value) {
-            if ($index === 0) {
+            if ($index === 1) {
                 $slug .= 'album' . '/';
                 $params['breadcrumbs'][] = [
                     'title' => 'Album',
@@ -258,7 +292,8 @@ class RenderController
             }
         }
         $params['album'] = $slug;
-        $params['title'] = end($requestIndex);
+        $params['title'] = str_replace('_', ' ', end($requestIndex));
+        $params['images_title'] = str_replace('_', ' ', end($requestIndex));
         $params['template'] = 'album.php';
 
         $this->render($params);

@@ -11,10 +11,19 @@
 ?>
 <nav class="navbar navbar-expand-lg bg-body-tertiary bg-primary navbar-dark mb-5">
     <div class="container-fluid">
-        <a class="navbar-brand text-light"
+        <a class="navbar-brand text-light float-start"
            href="/">
-            <img src="/out/img/stable-diffusion.png"
-                 style="height: 2rem; margin-top: -0.25rem;">
+            <img class="float-start me-2 logo"
+                 src="/out/img/stable-diffusion.png">
+            <div class="float-start">
+                <div class="brand-sm">
+                    Stable Diffusion
+                </div>
+                <div class="brand-lg">
+                    Image Generator
+                </div>
+            </div>
+            <div class="clearfix"></div>
         </a>
         <button class="navbar-toggler"
                 type="button"
@@ -228,101 +237,38 @@
                        role="button"
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
-                        <i class="bi bi-files"></i>
-                        Prompt Merger
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-right<?php if (count($params['navbar']['prompts']) == 0) {
-                        echo ' bg-warning';
-                    } ?>">
-                        <?php
-                        if (count($params['navbar']['prompts'])) {
-                            ?>
-                            <li>
-                                <a class="dropdown-item text-dark" href="/prompt-merger">
-                                    Overview
-                                </a>
-                            </li>
-                            <?php
-                            foreach ($params['navbar']['prompts'] as $prompt) {
-                                ?>
-                                <li>
-                                    <a class="dropdown-item text-dark" href="/prompt-merger/<?php echo $prompt; ?>">
-                                        <?php echo $prompt; ?>
-                                    </a>
-                                </li>
-                                <?php
-                            }
-                        } else {
-                            ?>
-                            <div class="dropdown-item bg-warning text-dark">
-                                No prompts available
-                            </div>
-                            <?php
-                        }
-                        ?>
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-light"
-                       href="#"
-                       role="button"
-                       data-bs-toggle="dropdown"
-                       aria-expanded="false">
-                        <i class="bi bi-images"></i>
-                        Initialize Images
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-right<?php if (count($params['navbar']['init_images']) == 0) {
-                        echo ' bg-warning';
-                    } ?>">
-                        <?php
-                        if (count($params['navbar']['init_images'])) {
-                            ?>
-                            <li>
-                                <a class="dropdown-item text-dark" href="/initialize-images">
-                                    Overview
-                                </a>
-                            </li>
-                            <?php
-                            foreach ($params['navbar']['init_images'] as $initImage) {
-                                ?>
-                                <li>
-                                    <a class="dropdown-item text-dark"
-                                       href="/initialize-images/<?php echo $initImage; ?>">
-                                        <?php echo $initImage; ?>
-                                    </a>
-                                </li>
-                                <?php
-                            }
-                        } else {
-                            ?>
-                            <div class="dropdown-item bg-warning text-dark">
-                                No initialize images available
-                            </div>
-                            <?php
-                        }
-                        ?>
-                    </ul>
-                </li>
-
-                <li class="nav-item active">
-                    <a class="nav-link text-light"
-                       href="/generator">
                         <i class="bi bi-lightning-fill"></i>
                         Generator
                     </a>
-                </li>
-
-                <li class="nav-item active">
-                    <a class="nav-link text-light"
-                       href="/settings">
-                        <i class="bi bi-gear-fill"></i>
-                        Settings
-                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item text-dark" href="/prompt-merger">
+                                <i class="bi bi-files"></i>
+                                Prompt Merger
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-dark" href="/initialize-images">
+                                <i class="bi bi-images"></i>
+                                Initialize Images
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-dark" href="/settings">
+                                <i class="bi bi-gear-fill"></i>
+                                Settings
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-dark" href="/generator">
+                                <i class="bi bi-lightning-fill"></i>
+                                Generator
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
             </ul>
         </div>
-
     </div>
 </nav>

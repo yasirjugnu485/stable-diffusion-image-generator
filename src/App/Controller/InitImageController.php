@@ -398,8 +398,10 @@ class InitImageController implements InitImagesInterface
     public function copyEntry(): void
     {
         if (!isset($_POST['source']) || !isset($_POST['destination'])) {
-            new ErrorController(self::ERROR_COPY_ENTRY);
-            new RedirectController();
+            new JsonResponseController([
+                'success' => false,
+                'message' => self::ERROR_COPY_ENTRY
+            ]);
         }
 
         $source = ltrim($_POST['source'], '/');
@@ -410,8 +412,10 @@ class InitImageController implements InitImagesInterface
 
         $sourceFile = ROOT_DIR . $source;
         if (!file_exists($sourceFile) || !is_dir(ROOT_DIR . $destination)) {
-            new ErrorController(self::ERROR_COPY_ENTRY);
-            new RedirectController();
+            new JsonResponseController([
+                'success' => false,
+                'message' => self::ERROR_COPY_ENTRY
+            ]);
         }
 
         $fileSplit  = explode('/', $sourceFile);
@@ -419,8 +423,10 @@ class InitImageController implements InitImagesInterface
 
         $fileNameSplit = explode('.', $fileName);
         if (count($fileNameSplit) !== 2) {
-            new ErrorController(self::ERROR_COPY_ENTRY);
-            new RedirectController();
+            new JsonResponseController([
+                'success' => false,
+                'message' => self::ERROR_COPY_ENTRY
+            ]);
         }
 
         $name = $fileNameSplit[0];
@@ -440,8 +446,10 @@ class InitImageController implements InitImagesInterface
             }
         }
 
-        new SuccessController(self::SUCCESS_COPY_ENTRY);
-        new RedirectController();
+        new JsonResponseController([
+            'success' => true,
+            'message' => self::SUCCESS_COPY_ENTRY
+        ]);
     }
 
     /**

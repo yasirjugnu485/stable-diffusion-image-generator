@@ -69,7 +69,7 @@ class NavbarController
     private function collectCheckpoints(): void
     {
         $fileController = new FileController();
-        self::$navbarData['checkpoints'] = $fileController->getUsedCheckpoints();
+        self::$navbarData['checkpoints'] = $fileController->getCheckpoints();
     }
 
     /**

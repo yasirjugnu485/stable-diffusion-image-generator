@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Interface\Interface\FileInterface;
-use Cli\Controller\RefinerController;
 
 class FileController implements FileInterface
 {
@@ -256,8 +255,6 @@ class FileController implements FileInterface
      */
     public function getImagesByCheckpoint(string $checkpoint, int $limit = 1000): array|null
     {
-
-
         $images = [];
         foreach (self::$dataFiles as $type => $dataFile) {
             foreach ($dataFile as $image) {
@@ -356,6 +353,46 @@ class FileController implements FileInterface
     }
 
     /**
+     * Get used modes
+     *
+     * @return array
+     */
+    public function getUsedModes(): array
+    {
+        if (self::$fileData) {
+            $this->collectFileData();
+        }
+
+        $usedModes = [];
+        if (isset(self::$fileData['txt2img']) && count(self::$fileData['txt2img'])) {
+            $usedModes[] = 'txt2img';
+        }
+        if (isset(self::$fileData['img2img']) && count(self::$fileData['img2img'])) {
+            $usedModes[] = 'img2img';
+        }
+        if (isset(self::$fileData['loop']) && count(self::$fileData['loop'])) {
+            $usedModes[] = 'loop';
+        }
+
+        return $usedModes;
+    }
+
+    /**
+     * Get type directories
+     *
+     * @param string $type Type
+     * @return array
+     */
+    public function getTypeDirectories(string $type): array
+    {
+        if (self::$fileData) {
+            $this->collectFileData();
+        }
+
+        return isset(self::$fileData[$type]) ? array_keys(self::$fileData[$type]) : [];
+    }
+
+    /**
      * Delete image
      *
      * @return void
@@ -363,7 +400,10 @@ class FileController implements FileInterface
     private function deleteImage(): void
     {
         if (!isset($_POST['image'])) {
-            exit();
+            new JsonResponseController([
+                'success' => false,
+                'message' => self::ERROR_DELETE_IMAGE
+            ]);
         }
 
         $image = ltrim($_POST['image'], '/');
@@ -371,7 +411,10 @@ class FileController implements FileInterface
         $splitImage[count($splitImage) - 1] = 'data.json';
         $dataFile = ROOT_DIR . implode('/' , $splitImage);
         if (!file_exists($dataFile)) {
-            exit();
+            new JsonResponseController([
+                'success' => false,
+                'message' => self::ERROR_DELETE_IMAGE
+            ]);
         }
         $data = json_decode(file_get_contents($dataFile), true);
 
@@ -386,7 +429,10 @@ class FileController implements FileInterface
             }
         }
 
-        exit();
+        new JsonResponseController([
+            'success' => true,
+            'message' => self::SUCCESS_DELETE_IMAGE
+        ]);
     }
 
     /**

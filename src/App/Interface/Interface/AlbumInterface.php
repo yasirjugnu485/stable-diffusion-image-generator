@@ -26,14 +26,14 @@ interface AlbumInterface
      *
      * @var string
      */
-    const string ERROR_ADD_SUB_ALBUM_WRONG_NAME = 'The Sub_Album name may only contain numbers, letters, _ and -';
+    const string ERROR_ADD_SUB_ALBUM_WRONG_NAME = 'The Sub-Album name may only contain numbers, letters, _ and -';
 
     /**
      * Error add sub album exists
      *
      * @var string
      */
-    const string ERROR_ADD_SUB_ALBUM_EXISTS = 'The Sub_Album already exists';
+    const string ERROR_ADD_SUB_ALBUM_EXISTS = 'The Sub-Album already exists';
 
     /**
      * Success add sub album
@@ -69,4 +69,32 @@ interface AlbumInterface
      * @var string
      */
     const string SUCCESS_COPY_ENTRY = 'Entry copied successfully';
+
+    /**
+     * Error rename album
+     *
+     * @var string
+     */
+    const string ERROR_RENAME_ALBUM = 'Error on renaming Album';
+
+    /**
+     * Error rename album wrong name
+     *
+     * @var string
+     */
+    const string ERROR_RENAME_WRONG_NAME = 'The Album name may only contain numbers, letters, _ and -';
+
+    /**
+     * Error rename album exists
+     *
+     * @var string
+     */
+    const string ERROR_RENAME_ALBUM_EXISTS = 'The Album already exists';
+
+    /**
+     * Success rename album
+     *
+     * @var string
+     */
+    const string SUCCESS_RENAME_ALBUM = 'Album renamed successfully';
 }

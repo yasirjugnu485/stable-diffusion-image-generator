@@ -51,10 +51,10 @@ if (isset($params['type']) && isset($params['date_time'])) {
         </div>
     </div>
 
-    <div class="container mb-5">
+    <div class="container">
         <div class="row">
             <div class="col-12 mb-5">
-                <button class="btn btn-danger"
+                <button class="btn btn-danger mb-2"
                         type="button"
                         data-bs-toggle="offcanvas"
                         href="#offcanvasDeleteByTypeAndDateTime">
