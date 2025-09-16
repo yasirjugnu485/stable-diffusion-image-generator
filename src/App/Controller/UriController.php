@@ -45,11 +45,11 @@ class UriController
         } elseif ($requestIndex[1] === 'prompt-merger' && !isset($requestIndex[2])) {
             $prompts = $promptController->getPromptDirectories();
             if ($prompts) {
-                $renderController->renderPrompts();
+                $renderController->renderPromptMerger();
             }
         } elseif ($requestIndex[1] === 'prompt-merger' && isset($requestIndex[2])) {
             if ($promptController->promptDirectoryExists($requestIndex[2])) {
-                $renderController->renderPromptEditor($requestIndex[2]);
+                $renderController->renderPromptMergerFileEditor($requestIndex[2]);
             }
         } elseif ($requestIndex[1] === 'initialize-images' && !isset($requestIndex[2])) {
             $initImages = $initImagesController->getInitImagesDirectories();

@@ -292,7 +292,7 @@ if ($params['directory'] !== 'demo') {
             ?>
             <div class="col-12">
                 <div class="alert alert-warning">
-                    No Prompt Merger Files available yet
+                    No Prompt Merger Files available available
                 </div>
             </div>
             <?php

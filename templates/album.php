@@ -14,11 +14,11 @@ include(ROOT_DIR . 'templates/toast.php');
 include(ROOT_DIR . 'templates/title.php');
 include(ROOT_DIR . 'templates/breadcrumbs.php');
 include(ROOT_DIR . 'templates/hr.php');
-if (isset($params['sub_albums']) && count($params['sub_albums'])) {
-    include(ROOT_DIR . 'templates/sub_albums.php');
+if (isset($params['album_sub_albums']) && count($params['album_sub_albums'])) {
+    include(ROOT_DIR . 'templates/album_sub_albums.php');
     include(ROOT_DIR . 'templates/hr.php');
 }
-include(ROOT_DIR . 'templates/manage_albums.php');
+include(ROOT_DIR . 'templates/album_buttons.php');
 if ($params['album'] !== '/album/') {
     include(ROOT_DIR . 'templates/images_title.php');
     include(ROOT_DIR . 'templates/images.php');

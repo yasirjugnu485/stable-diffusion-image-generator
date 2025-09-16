@@ -8,7 +8,7 @@
  * @license     GNU GENERAL PUBLIC LICENSE
  */
 
-if (isset($params['sub_albums']) && count($params['sub_albums']) &&
+if (isset($params['album_sub_albums']) && count($params['album_sub_albums']) &&
     isset($params['album']) && $params['album'] !== '/album') {
     ?>
     <div class="container mb-4">
@@ -17,13 +17,13 @@ if (isset($params['sub_albums']) && count($params['sub_albums']) &&
                 <h4>
                     Sub-Albums
                 </h4>
-                <?php if (count($params['sub_albums'])) {
-                    foreach ($params['sub_albums'] as $album) {
+                <?php if (count($params['album_sub_albums'])) {
+                    foreach ($params['album_sub_albums'] as $subAlbum) {
                         ?>
-                        <a href="<?php echo $album['link']; ?>" style="text-decoration: none">
+                        <a href="<?php echo $subAlbum['link']; ?>" style="text-decoration: none">
                             <button class="btn btn-outline-secondary mb-2"
                                     type="button">
-                                <?php echo $album['name']; ?>
+                                <?php echo $subAlbum['name']; ?>
                             </button>
                         </a>
                         <?php

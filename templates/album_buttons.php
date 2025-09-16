@@ -47,7 +47,7 @@
                 <button type="submit"
                         class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i>
-                    Add
+                    Add Sub-Album
                 </button>
             </div>
         </form>
@@ -93,7 +93,7 @@
                 <button type="submit"
                         class="btn btn-primary">
                     <i class="bi bi-pencil"></i>
-                    Rename
+                    Rename Album
                 </button>
             </div>
         </form>
@@ -135,7 +135,7 @@ if ($params['album'] !== '/album') {
                     <button type="submit"
                             class="btn btn-danger">
                         <i class="bi bi-trash me-1"></i>
-                        Delete
+                        Delete Album
                     </button>
                 </div>
             </form>
@@ -161,14 +161,20 @@ if ($params['album'] !== '/album') {
                 <?php
             }
             ?>
-            <div class="float-end">
-                <button class="btn btn-primary mb-2"
-                        type="button"
-                        data-bs-toggle="offcanvas"
-                        href="#offcanvasRename">
-                    <i class="bi bi-plus-circle me-1"></i>
-                    Rename Album
-                </button>
+            <div class="float-end text-end">
+                <?php
+                if (count($params['request_index']) > 1) {
+                    ?>
+                    <button class="btn btn-primary mb-2"
+                            type="button"
+                            data-bs-toggle="offcanvas"
+                            href="#offcanvasRename">
+                        <i class="bi bi-plus-circle me-1"></i>
+                        Rename Album
+                    </button>
+                    <?php
+                }
+                ?>
                 <button class="btn btn-primary mb-2"
                         type="button"
                         data-bs-toggle="offcanvas"

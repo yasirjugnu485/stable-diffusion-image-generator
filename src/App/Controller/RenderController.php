@@ -141,12 +141,12 @@ class RenderController
             [
                 'title' => $type,
                 'url' => '/' . $type,
-                'active' => false
+                'active' => true
             ],
             [
                 'title' => $dateTime,
                 'url' => '/' . $type . '/' . $dateTime,
-                'active' => true
+                'active' => false
             ]
         ];
         $params['title'] = $dateTime;
@@ -227,12 +227,12 @@ class RenderController
             [
                 'title' => 'Checkpoints',
                 'url' => '/checkpoints',
-                'active' => false
+                'active' => true
             ],
             [
                 'title' => $checkpoint,
                 'url' => '/checkpoints/' . $checkpoint,
-                'active' => true
+                'active' => false
             ]
         ];
         $params['title'] = $checkpoint;
@@ -256,7 +256,7 @@ class RenderController
 
         $params = $this->prepareParams();
         $albumController = new AlbumController();
-        $params['sub_albums'] = $albumController->getAlbumSubdirectories();
+        $params['album_sub_albums'] = $albumController->getAlbumSubdirectories();
         $params['images'] = $albumController->getAlbumImages();
         $params['copy']['albums'] = $albumController->getAlbumData();
         $initImageController = new InitImageController();
@@ -280,7 +280,7 @@ class RenderController
                 $params['breadcrumbs'][] = [
                     'title' => 'Album',
                     'url' => rtrim($slug, '/'),
-                    'active' => false
+                    'active' => true
                 ];
             } else {
                 $slug .= $value . '/';
@@ -291,8 +291,13 @@ class RenderController
                 ];
             }
         }
+
         $params['album'] = $slug;
-        $params['title'] = str_replace('_', ' ', end($requestIndex));
+        if (count($requestIndex) === 1) {
+            $params['title'] = 'Album';
+        } else {
+            $params['title'] = str_replace('_', ' ', end($requestIndex));
+        }
         $params['images_title'] = str_replace('_', ' ', end($requestIndex));
         $params['template'] = 'album.php';
 
@@ -300,16 +305,65 @@ class RenderController
     }
 
     /**
-     * Render prompts
+     * Render prompt merger
      *
      * @return void
      */
-    public function renderPrompts(): void
+    public function renderPromptMerger(): void
     {
         $params = $this->prepareParams();
         $promptController = new PromptController();
-        $params['prompts'] = $promptController->getPromptDirectories();
-        $params['template'] = 'prompts.php';
+        $params['prompt_merger_directories'] = $promptController->getPromptDirectories();
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+            [
+                'title' => 'Prompt Merger',
+                'url' => '/prompt-merger',
+                'active' => false
+            ],
+        ];
+        $params['title'] = 'Prompt Merger';
+        $params['template'] = 'prompt_merger.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render prompt merger file editor
+     *
+     * @param string $promptMergerDirectory Prompt merger directory
+     * @return void
+     */
+    public function renderPromptMergerFileEditor(string $promptMergerDirectory): void
+    {
+        $params = $this->prepareParams();
+        $promptController = new PromptController();
+        $promptFiles = $promptController->getPromptFiles($promptMergerDirectory);
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+            [
+                'title' => 'Prompt Merger',
+                'url' => '/prompt-merger',
+                'active' => false
+            ],
+            [
+                'title' => $promptMergerDirectory,
+                'url' => '/prompt-merger/' . $promptMergerDirectory,
+                'active' => false
+            ],
+        ];
+        $params['directory'] = $promptMergerDirectory;
+        $params['files'] = $promptFiles;
+        $params['title'] = $promptMergerDirectory;
+        $params['template'] = 'prompt_merger_editor.php';
 
         $this->render($params);
     }
@@ -325,24 +379,6 @@ class RenderController
         $initImagesController = new InitImageController();
         $params['init_images'] = $initImagesController->getInitImagesDirectories();
         $params['template'] = 'init_images.php';
-
-        $this->render($params);
-    }
-
-    /**
-     * Render prompt editor
-     *
-     * @param string $promptDirectory Prompt directory
-     * @return void
-     */
-    public function renderPromptEditor(string $promptDirectory): void
-    {
-        $params = $this->prepareParams();
-        $promptController = new PromptController();
-        $promptFiles = $promptController->getPromptFiles($promptDirectory);
-        $params['directory'] = $promptDirectory;
-        $params['files'] = $promptFiles;
-        $params['template'] = 'prompt_editor.php';
 
         $this->render($params);
     }
