@@ -9,7 +9,7 @@
  */
 
 if (isset($params['album_sub_albums']) && count($params['album_sub_albums']) &&
-    isset($params['album']) && $params['album'] !== '/album') {
+        isset($params['album']) && $params['album'] !== '/album') {
     ?>
     <div class="container mb-4">
         <div class="row">

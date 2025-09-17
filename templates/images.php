@@ -9,7 +9,7 @@
  */
 
 if (isset($params['images'])) {
-    include(ROOT_DIR . 'templates/lightbox.php');
+    include(ROOT_DIR . 'templates/images_lightbox.php');
 
     ?>
     <div class="container mb-5">

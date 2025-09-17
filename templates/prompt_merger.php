@@ -14,4 +14,4 @@ include(ROOT_DIR . 'templates/breadcrumbs.php');
 include(ROOT_DIR . 'templates/hr.php');
 include(ROOT_DIR . 'templates/prompt_merger_directories.php');
 include(ROOT_DIR . 'templates/hr.php');
-include(ROOT_DIR . 'templates/prompt_merger_add_directory.php');
+include(ROOT_DIR . 'templates/prompt_merger_buttons.php');

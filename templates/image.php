@@ -22,7 +22,7 @@
             <div class="float-end">
                 <button class="btn btn-danger"
                         type="button"
-                        onclick="offcanvasDeleteImage.deleteClick(
+                        onclick="imageDelete.deleteClick(
                         <?php echo $index; ?>,
                                 '<?php echo $image['file']; ?>'
                                 )">
@@ -30,7 +30,7 @@
                 </button>
                 <button class="btn btn-primary ms-4"
                         type="button"
-                        onclick="albumPicker.copy('<?php echo $image['file']; ?>')">
+                        onclick="imageCopy.copy('<?php echo $image['file']; ?>')">
                     <i class="bi bi-copy"></i>
                 </button>
             </div>
@@ -50,6 +50,7 @@
                              onclick="openModal(); currentSlide(<?php echo $index; ?>)">
                         <?php
                     } else {
+                        $index--;
                         ?>
                         <div class="text-center">
                             <img class="w-100 rounded"

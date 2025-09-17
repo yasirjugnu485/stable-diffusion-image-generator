@@ -109,15 +109,15 @@ if (!isset($params['error']) || !$params['error']) {
                                             id="loop"
                                             name="loop">
                                         <option value="0"
-                                            <?php if (!$params['config']['loop']) {
-                                                echo 'selected';
-                                            } ?>>
+                                                <?php if (!$params['config']['loop']) {
+                                                    echo 'selected';
+                                                } ?>>
                                             false
                                         </option>
                                         <option value="1"
-                                            <?php if ($params['config']['loop']) {
-                                                echo 'selected';
-                                            } ?>>
+                                                <?php if ($params['config']['loop']) {
+                                                    echo 'selected';
+                                                } ?>>
                                             true
                                         </option>
                                     </select>
@@ -140,15 +140,15 @@ if (!isset($params['error']) || !$params['error']) {
                                             name="mode"
                                             onchange="generator.modeOnchange();">
                                         <option value="txt2img"
-                                            <?php if ($params['config']['mode'] === 'txt2img') {
-                                                echo 'selected';
-                                            } ?>>
+                                                <?php if ($params['config']['mode'] === 'txt2img') {
+                                                    echo 'selected';
+                                                } ?>>
                                             txt2img
                                         </option>
                                         <option value="img2img"
-                                            <?php if ($params['config']['mode'] === 'img2img') {
-                                                echo 'selected';
-                                            } ?>>
+                                                <?php if ($params['config']['mode'] === 'img2img') {
+                                                    echo 'selected';
+                                                } ?>>
                                             img2img
                                         </option>
                                     </select>
@@ -172,9 +172,9 @@ if (!isset($params['error']) || !$params['error']) {
                                         foreach ($params['checkpoints'] as $checkpoint) {
                                             ?>
                                             <option value="<?php echo $checkpoint['name']; ?>"
-                                                <?php if ($checkpoint['selected']) {
-                                                    echo ' selected';
-                                                } ?>>
+                                                    <?php if ($checkpoint['selected']) {
+                                                        echo ' selected';
+                                                    } ?>>
                                                 <?php echo $checkpoint['name']; ?>
                                             </option>
                                             <?php
@@ -200,9 +200,9 @@ if (!isset($params['error']) || !$params['error']) {
                                         foreach ($params['samplers'] as $sampler) {
                                             ?>
                                             <option value="<?php echo $sampler['name']; ?>"
-                                                <?php if ($sampler['selected']) {
-                                                    echo ' selected';
-                                                } ?>>
+                                                    <?php if ($sampler['selected']) {
+                                                        echo ' selected';
+                                                    } ?>>
                                                 <?php echo $sampler['name']; ?>
                                             </option>
                                             <?php
@@ -233,9 +233,9 @@ if (!isset($params['error']) || !$params['error']) {
                                         foreach ($params['prompts'] as $prompt) {
                                             ?>
                                             <option value="<?php echo $prompt['name']; ?>"
-                                                <?php if ($params['config']['prompt'] === $prompt['name']) {
-                                                    echo 'selected';
-                                                } ?>>
+                                                    <?php if ($params['config']['prompt'] === $prompt['name']) {
+                                                        echo 'selected';
+                                                    } ?>>
                                                 <?php echo $prompt['name']; ?>
                                             </option>
                                             <?php
@@ -266,9 +266,9 @@ if (!isset($params['error']) || !$params['error']) {
                                         foreach ($params['initImages'] as $initImage) {
                                             ?>
                                             <option value="<?php echo $initImage['name']; ?>"
-                                                <?php if ($params['config']['initImages'] === $initImage['name']) {
-                                                    echo 'selected';
-                                                } ?>>
+                                                    <?php if ($params['config']['initImages'] === $initImage['name']) {
+                                                        echo 'selected';
+                                                    } ?>>
                                                 <?php echo $initImage['name']; ?>
                                             </option>
                                             <?php
@@ -349,15 +349,15 @@ if (!isset($params['error']) || !$params['error']) {
                                             id="restoreFaces"
                                             name="restoreFaces">
                                         <option value="0"
-                                            <?php if (!$params['config']['restoreFaces']) {
-                                                echo 'selected';
-                                            } ?>>
+                                                <?php if (!$params['config']['restoreFaces']) {
+                                                    echo 'selected';
+                                                } ?>>
                                             false
                                         </option>
                                         <option value="1"
-                                            <?php if ($params['config']['restoreFaces']) {
-                                                echo 'selected';
-                                            } ?>>
+                                                <?php if ($params['config']['restoreFaces']) {
+                                                    echo 'selected';
+                                                } ?>>
                                             true
                                         </option>
                                     </select>
@@ -375,15 +375,15 @@ if (!isset($params['error']) || !$params['error']) {
                                             id="tiling"
                                             name="tiling">
                                         <option value="0"
-                                            <?php if (!$params['config']['tiling']) {
-                                                echo 'selected';
-                                            } ?>>
+                                                <?php if (!$params['config']['tiling']) {
+                                                    echo 'selected';
+                                                } ?>>
                                             false
                                         </option>
                                         <option value="1"
-                                            <?php if ($params['config']['tiling']) {
-                                                echo 'selected';
-                                            } ?>>
+                                                <?php if ($params['config']['tiling']) {
+                                                    echo 'selected';
+                                                } ?>>
                                             true
                                         </option>
                                     </select>
@@ -416,9 +416,9 @@ if (!isset($params['error']) || !$params['error']) {
                                         foreach ($params['refinerCheckpoints'] as $refinerCheckpoint) {
                                             ?>
                                             <option value="<?php echo $refinerCheckpoint['name']; ?>"
-                                                <?php if ($refinerCheckpoint['selected']) {
-                                                    echo ' selected';
-                                                } ?>>
+                                                    <?php if ($refinerCheckpoint['selected']) {
+                                                        echo ' selected';
+                                                    } ?>>
                                                 <?php echo $refinerCheckpoint['name']; ?>
                                             </option>
                                             <?php
@@ -473,15 +473,15 @@ if (!isset($params['error']) || !$params['error']) {
                                                 name="enableHr"
                                                 onchange="generator.enableHrOnchange()">
                                             <option value="0"
-                                                <?php if (!$params['config']['enableHr']) {
-                                                    echo 'selected';
-                                                } ?>>
+                                                    <?php if (!$params['config']['enableHr']) {
+                                                        echo 'selected';
+                                                    } ?>>
                                                 false
                                             </option>
                                             <option value="1"
-                                                <?php if ($params['config']['enableHr']) {
-                                                    echo 'selected';
-                                                } ?>>
+                                                    <?php if ($params['config']['enableHr']) {
+                                                        echo 'selected';
+                                                    } ?>>
                                                 true
                                             </option>
                                         </select>
@@ -511,9 +511,9 @@ if (!isset($params['error']) || !$params['error']) {
                                             foreach ($params['upscalers'] as $upscaler) {
                                                 ?>
                                                 <option value="<?php echo $upscaler; ?>"
-                                                    <?php if ($params['config']['hrUpscaler'] === $upscaler) {
-                                                        echo 'selected';
-                                                    } ?>>
+                                                        <?php if ($params['config']['hrUpscaler'] === $upscaler) {
+                                                            echo 'selected';
+                                                        } ?>>
                                                     <?php echo $upscaler; ?>
                                                 </option>
                                                 <?php
@@ -612,9 +612,9 @@ if (!isset($params['error']) || !$params['error']) {
                                             foreach ($params['samplers'] as $sampler) {
                                                 ?>
                                                 <option value="<?php echo $sampler['name']; ?>"
-                                                    <?php if ($params['config']['hrSamplerName'] === $sampler['name']) {
-                                                        echo 'selected';
-                                                    } ?>>
+                                                        <?php if ($params['config']['hrSamplerName'] === $sampler['name']) {
+                                                            echo 'selected';
+                                                        } ?>>
                                                     <?php echo $sampler['name']; ?>
                                                 </option>
                                                 <?php
@@ -803,4 +803,3 @@ if (!isset($params['error']) || !$params['error']) {
 
     const generator = new Generator();
 </script>
-

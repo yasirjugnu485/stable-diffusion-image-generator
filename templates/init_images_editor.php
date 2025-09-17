@@ -12,12 +12,12 @@ if ($params['directory'] !== 'demo') {
     ?>
     <div class="offcanvas offcanvas-end"
          tabindex="-1"
-         id="offcanvasDeleteInitImagesDirectory"
-         aria-labelledby="offcanvasDeleteInitImagesDirectoryLabel"
+         id="offcanvasInitImagesDeleteDirectory"
+         aria-labelledby="offcanvasInitImagesDeleteDirectoryLabel"
          style="width: 600px; max-width: 100%">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
-                id="offcanvasDeleteInitImagesDirectoryLabel">Delete Initialize Images Directory
+                id="offcanvasInitImagesDeleteDirectoryLabel">Delete Initialize Images Directory
             </h5>
             <button type="button"
                     class="btn-close"
@@ -34,7 +34,7 @@ if ($params['directory'] !== 'demo') {
                 <div class="mb-3">
                     <input type="hidden"
                            name="action"
-                           value="deleteInitImagesDirectory">
+                           value="InitImagesDeleteDirectory">
                     <input type="hidden"
                            name="directory"
                            value="<?php echo $params['directory']; ?>">
@@ -175,26 +175,6 @@ if ($params['directory'] !== 'demo') {
             </div>
             <?php
         }
-        ?>
-
-        <?php if (isset($params['error'])) {
-            ?>
-            <div class="col-12">
-                <div class="alert alert-danger mb-5">
-                    <?php echo $params['error']; ?>
-                </div>
-            </div>
-            <?php
-        }
-        if (isset($params['success'])) {
-            ?>
-            <div class="col-12">
-                <div class="alert alert-success mb-5">
-                    <?php echo $params['success']; ?>
-                </div>
-            </div>
-            <?php
-        }
 
         if ($params['directory'] !== 'demo') {
             ?>
@@ -203,7 +183,7 @@ if ($params['directory'] !== 'demo') {
                     <button class="btn btn-danger"
                             type="button"
                             data-bs-toggle="offcanvas"
-                            href="#offcanvasDeleteInitImagesDirectory">
+                            href="#offcanvasInitImagesDeleteDirectory">
                         <i class="bi bi-trash me-1"></i>
                         Delete
                     </button>
@@ -315,9 +295,9 @@ if ($params['directory'] !== 'demo') {
 <script>
     class InitImagesEditor {
         deleteInitImagesImage = (name, file) => {
-            document.getElementById('deleteInitImagesImage').value = file;
-            document.getElementById('deleteInitImagesImageInput').value = name;
-            let offcanvasDeleteInitImagesImage = document.getElementById('offcanvasDeleteInitImagesImage');
+            document.getElementById("deleteInitImagesImage").value = file;
+            document.getElementById("deleteInitImagesImageInput").value = name;
+            let offcanvasDeleteInitImagesImage = document.getElementById("offcanvasDeleteInitImagesImage");
             const offcanvas = new bootstrap.Offcanvas(offcanvasDeleteInitImagesImage);
             offcanvas.show();
         }

@@ -11,12 +11,12 @@
 ?>
 <div class="offcanvas offcanvas-end"
      tabindex="-1"
-     id="offcanvasAdd"
-     aria-labelledby="offcanvasAddLabel"
+     id="offcanvasAlbumButtonsAddSubAlbumAlbum"
+     aria-labelledby="offcanvasAlbumButtonsAddSubAlbumLabel"
      style="width: 600px; max-width: 100%">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title"
-            id="offcanvasAddLabel">
+            id="offcanvasAlbumButtonsAddSubAlbumLabel">
             Add new Sub-Album
         </h5>
         <button type="button"
@@ -56,12 +56,12 @@
 
 <div class="offcanvas offcanvas-end"
      tabindex="-1"
-     id="offcanvasRename"
-     aria-labelledby="offcanvasRenameLabel"
+     id="offcanvasAlbumButtonsRenameAlbum"
+     aria-labelledby="offcanvasAlbumButtonsRenameAlbumLabel"
      style="width: 600px; max-width: 100%">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title"
-            id="offcanvasRenameLabel">
+            id="offcanvasAlbumButtonsRenameAlbumLabel">
             Rename Album
         </h5>
         <button type="button"
@@ -105,12 +105,12 @@ if ($params['album'] !== '/album') {
     ?>
     <div class="offcanvas offcanvas-end"
          tabindex="-1"
-         id="offcanvasDelete"
-         aria-labelledby="offcanvasDeleteLabel"
+         id="offcanvasAlbumButtonsDeleteAlbum"
+         aria-labelledby="offcanvasAlbumButtonsDeleteAlbumLabel"
          style="width: 600px; max-width: 100%">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
-                id="offcanvasDeleteLabel">Delete Album
+                id="offcanvasAlbumButtonsDeleteAlbumLabel">Delete Album
             </h5>
             <button type="button"
                     class="btn-close"
@@ -154,7 +154,7 @@ if ($params['album'] !== '/album') {
                 <button class="btn btn-danger float-start mb-2"
                         type="button"
                         data-bs-toggle="offcanvas"
-                        href="#offcanvasDelete">
+                        href="#offcanvasAlbumButtonsDeleteAlbum">
                     <i class="bi bi-trash me-1"></i>
                     Delete Album
                 </button>
@@ -168,7 +168,7 @@ if ($params['album'] !== '/album') {
                     <button class="btn btn-primary mb-2"
                             type="button"
                             data-bs-toggle="offcanvas"
-                            href="#offcanvasRename">
+                            href="#offcanvasAlbumButtonsRenameAlbum">
                         <i class="bi bi-plus-circle me-1"></i>
                         Rename Album
                     </button>
@@ -178,7 +178,7 @@ if ($params['album'] !== '/album') {
                 <button class="btn btn-primary mb-2"
                         type="button"
                         data-bs-toggle="offcanvas"
-                        href="#offcanvasAdd">
+                        href="#offcanvasAlbumButtonsAddSubAlbum">
                     <i class="bi bi-plus-circle me-1"></i>
                     Add Sub-Album
                 </button>

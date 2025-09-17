@@ -13,15 +13,15 @@ if (isset($params['images']) && count($params['images'])) {
 
     <div class="offcanvas offcanvas-end"
          tabindex="-1"
-         id="offcanvasDeleteImage"
-         aria-labelledby="offcanvasDeleteImageLabel"
+         id="offcanvasImageDelete"
+         aria-labelledby="offcanvasImageDeleteLabel"
          style="width: 600px; max-width: 100%">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
-                id="offcanvasDeleteImageLabel">Delete Image
+                id="offcanvasImageDeleteLabel">Delete Image
             </h5>
             <button type="button"
-                    id="offcanvasDeleteImageClose"
+                    id="offcanvasImageDeleteClose"
                     class="btn-close"
                     data-bs-dismiss="offcanvas"
                     aria-label="Close">
@@ -33,12 +33,12 @@ if (isset($params['images']) && count($params['images'])) {
             </div>
             <input type="text"
                    class="form-control mb-4"
-                   id="offcanvasDeleteImageFile"
+                   id="offcanvasImageDeleteFile"
                    disabled>
             <div class="text-end">
                 <button type="submit"
                         class="btn btn-danger"
-                        onclick="offcanvasDeleteImage.deleteExecute()">
+                        onclick="imageDelete.deleteExecute()">
                     <i class="bi bi-trash me-1"></i>
                     Delete Image
                 </button>
@@ -47,7 +47,7 @@ if (isset($params['images']) && count($params['images'])) {
     </div>
 
     <script>
-        class OffcanvasDeleteImage {
+        class ImageDelete {
             constructor() {
                 this.index = null;
                 this.file = null;
@@ -56,14 +56,14 @@ if (isset($params['images']) && count($params['images'])) {
             deleteClick = (index, file) => {
                 this.index = index;
                 this.file = file;
-                document.getElementById("offcanvasDeleteImageFile").value = file;
-                let offcanvasDeleteImage = document.getElementById("offcanvasDeleteImage");
-                const offcanvas = new bootstrap.Offcanvas(offcanvasDeleteImage);
+                document.getElementById("offcanvasImageDeleteFile").value = file;
+                let offcanvasImageDelete = document.getElementById("offcanvasImageDelete");
+                const offcanvas = new bootstrap.Offcanvas(offcanvasImageDelete);
                 offcanvas.show();
             }
 
             deleteExecute = () => {
-                document.getElementById("offcanvasDeleteImageClose").click();
+                document.getElementById("offcanvasImageDeleteClose").click();
                 document.getElementById("image-" + this.index).remove();
                 this.delete();
             }
@@ -90,7 +90,7 @@ if (isset($params['images']) && count($params['images'])) {
             }
         }
 
-        const offcanvasDeleteImage = new OffcanvasDeleteImage();
+        const imageDelete = new ImageDelete();
     </script>
     <?php
 }

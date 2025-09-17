@@ -17,7 +17,7 @@ if (isset($params['copy'])) {
                 ?>
                 <div style="margin-left: <?php echo $marginLeft; ?>px;">
                     <div class="btn btn-outline-primary w-100 text-start p-2 mb-1"
-                         onclick="albumPicker.execute('<?php echo $slug . '/' . $key; ?>');">
+                         onclick="imageCopy.execute('<?php echo $slug . '/' . $key; ?>');">
                         <?php echo str_replace('_', ' ', $key); ?>
                     </div>
                 </div>
@@ -30,14 +30,14 @@ if (isset($params['copy'])) {
     ?>
     <div class="offcanvas offcanvas-end"
          tabindex="-1"
-         id="offcanvasAlbumPicker"
-         aria-labelledby="offcanvasAlbumPickerLabel"
+         id="offcanvasImageCopy"
+         aria-labelledby="offcanvasImageCopyLabel"
          style="width: 600px; max-width: 100%">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
-                id="offcanvasAlbumPickerLabel">Copy
+                id="offcanvasImageCopyLabel">Copy
             </h5>
-            <button id="offcanvasAlbumPickerBtnClose"
+            <button id="offcanvasImageCopyBtnClose"
                     type="button"
                     class="btn-close"
                     data-bs-dismiss="offcanvas"
@@ -86,15 +86,15 @@ if (isset($params['copy'])) {
     </div>
 
     <script>
-        class AlbumPicker {
+        class ImageCopy {
             constructor() {
                 this.source = null;
             }
 
             copy = (source) => {
                 this.source = source;
-                let offcanvasElement = document.getElementById("offcanvasAlbumPicker");
-                let offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                let offcanvasImageCopy = document.getElementById("offcanvasImageCopy");
+                let offcanvas = new bootstrap.Offcanvas(offcanvasImageCopy);
                 offcanvas.show();
             }
 
@@ -118,11 +118,11 @@ if (isset($params['copy'])) {
                         toast.error(response.message);
                     }
                 });
-                document.getElementById("offcanvasAlbumPickerBtnClose").click();
+                document.getElementById("offcanvasImageCopyBtnClose").click();
             }
         }
 
-        const albumPicker = new AlbumPicker();
+        const imageCopy = new ImageCopy();
     </script>
 
     <?php

@@ -12,12 +12,12 @@ if (isset($params['type']) && isset($params['date_time'])) {
     ?>
     <div class="offcanvas offcanvas-end"
          tabindex="-1"
-         id="offcanvasDeleteByTypeAndDateTime"
-         aria-labelledby="offcanvasDeleteByTypeAndDateTimeLabel"
+         id="offcanvasDeleteDirectory"
+         aria-labelledby="offcanvasDeleteDirectoryLabel"
          style="width: 600px; max-width: 100%">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"
-                id="offcanvasDeleteByTypeAndDateTimeLabel">Delete Directory
+                id="offcanvasDeleteDirectoryLabel">Delete Directory
             </h5>
             <button type="button"
                     class="btn-close"
@@ -57,7 +57,7 @@ if (isset($params['type']) && isset($params['date_time'])) {
                 <button class="btn btn-danger mb-2"
                         type="button"
                         data-bs-toggle="offcanvas"
-                        href="#offcanvasDeleteByTypeAndDateTime">
+                        href="#offcanvasDeleteDirectory">
                     <i class="bi bi-trash me-1"></i>
                     Delete Directory
                 </button>

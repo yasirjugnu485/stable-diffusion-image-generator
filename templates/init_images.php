@@ -113,7 +113,7 @@
                     Initialize Images Directories
                 </h3>
                 <div class="alert alert-warning">
-                    There are no Initialize Images Directories yet
+                    There are no Initialize Images Directories available
                 </div>
             </div>
 

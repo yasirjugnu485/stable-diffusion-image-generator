@@ -20,7 +20,7 @@ if (isset($params['breadcrumbs']) && count($params['breadcrumbs'])) {
                                 <li class="breadcrumb-item<?php if ($breadcrumb['active']) {
                                     echo ' active';
                                 } ?>"
-                                    <?php if ($breadcrumb['active']) { ?> aria-current="page" <?php } ?>>
+                                        <?php if ($breadcrumb['active']) { ?> aria-current="page" <?php } ?>>
                                     <a href="<?php echo $breadcrumb['url']; ?>">
                                         <?php echo $breadcrumb['title']; ?>
                                     </a>
