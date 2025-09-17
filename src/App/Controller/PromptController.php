@@ -49,14 +49,14 @@ class PromptController implements PromptInterface
                 $this->addPromptMergerDirectory();
             } elseif (isset($_POST['action']) && $_POST['action'] === 'renamePromptMergerDirectory') {
                 $this->renamePromptMergerDirectory();
-            } elseif (isset($_POST['action']) && $_POST['action'] === 'editPromptMergerFiles') {
-                $this->editPromptMergerFiles();
-            } elseif (isset($_POST['action']) && $_POST['action'] === 'addPromptMergerFile') {
-                $this->addPromptMergerFile();
-            } elseif (isset($_POST['action']) && $_POST['action'] === 'deletePromptMergerFile') {
-                $this->deletePromptMergerFile();
             } elseif (isset($_POST['action']) && $_POST['action'] === 'deletePromptMergerDirectory') {
                 $this->deletePromptMergerDirectory();
+            } elseif (isset($_POST['action']) && $_POST['action'] === 'addPromptMergerFile') {
+                $this->addPromptMergerFile();
+            } elseif (isset($_POST['action']) && $_POST['action'] === 'editPromptMergerFiles') {
+                $this->editPromptMergerFiles();
+            } elseif (isset($_POST['action']) && $_POST['action'] === 'deletePromptMergerFile') {
+                $this->deletePromptMergerFile();
             }
         }
     }
@@ -132,18 +132,18 @@ class PromptController implements PromptInterface
         $match = preg_match('/^[a-zA-Z0-9_-]+$/', $directory);
         if (!$match) {
             new ErrorController(self::ERROR_PROMPT_MERGER_DIRECTORY_WRONG_NAME);
-            $this->redirect();
+            new RedirectController();
         } elseif (is_dir(ROOT_DIR . 'prompt/' . $directory) ||
             is_file(ROOT_DIR . 'prompt/' . $directory)) {
             new ErrorController(self::ERROR_PROMPT_MERGER_DIRECTORY_EXISTS);
-            $this->redirect();
+            new RedirectController();
         }
 
         mkdir(ROOT_DIR . 'prompt/' . $directory, 0777, true);
         file_put_contents(ROOT_DIR . 'prompt/' . $directory . '/001_style.txt', '');
 
         new SuccessController(self::SUCCESS_PROMPT_MERGER_DIRECTORY_CREATED);
-        $this->redirect();
+        new RedirectController();
     }
 
     /**
@@ -158,7 +158,7 @@ class PromptController implements PromptInterface
         $match = preg_match('/^[a-zA-Z0-9_-]+$/', $directory);
         if (!$match) {
             new ErrorController(self::ERROR_RENAME_PROMPT_MERGER_DIRECTORY);
-            $this->redirect();
+            new RedirectController();
         }
 
         $toolController = new ToolController();
@@ -167,17 +167,17 @@ class PromptController implements PromptInterface
         $currentDirectory = end($split);
         if ($currentDirectory === $directory) {
             new SuccessController(self::SUCCESS_RENAME_PROMPT_MERGER_DIRECTORY);
-            $this->redirect();
+            new RedirectController();
         } elseif (is_dir(ROOT_DIR . 'prompt/' . $directory) ||
             is_file(ROOT_DIR . 'prompt/' . $directory)) {
             new ErrorController(self::ERROR_PROMPT_MERGER_DIRECTORY_EXISTS);
-            $this->redirect();
+            new RedirectController();
         }
 
         rename(ROOT_DIR . 'prompt/' . $currentDirectory, ROOT_DIR . 'prompt/' . $directory);
 
         new SuccessController(self::SUCCESS_PROMPT_MERGER_DIRECTORY_CREATED);
-        $this->redirect('/prompt-merger/' . $directory);
+        new RedirectController('/prompt-merger/' . $directory);
     }
 
     /**
@@ -189,26 +189,26 @@ class PromptController implements PromptInterface
     {
         if (!isset($_POST['directory'])) {
             new ErrorController(self::ERROR_DELETE_PROMPT_MERGER_DIRECTORY);
-            $this->redirect();
+            new RedirectController();
         }
 
         $directory = $_POST['directory'];
         $this->collectPrompts();
         if (!isset(self::$promptData[$directory])) {
             new ErrorController(self::ERROR_DELETE_PROMPT_MERGER_DIRECTORY);
-            $this->redirect();
+            new RedirectController();
         }
 
         if (!is_dir(ROOT_DIR . 'prompt/' . $directory)) {
             new ErrorController(self::ERROR_DELETE_PROMPT_MERGER_DIRECTORY);
-            $this->redirect();
+            new RedirectController();
         }
 
         $toolController = new ToolController();
         $toolController->deleteDirectory(ROOT_DIR . 'prompt/' . $directory);
 
         new SuccessController(self::SUCCESS_DELETE_PROMPT_MERGER_DIRECTORY);
-        $this->redirect('/prompt-merger');
+        new RedirectController('/prompt-merger');
     }
 
     /**
@@ -220,7 +220,7 @@ class PromptController implements PromptInterface
     {
         if (!isset($_POST['directory']) || !isset($_POST['name'])) {
             new ErrorController(self::ERROR_ADD_PROMPT_MERGER_FILE);
-            $this->redirect();
+            new RedirectController();
         }
 
         $directory = trim($_POST['directory']);
@@ -228,22 +228,22 @@ class PromptController implements PromptInterface
         $name = str_replace(' ', '_', $name);
         if (!preg_match('/^[a-zA-Z0-9_-]+$/', $name)) {
             new ErrorController(self::ERROR_PROMPT_MERGER_FILE_WRONG_NAME);
-            $this->redirect();
+            new RedirectController();
         }
 
         $this->collectPrompts();
         if (!isset(self::$promptData[$directory])) {
             new ErrorController(self::ERROR_ADD_PROMPT_MERGER_FILE);
-            $this->redirect();
+            new RedirectController();
         } elseif (file_exists(ROOT_DIR . 'prompt/' . $directory . '/' . $name . '.txt')) {
             new ErrorController(self::ERROR_PROMPT_MERGER_FILE_EXISTS);
-            $this->redirect();
+            new RedirectController();
         }
 
         file_put_contents(ROOT_DIR . 'prompt/' . $directory . '/' . $name . '.txt', '');
 
         new SuccessController(self::SUCCESS_ADD_PROMPT_MERGER_FILE);
-        $this->redirect();
+        new RedirectController();
     }
 
     /**
@@ -255,7 +255,7 @@ class PromptController implements PromptInterface
     {
         if (!isset($_POST['directory']) || !isset($_POST['name']) || !isset($_POST['content'])) {
             new ErrorController(self::ERROR_SAVE_PROMPT_MERGER_FILES);
-            $this->redirect();
+            new RedirectController();
         }
 
         $directory = trim($_POST['directory']);
@@ -267,7 +267,7 @@ class PromptController implements PromptInterface
             $value = str_replace(' ', '_', $value);
             if (!preg_match('/^[a-zA-Z0-9_-]+$/', $value)) {
                 new ErrorController(self::ERROR_PROMPT_MERGER_FILE_WRONG_NAME);
-                $this->redirect();
+                new RedirectController();
             }
             $name[$index . '.txt'] = $value . '.txt';
         }
@@ -279,7 +279,7 @@ class PromptController implements PromptInterface
         $this->collectPrompts();
         if (!isset(self::$promptData[$directory])) {
             new ErrorController(self::ERROR_SAVE_PROMPT_MERGER_FILES);
-            $this->redirect();
+            new RedirectController();
         }
 
         foreach (self::$promptData[$directory] as $file) {
@@ -293,7 +293,7 @@ class PromptController implements PromptInterface
         }
 
         new SuccessController(self::SUCCESS_SAVE_PROMPT_MERGER_FILES);
-        $this->redirect();
+        new RedirectController();
     }
 
     /**
@@ -305,7 +305,7 @@ class PromptController implements PromptInterface
     {
         if (!isset($_POST['directory']) || !isset($_POST['file'])) {
             new ErrorController(self::ERROR_DELETE_PROMPT_MERGER_FILE);
-            $this->redirect();
+            new RedirectController();
         }
 
         $directory = $_POST['directory'];
@@ -323,27 +323,7 @@ class PromptController implements PromptInterface
         unlink(ROOT_DIR . 'prompt/' . $directory . '/' . $file . '.txt');
 
         new SuccessController(self::SUCCESS_DELETE_PROMPT_MERGER_FILE);
-        $this->redirect();
-    }
-
-    /**
-     * Redirect
-     *
-     * @param string|null $uri URI
-     * @return void
-     */
-    public function redirect(string|null $uri = null): void
-    {
-        if ($uri !== null) {
-            $location = $_SERVER['HTTP_REFERER'];
-            $split = explode('/prompt-merger/', $location);
-            $uri = $split[0] . $uri;
-            header('Location: ' . $uri);
-            exit();
-        }
-
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
-        exit();
+        new RedirectController();
     }
 
     /**
@@ -366,7 +346,7 @@ class PromptController implements PromptInterface
     public function getPromptFiles(string $promptDirectory): array
     {
        if (!isset(self::$promptData[$promptDirectory])) {
-            return [];
+            new RedirectController('/prompt-merger');
        }
 
        $files = [];

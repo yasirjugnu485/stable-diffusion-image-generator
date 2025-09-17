@@ -132,4 +132,18 @@ interface InitImagesInterface
      * @var string
      */
     const string SUCCESS_COPY_ENTRY = 'Entry copied successfully';
+
+    /**
+     * Error rename init images directory
+     *
+     * @var string
+     */
+    const string ERROR_RENAME_INIT_IMAGES_DIRECTORY = 'Error on renaming Initialize Images Directory';
+
+    /**
+     * Success rename initialize images directory
+     *
+     * @var string
+     */
+    const string SUCCESS_RENAME_INIT_IMAGES_DIRECTORY = 'Initialize Images Directory renamed successfully';
 }

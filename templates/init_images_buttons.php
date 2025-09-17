@@ -11,12 +11,12 @@
 ?>
 <div class="offcanvas offcanvas-end"
      tabindex="-1"
-     id="offcanvasPromptMergerButtonsAddDirectory"
-     aria-labelledby="offcanvasPromptMergerButtonsAddDirectoryLabel"
+     id="offcanvasInitImagesButtonsAddDirectory"
+     aria-labelledby="offcanvasInitImagesButtonsAddDirectoryLabel"
      style="width: 600px; max-width: 100%">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title"
-            id="offcanvasPromptMergerButtonsAddDirectoryLabel">Add Prompt Merger Directory
+            id="offcanvasInitImagesButtonsAddDirectoryLabel">Add new Initialize Images Directory
         </h5>
         <button type="button"
                 class="btn-close"
@@ -26,16 +26,16 @@
     </div>
     <div class="offcanvas-body">
         <div class="mb-4">
-            The Prompt Merger Directory name may only contain numbers, letters, _ and -.
+            The Initialize Images Directory name may only contain numbers, letters, _ and -.
         </div>
         <form method="post">
             <div class="mb-3">
                 <input type="hidden"
                        name="action"
-                       value="addPromptMergerDirectory">
+                       value="addInitImagesDirectory">
                 <label for="directory"
                        class="form-label">
-                    Prompt Merger Directory name
+                    Initialize Images Directory name
                 </label>
                 <input type="text"
                        class="form-control"
@@ -55,14 +55,18 @@
 
 <div class="container mb-5">
     <div class="row">
-        <div class="col-12 text-end">
+        <div class="col-12 text-end mb-5">
             <button class="btn btn-primary"
                     type="button"
                     data-bs-toggle="offcanvas"
-                    href="#offcanvasPromptMergerButtonsAddDirectory">
+                    href="#offcanvasInitImagesButtonsAddDirectory">
                 <i class="bi bi-plus-circle me-1"></i>
                 Add Directory
             </button>
         </div>
+
+        <?php
+
+        ?>
     </div>
 </div>

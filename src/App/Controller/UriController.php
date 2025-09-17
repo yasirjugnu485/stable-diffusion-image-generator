@@ -43,23 +43,13 @@ class UriController
         } elseif ($requestIndex[1] === 'album') {
             $renderController->renderAlbum($requestIndex);
         } elseif ($requestIndex[1] === 'prompt-merger' && !isset($requestIndex[2])) {
-            $prompts = $promptController->getPromptDirectories();
-            if ($prompts) {
-                $renderController->renderPromptMerger();
-            }
+            $renderController->renderPromptMerger();
         } elseif ($requestIndex[1] === 'prompt-merger' && isset($requestIndex[2])) {
-            if ($promptController->promptDirectoryExists($requestIndex[2])) {
-                $renderController->renderPromptMergerFileEditor($requestIndex[2]);
-            }
+            $renderController->renderPromptMergerFileEditor($requestIndex[2]);
         } elseif ($requestIndex[1] === 'initialize-images' && !isset($requestIndex[2])) {
-            $initImages = $initImagesController->getInitImagesDirectories();
-            if ($initImages) {
-                $renderController->renderInitImages();
-            }
+            $renderController->renderInitImages();
         } elseif ($requestIndex[1] === 'initialize-images' && isset($requestIndex[2])) {
-            if ($initImagesController->initImagesDirectoryExists($requestIndex[2])) {
-                $renderController->renderInitImagesEditor($requestIndex[2]);
-            }
+            $renderController->renderInitImagesEditor($requestIndex[2]);
         } elseif ($requestIndex[1] === 'generator' && !isset($requestIndex[2])) {
             $renderController->renderGenerator();
         } elseif ($requestIndex[1] === 'generate' && !isset($requestIndex[2])) {

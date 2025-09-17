@@ -50,14 +50,16 @@ class InitImageController implements InitImagesInterface
         if (null === self::$initImagesData) {
             if (isset($_POST['action']) && $_POST['action'] === 'addInitImagesDirectory') {
                 $this->addInitImagesDirectory();
-            } elseif (isset($_POST['action']) && $_POST['action'] === 'editInitImagesImages') {
-                $this->editInitImagesImages();
-            } elseif (isset($_POST['action']) && $_POST['action'] === 'addInitImagesImage') {
-                $this->addInitImagesImage();
-            } elseif (isset($_POST['action']) && $_POST['action'] === 'deleteInitImagesImage') {
-                $this->deleteInitImagesImage();
+            } elseif (isset($_POST['action']) && $_POST['action'] === 'renameInitImagesDirectory') {
+                $this->renameInitImagesDirectory();
             } elseif (isset($_POST['action']) && $_POST['action'] === 'deleteInitImagesDirectory') {
                 $this->deleteInitImagesDirectory();
+            } elseif (isset($_POST['action']) && $_POST['action'] === 'addInitImagesImage') {
+                $this->addInitImagesImage();
+            } elseif (isset($_POST['action']) && $_POST['action'] === 'editInitImagesImages') {
+                $this->editInitImagesImages();
+            }  elseif (isset($_POST['action']) && $_POST['action'] === 'deleteInitImagesImage') {
+                $this->deleteInitImagesImage();
             } elseif (isset($_POST['action']) && $_POST['action'] === 'copyEntry') {
                 $this->copyEntry();
             }
@@ -130,7 +132,8 @@ class InitImageController implements InitImagesInterface
      */
     protected function addInitImagesDirectory(): void
     {
-        $directory = $_POST['directory'];
+        $directory = trim($_POST['directory']);
+        $directory = str_replace(' ', '_', $directory);
         $match = preg_match('/^[a-zA-Z0-9_-]+$/', $directory);
         if (!$match) {
             new ErrorController(self::ERROR_INIT_IMAGES_DIRECTORY_WRONG_NAME);
@@ -144,6 +147,120 @@ class InitImageController implements InitImagesInterface
         mkdir(ROOT_DIR . 'init_images/' . $directory, 0777, true);
 
         new SuccessController(self::SUCCESS_INIT_IMAGES_DIRECTORY_CREATED);
+        new RedirectController();
+    }
+
+    /**
+     * Rename init images directory
+     *
+     * @return void
+     */
+    protected function renameInitImagesDirectory(): void
+    {
+        $directory = trim($_POST['directory']);
+        $directory = str_replace(' ', '_', $directory);
+        $match = preg_match('/^[a-zA-Z0-9_-]+$/', $directory);
+        if (!$match) {
+            new ErrorController(self::ERROR_RENAME_INIT_IMAGES_DIRECTORY);
+            new RedirectController();
+        }
+
+        $toolController = new ToolController();
+        $url = rtrim($toolController->getCurrentUrl(), '/');
+        $split = explode('/', $url);
+        $currentDirectory = end($split);
+        if ($currentDirectory === $directory) {
+            new SuccessController(self::SUCCESS_RENAME_INIT_IMAGES_DIRECTORY);
+            new RedirectController();
+        } elseif (is_dir(ROOT_DIR . 'init_images/' . $directory) ||
+            is_file(ROOT_DIR . 'init_images/' . $directory)) {
+            new ErrorController(self::ERROR_INIT_IMAGES_DIRECTORY_EXISTS);
+            new RedirectController();
+        }
+
+        rename(ROOT_DIR . 'init_images/' . $currentDirectory, ROOT_DIR . 'init_images/' . $directory);
+
+        new SuccessController(self::SUCCESS_RENAME_INIT_IMAGES_DIRECTORY);
+        new RedirectController('/initialize-images/' . $directory);
+    }
+
+    /**
+     * Delete initialize images directory
+     *
+     * @return void
+     */
+    private function deleteInitImagesDirectory(): void
+    {
+        if (!isset($_POST['directory'])) {
+            new ErrorController(self::ERROR_DELETE_INIT_IMAGES_DIRECTORY);
+            new RedirectController();
+        }
+
+        $directory = $_POST['directory'];
+        $this->collectInitImages();
+        if (!isset(self::$initImagesData[$directory])) {
+            new ErrorController(self::ERROR_DELETE_INIT_IMAGES_DIRECTORY);
+            new RedirectController();
+        }
+
+        if (!is_dir(ROOT_DIR . 'init_images/' . $directory)) {
+            new ErrorController(self::ERROR_DELETE_INIT_IMAGES_DIRECTORY);
+            new RedirectController();
+        }
+
+        $toolController = new ToolController();
+        $toolController->deleteDirectory(ROOT_DIR . 'init_images/' . $directory);
+
+        new SuccessController(self::SUCCESS_DELETE_INIT_IMAGES_DIRECTORY);
+        new RedirectController('/initialize-images');
+    }
+
+    /**
+     * Add init images image
+     *
+     * @return void
+     */
+    private function addInitImagesImage(): void
+    {
+        if (!isset($_POST['directory']) || !isset($_POST['name']) || !isset($_FILES['image'])) {
+            new ErrorController(self::ERROR_ADD_INIT_IMAGES_IMAGE);
+            new RedirectController();
+        }
+
+        $directory = trim($_POST['directory']);
+        $name = trim($_POST['name']);
+        $name = str_replace(' ', '_', $name);
+        $name = str_replace('.png', '', $name);
+        $name = str_replace('.jpg', '', $name);
+        $name = str_replace('.jpeg', '', $name);
+        if (!preg_match('/^[a-zA-Z0-9_-]+$/', $name)) {
+            new ErrorController(self::ERROR_INIT_IMAGES_IMAGE_WRONG_NAME);
+            new RedirectController();
+        }
+
+        $image = $_FILES['image'];
+        if ($image['type'] === 'image/png') {
+            $extension = '.png';
+        } elseif ( $image['type'] === 'image/jpg' || $image['type'] === 'image/jpeg') {
+            $extension = '.jpg';
+        } else {
+            new ErrorController(self::ERROR_INIT_IMAGES_IMAGE_WRONG_FILE);
+            new RedirectController();
+        }
+
+        $this->collectInitImages();
+        if (!isset(self::$initImagesData[$directory])) {
+            new ErrorController(self::ERROR_ADD_INIT_IMAGES_IMAGE);
+            new RedirectController();
+        } elseif (file_exists(ROOT_DIR . 'init_images/' . $directory . '/' . $name . $extension)) {
+            new ErrorController(self::ERROR_INIT_IMAGES_IMAGE_EXISTS);
+            new RedirectController();
+        }
+
+        move_uploaded_file($image['tmp_name'], ROOT_DIR . 'init_images/' . $directory . '/' . $name . $extension);
+
+        new SuccessController(self::SUCCESS_ADD_INIT_IMAGES_FILE);
+        new RedirectController();
     }
 
     /**
@@ -156,7 +273,7 @@ class InitImageController implements InitImagesInterface
     {
         if (!isset($_POST['directory']) || !isset($_POST['name']) || !isset($_POST['file'])) {
             new ErrorController(self::ERROR_SAVE_INITIALIZE_IMAGES_IMAGES);
-            $this->redirect();
+            new RedirectController();
         }
 
         $directory = $_POST['directory'];
@@ -165,24 +282,24 @@ class InitImageController implements InitImagesInterface
         foreach ($name as $value) {
             if (!preg_match('/^[a-zA-Z0-9_-]+$/', $value)) {
                 new ErrorController(self::ERROR_INIT_IMAGES_IMAGE_WRONG_NAME);
-                $this->redirect();
+                new RedirectController();
             }
         }
         if (!$this->noDuplicates($name)) {
             new ErrorController(self::ERROR_INIT_IMAGES_NAME_DUPLICATED);
-            $this->redirect();
+            new RedirectController();
         }
 
         $this->collectInitImages();
         if (!isset(self::$initImagesData[$directory])) {
             new ErrorController(self::ERROR_SAVE_INITIALIZE_IMAGES_IMAGES);
-            $this->redirect();
+            new RedirectController();
         }
 
         foreach ($file as $value) {
             if (!in_array($value, self::$initImagesData[$directory])) {
                 new ErrorController(self::ERROR_SAVE_INITIALIZE_IMAGES_IMAGES);
-                $this->redirect();
+                new RedirectController();
             }
         }
 
@@ -208,54 +325,7 @@ class InitImageController implements InitImagesInterface
 
         new SuccessController(self::SUCCESS_SAVE_INITIALIZE_IMAGES_IMAGES);
 
-        $this->redirect();
-    }
-
-    /**
-     * Add init images image
-     *
-     * @return void
-     */
-    private function addInitImagesImage(): void
-    {
-        if (!isset($_POST['directory']) || !isset($_POST['name']) || !isset($_FILES['image'])) {
-            new ErrorController(self::ERROR_ADD_INIT_IMAGES_IMAGE);
-            $this->redirect();
-        }
-
-        $directory = $_POST['directory'];
-        $name = str_replace('.png', '', $_POST['name']);
-        $name = str_replace('.jpg', '', $name);
-        $name = str_replace('.jpeg', '', $name);
-        if (!preg_match('/^[a-zA-Z0-9_-]+$/', $name)) {
-            new ErrorController(self::ERROR_INIT_IMAGES_IMAGE_WRONG_NAME);
-            $this->redirect();
-        }
-
-        $image = $_FILES['image'];
-        if ($image['type'] === 'image/png') {
-            $extension = '.png';
-        } elseif ( $image['type'] === 'image/jpg' || $image['type'] === 'image/jpeg') {
-            $extension = '.jpg';
-        } else {
-            new ErrorController(self::ERROR_INIT_IMAGES_IMAGE_WRONG_FILE);
-            $this->redirect();
-        }
-
-        $this->collectInitImages();
-        if (!isset(self::$initImagesData[$directory])) {
-            new ErrorController(self::ERROR_ADD_INIT_IMAGES_IMAGE);
-            $this->redirect();
-        } elseif (file_exists(ROOT_DIR . 'init_images/' . $directory . '/' . $name . $extension)) {
-            new ErrorController(self::ERROR_INIT_IMAGES_IMAGE_EXISTS);
-            $this->redirect();
-        }
-
-        move_uploaded_file($image['tmp_name'], ROOT_DIR . 'init_images/' . $directory . '/' . $name . $extension);
-
-        new SuccessController(self::SUCCESS_ADD_INIT_IMAGES_FILE);
-
-        $this->redirect();
+        new RedirectController();
     }
 
     /**
@@ -267,7 +337,7 @@ class InitImageController implements InitImagesInterface
     {
         if (!isset($_POST['directory']) || !isset($_POST['file'])) {
             new ErrorController(self::ERROR_DELETE_INITIALIZE_IMAGES_IMAGE);
-            $this->redirect();
+            new RedirectController();
         }
 
         $directory = $_POST['directory'];
@@ -286,39 +356,7 @@ class InitImageController implements InitImagesInterface
 
         new SuccessController(self::SUCCESS_DELETE_INITIALIZE_IMAGES_IMAGE);
 
-        $this->redirect();
-    }
-
-    /**
-     * Delete initialize images directory
-     *
-     * @return void
-     */
-    private function deleteInitImagesDirectory(): void
-    {
-        if (!isset($_POST['directory'])) {
-            new ErrorController(self::ERROR_DELETE_INIT_IMAGES_DIRECTORY);
-            $this->redirect();
-        }
-
-        $directory = $_POST['directory'];
-        $this->collectInitImages();
-        if (!isset(self::$initImagesData[$directory])) {
-            new ErrorController(self::ERROR_DELETE_INIT_IMAGES_DIRECTORY);
-            $this->redirect();
-        }
-
-        if (!is_dir(ROOT_DIR . 'init_images/' . $directory)) {
-            new ErrorController(self::ERROR_DELETE_INIT_IMAGES_DIRECTORY);
-            $this->redirect();
-        }
-
-        $toolController = new ToolController();
-        $toolController->deleteDirectory(ROOT_DIR . 'init_images/' . $directory);
-
-        new SuccessController(self::SUCCESS_DELETE_INIT_IMAGES_DIRECTORY);
-
-        $this->redirect('/initialize-images');
+        new RedirectController();
     }
 
     /**

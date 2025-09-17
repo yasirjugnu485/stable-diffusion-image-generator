@@ -337,8 +337,9 @@ class RenderController
     public function renderPromptMergerFileEditor(string $promptMergerDirectory): void
     {
         $params = $this->prepareParams();
+        $params['prompt_merger_directory'] = $promptMergerDirectory;
         $promptController = new PromptController();
-        $promptFiles = $promptController->getPromptFiles($promptMergerDirectory);
+        $params['prompt_merger_files'] = $promptController->getPromptFiles($promptMergerDirectory);
         $params['breadcrumbs'] = [
             [
                 'title' => 'Home',
@@ -348,7 +349,7 @@ class RenderController
             [
                 'title' => 'Prompt Merger',
                 'url' => '/prompt-merger',
-                'active' => false
+                'active' => true
             ],
             [
                 'title' => str_replace('_', ' ', $promptMergerDirectory),
@@ -356,8 +357,6 @@ class RenderController
                 'active' => false
             ],
         ];
-        $params['prompt_merger_directory'] = $promptMergerDirectory;
-        $params['prompt_merger_files'] = $promptFiles;
         $params['title'] = 'Prompt Merger';
         $params['template'] = 'prompt_merger_file_editor.php';
 
@@ -373,7 +372,20 @@ class RenderController
     {
         $params = $this->prepareParams();
         $initImagesController = new InitImageController();
-        $params['init_images'] = $initImagesController->getInitImagesDirectories();
+        $params['init_images_directories'] = $initImagesController->getInitImagesDirectories();
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+            [
+                'title' => 'Initialize Images',
+                'url' => '/initialize-images',
+                'active' => false
+            ],
+        ];
+        $params['title'] = 'Initialize Images';
         $params['template'] = 'init_images.php';
 
         $this->render($params);
@@ -388,11 +400,28 @@ class RenderController
     public function renderInitImagesEditor(string $initImagesDirectory): void
     {
         $params = $this->prepareParams();
+        $params['init_images_directory'] = $initImagesDirectory;
         $initImagesController = new InitImageController();
-        $initImagesImages = $initImagesController->getInitImagesImages($initImagesDirectory);;
-        $params['directory'] = $initImagesDirectory;
-        $params['images'] = $initImagesImages;
-        $params['template'] = 'init_images_editor.php';
+        $params['init_images_images'] = $initImagesController->getInitImagesImages($initImagesDirectory);
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+            [
+                'title' => 'Initialize Images',
+                'url' => '/initialize-images',
+                'active' => true
+            ],
+            [
+                'title' => str_replace('_', ' ', $initImagesDirectory),
+                'url' => '/initialize-images/' . $initImagesDirectory,
+                'active' => false
+            ],
+        ];
+        $params['title'] = 'Initialize Images';
+        $params['template'] = 'init_images_image_editor.php';
 
         $this->render($params);
     }
