@@ -47,6 +47,8 @@ class PromptController implements PromptInterface
         if (null === self::$promptData) {
             if (isset($_POST['action']) && $_POST['action'] === 'addPromptMergerDirectory') {
                 $this->addPromptMergerDirectory();
+            } elseif (isset($_POST['action']) && $_POST['action'] === 'renamePromptMergerDirectory') {
+                $this->renamePromptMergerDirectory();
             } elseif (isset($_POST['action']) && $_POST['action'] === 'editPromptMergerFiles') {
                 $this->editPromptMergerFiles();
             } elseif (isset($_POST['action']) && $_POST['action'] === 'addPromptMergerFile') {
@@ -125,7 +127,8 @@ class PromptController implements PromptInterface
      */
     protected function addPromptMergerDirectory(): void
     {
-        $directory = $_POST['directory'];
+        $directory = trim($_POST['directory']);
+        $directory = str_replace(' ', '_', $directory);
         $match = preg_match('/^[a-zA-Z0-9_-]+$/', $directory);
         if (!$match) {
             new ErrorController(self::ERROR_PROMPT_MERGER_DIRECTORY_WRONG_NAME);
@@ -140,123 +143,41 @@ class PromptController implements PromptInterface
         file_put_contents(ROOT_DIR . 'prompt/' . $directory . '/001_style.txt', '');
 
         new SuccessController(self::SUCCESS_PROMPT_MERGER_DIRECTORY_CREATED);
-
         $this->redirect();
     }
 
     /**
-     * Edit prompt merger files
+     * Rename prompt merger directory
      *
      * @return void
      */
-    protected function editPromptMergerFiles(): void
+    protected function renamePromptMergerDirectory(): void
     {
-        if (!isset($_POST['directory']) || !isset($_POST['name']) || !isset($_POST['content'])) {
-            new ErrorController(self::ERROR_SAVE_PROMPT_MERGER_FILES);
+        $directory = trim($_POST['directory']);
+        $directory = str_replace(' ', '_', $directory);
+        $match = preg_match('/^[a-zA-Z0-9_-]+$/', $directory);
+        if (!$match) {
+            new ErrorController(self::ERROR_RENAME_PROMPT_MERGER_DIRECTORY);
             $this->redirect();
         }
 
-        $directory = $_POST['directory'];
-        $name = $_POST['name'];
-        $content = $_POST['content'];
-        foreach ($name as $index => $value) {
-            unset ($name[$index]);
-            if (!preg_match('/^[a-zA-Z0-9_-]+$/', $value)) {
-                new ErrorController(self::ERROR_PROMPT_MERGER_FILE_WRONG_NAME);
-                $this->redirect();
-            }
-            $name[$index . '.txt'] = $value . '.txt';
-        }
-        foreach ($content as $index => $value) {
-            unset($content[$index]);
-            $content[$index . '.txt'] = $value;
-        }
-
-        $this->collectPrompts();
-        if (!isset(self::$promptData[$directory])) {
-            new ErrorController(self::ERROR_SAVE_PROMPT_MERGER_FILES);
+        $toolController = new ToolController();
+        $url = rtrim($toolController->getCurrentUrl(), '/');
+        $split = explode('/', $url);
+        $currentDirectory = end($split);
+        if ($currentDirectory === $directory) {
+            new SuccessController(self::SUCCESS_RENAME_PROMPT_MERGER_DIRECTORY);
+            $this->redirect();
+        } elseif (is_dir(ROOT_DIR . 'prompt/' . $directory) ||
+            is_file(ROOT_DIR . 'prompt/' . $directory)) {
+            new ErrorController(self::ERROR_PROMPT_MERGER_DIRECTORY_EXISTS);
             $this->redirect();
         }
 
-        foreach (self::$promptData[$directory] as $file) {
-            if (isset($name[$file])) {
-                unlink(ROOT_DIR . 'prompt/' . $directory . '/' . $file);
-                file_put_contents(
-                    ROOT_DIR . 'prompt/' . $directory . '/' . $name[$file],
-                    preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $content[$file])
-                );
-            }
-        }
+        rename(ROOT_DIR . 'prompt/' . $currentDirectory, ROOT_DIR . 'prompt/' . $directory);
 
-        new SuccessController(self::SUCCESS_SAVE_PROMPT_MERGER_FILES);
-
-        $this->redirect();
-    }
-
-    /**
-     * Add prompt file
-     *
-     * @return void
-     */
-    private function addPromptMergerFile(): void
-    {
-        if (!isset($_POST['directory']) || !isset($_POST['name'])) {
-            new ErrorController(self::ERROR_ADD_PROMPT_MERGER_FILE);
-            $this->redirect();
-        }
-
-        $directory = $_POST['directory'];
-        $name = str_replace('.txt', '', $_POST['name']);
-        if (!preg_match('/^[a-zA-Z0-9_-]+$/', $name)) {
-            new ErrorController(self::ERROR_PROMPT_MERGER_FILE_WRONG_NAME);
-            $this->redirect();
-        }
-
-        $this->collectPrompts();
-        if (!isset(self::$promptData[$directory])) {
-            new ErrorController(self::ERROR_ADD_PROMPT_MERGER_FILE);
-            $this->redirect();
-        } elseif (file_exists(ROOT_DIR . 'prompt/' . $directory . '/' . $name . '.txt')) {
-            new ErrorController(self::ERROR_PROMPT_MERGER_FILE_EXISTS);
-            $this->redirect();
-        }
-
-        file_put_contents(ROOT_DIR . 'prompt/' . $directory . '/' . $name . '.txt', '');
-
-        new SuccessController(self::SUCCESS_ADD_PROMPT_MERGER_FILE);
-
-        $this->redirect();
-    }
-
-    /**
-     * Delete prompt merger file
-     *
-     * @return void
-     */
-    private function deletePromptMergerFile(): void
-    {
-        if (!isset($_POST['directory']) || !isset($_POST['file'])) {
-            new ErrorController(self::ERROR_DELETE_PROMPT_MERGER_FILE);
-            $this->redirect();
-        }
-
-        $directory = $_POST['directory'];
-        $file = $_POST['file'];
-
-        $this->collectPrompts();
-        if (!isset(self::$promptData[$directory])) {
-            new ErrorController(self::ERROR_DELETE_PROMPT_MERGER_FILE);
-        }
-
-        if (!file_exists(ROOT_DIR . 'prompt/' . $directory . '/' . $file . '.txt')) {
-            new ErrorController(self::ERROR_DELETE_PROMPT_MERGER_FILE);
-        }
-
-        unlink(ROOT_DIR . 'prompt/' . $directory . '/' . $file . '.txt');
-
-        new SuccessController(self::SUCCESS_DELETE_PROMPT_MERGER_FILE);
-
-        $this->redirect();
+        new SuccessController(self::SUCCESS_PROMPT_MERGER_DIRECTORY_CREATED);
+        $this->redirect('/prompt-merger/' . $directory);
     }
 
     /**
@@ -287,8 +208,122 @@ class PromptController implements PromptInterface
         $toolController->deleteDirectory(ROOT_DIR . 'prompt/' . $directory);
 
         new SuccessController(self::SUCCESS_DELETE_PROMPT_MERGER_DIRECTORY);
-
         $this->redirect('/prompt-merger');
+    }
+
+    /**
+     * Add prompt merger file
+     *
+     * @return void
+     */
+    private function addPromptMergerFile(): void
+    {
+        if (!isset($_POST['directory']) || !isset($_POST['name'])) {
+            new ErrorController(self::ERROR_ADD_PROMPT_MERGER_FILE);
+            $this->redirect();
+        }
+
+        $directory = trim($_POST['directory']);
+        $name = trim($_POST['name']);
+        $name = str_replace(' ', '_', $name);
+        if (!preg_match('/^[a-zA-Z0-9_-]+$/', $name)) {
+            new ErrorController(self::ERROR_PROMPT_MERGER_FILE_WRONG_NAME);
+            $this->redirect();
+        }
+
+        $this->collectPrompts();
+        if (!isset(self::$promptData[$directory])) {
+            new ErrorController(self::ERROR_ADD_PROMPT_MERGER_FILE);
+            $this->redirect();
+        } elseif (file_exists(ROOT_DIR . 'prompt/' . $directory . '/' . $name . '.txt')) {
+            new ErrorController(self::ERROR_PROMPT_MERGER_FILE_EXISTS);
+            $this->redirect();
+        }
+
+        file_put_contents(ROOT_DIR . 'prompt/' . $directory . '/' . $name . '.txt', '');
+
+        new SuccessController(self::SUCCESS_ADD_PROMPT_MERGER_FILE);
+        $this->redirect();
+    }
+
+    /**
+     * Edit prompt merger files
+     *
+     * @return void
+     */
+    protected function editPromptMergerFiles(): void
+    {
+        if (!isset($_POST['directory']) || !isset($_POST['name']) || !isset($_POST['content'])) {
+            new ErrorController(self::ERROR_SAVE_PROMPT_MERGER_FILES);
+            $this->redirect();
+        }
+
+        $directory = trim($_POST['directory']);
+        $name = $_POST['name'];
+        $content = $_POST['content'];
+        foreach ($name as $index => $value) {
+            unset ($name[$index]);
+            $value = trim($value);
+            $value = str_replace(' ', '_', $value);
+            if (!preg_match('/^[a-zA-Z0-9_-]+$/', $value)) {
+                new ErrorController(self::ERROR_PROMPT_MERGER_FILE_WRONG_NAME);
+                $this->redirect();
+            }
+            $name[$index . '.txt'] = $value . '.txt';
+        }
+        foreach ($content as $index => $value) {
+            unset($content[$index]);
+            $content[$index . '.txt'] = $value;
+        }
+
+        $this->collectPrompts();
+        if (!isset(self::$promptData[$directory])) {
+            new ErrorController(self::ERROR_SAVE_PROMPT_MERGER_FILES);
+            $this->redirect();
+        }
+
+        foreach (self::$promptData[$directory] as $file) {
+            if (isset($name[$file])) {
+                unlink(ROOT_DIR . 'prompt/' . $directory . '/' . $file);
+                file_put_contents(
+                    ROOT_DIR . 'prompt/' . $directory . '/' . $name[$file],
+                    preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $content[$file])
+                );
+            }
+        }
+
+        new SuccessController(self::SUCCESS_SAVE_PROMPT_MERGER_FILES);
+        $this->redirect();
+    }
+
+    /**
+     * Delete prompt merger file
+     *
+     * @return void
+     */
+    private function deletePromptMergerFile(): void
+    {
+        if (!isset($_POST['directory']) || !isset($_POST['file'])) {
+            new ErrorController(self::ERROR_DELETE_PROMPT_MERGER_FILE);
+            $this->redirect();
+        }
+
+        $directory = $_POST['directory'];
+        $file = $_POST['file'];
+
+        $this->collectPrompts();
+        if (!isset(self::$promptData[$directory])) {
+            new ErrorController(self::ERROR_DELETE_PROMPT_MERGER_FILE);
+        }
+
+        if (!file_exists(ROOT_DIR . 'prompt/' . $directory . '/' . $file . '.txt')) {
+            new ErrorController(self::ERROR_DELETE_PROMPT_MERGER_FILE);
+        }
+
+        unlink(ROOT_DIR . 'prompt/' . $directory . '/' . $file . '.txt');
+
+        new SuccessController(self::SUCCESS_DELETE_PROMPT_MERGER_FILE);
+        $this->redirect();
     }
 
     /**

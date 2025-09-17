@@ -8,7 +8,7 @@
  * @license     GNU GENERAL PUBLIC LICENSE
  */
 
-if ($params['directory'] !== 'demo') {
+if ($params['directory'] !== 'Demo') {
     ?>
     <div class="offcanvas offcanvas-end"
          tabindex="-1"
@@ -166,7 +166,7 @@ if ($params['directory'] !== 'demo') {
 <div class="container">
     <div class="row">
         <?php
-        if ($params['directory'] === 'demo') {
+        if ($params['directory'] === 'Demo') {
             ?>
             <div class="col-12">
                 <div class="alert alert-warning mb-5">
@@ -176,7 +176,7 @@ if ($params['directory'] !== 'demo') {
             <?php
         }
 
-        if ($params['directory'] !== 'demo') {
+        if ($params['directory'] !== 'Demo') {
             ?>
             <div class="col-12 mb-5">
                 <div class="float-start">
@@ -226,7 +226,7 @@ if ($params['directory'] !== 'demo') {
                                         <?php echo $image['name']; ?>
                                     </h5>
                                     <?php
-                                    if (count($params['images']) > 1 && $params['directory'] !== 'demo') {
+                                    if (count($params['images']) > 1 && $params['directory'] !== 'Demo') {
                                         ?>
                                         <button class="btn btn-danger float-end"
                                                 type="button"
@@ -265,7 +265,7 @@ if ($params['directory'] !== 'demo') {
                 </div>
 
                 <?php
-                if ($params['directory'] !== 'demo') {
+                if ($params['directory'] !== 'Demo') {
                     ?>
                     <div class="text-end mb-5">
                         <button type="submit"
@@ -283,7 +283,7 @@ if ($params['directory'] !== 'demo') {
             ?>
             <div class="col-12">
                 <div class="alert alert-warning">
-                    No Initialize Images available yet
+                    No Initialize Images available
                 </div>
             </div>
             <?php

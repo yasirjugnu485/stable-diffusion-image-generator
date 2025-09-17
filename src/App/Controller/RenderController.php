@@ -149,7 +149,7 @@ class RenderController
                 'active' => false
             ]
         ];
-        $params['title'] = $dateTime;
+        $params['title'] = $type;
         $params['images_title'] = $dateTime;
         $params['template'] = 'images_by_type_and_date_time.php';
 
@@ -235,7 +235,7 @@ class RenderController
                 'active' => false
             ]
         ];
-        $params['title'] = $checkpoint;
+        $params['title'] = 'Checkpoints';
         $params['images_title'] = $checkpoint;
         $params['template'] = 'images_by_checkpoint.php';
 
@@ -293,11 +293,7 @@ class RenderController
         }
 
         $params['album'] = $slug;
-        if (count($requestIndex) === 1) {
-            $params['title'] = 'Album';
-        } else {
-            $params['title'] = str_replace('_', ' ', end($requestIndex));
-        }
+        $params['title'] = 'Album';
         $params['images_title'] = str_replace('_', ' ', end($requestIndex));
         $params['template'] = 'album.php';
 
@@ -355,15 +351,15 @@ class RenderController
                 'active' => false
             ],
             [
-                'title' => $promptMergerDirectory,
+                'title' => str_replace('_', ' ', $promptMergerDirectory),
                 'url' => '/prompt-merger/' . $promptMergerDirectory,
                 'active' => false
             ],
         ];
-        $params['directory'] = $promptMergerDirectory;
-        $params['files'] = $promptFiles;
-        $params['title'] = $promptMergerDirectory;
-        $params['template'] = 'prompt_merger_editor.php';
+        $params['prompt_merger_directory'] = $promptMergerDirectory;
+        $params['prompt_merger_files'] = $promptFiles;
+        $params['title'] = 'Prompt Merger';
+        $params['template'] = 'prompt_merger_file_editor.php';
 
         $this->render($params);
     }

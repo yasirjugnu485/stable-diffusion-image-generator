@@ -104,4 +104,18 @@ interface PromptInterface
      * @var string
      */
     const string SUCCESS_DELETE_PROMPT_MERGER_DIRECTORY = 'Prompt Merger Directory deleted successfully';
+
+    /**
+     * Error rename prompt merger directory
+     *
+     * @var string
+     */
+    const string ERROR_RENAME_PROMPT_MERGER_DIRECTORY = 'Error on renaming Prompt Merger Directory';
+
+    /**
+     * Success rename prompt merger directory
+     *
+     * @var string
+     */
+    const string SUCCESS_RENAME_PROMPT_MERGER_DIRECTORY = 'Prompt Merger Directory renamed successfully';
 }

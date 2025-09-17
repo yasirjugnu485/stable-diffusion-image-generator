@@ -11,7 +11,7 @@
 ?>
 <div class="offcanvas offcanvas-end"
      tabindex="-1"
-     id="offcanvasAlbumButtonsAddSubAlbumAlbum"
+     id="offcanvasAlbumButtonsAddSubAlbum"
      aria-labelledby="offcanvasAlbumButtonsAddSubAlbumLabel"
      style="width: 600px; max-width: 100%">
     <div class="offcanvas-header">
@@ -144,6 +144,7 @@ if ($params['album'] !== '/album') {
     <?php
 }
 ?>
+
 <div class="container">
     <div class="row">
 
@@ -151,13 +152,15 @@ if ($params['album'] !== '/album') {
             <?php
             if (count($params['request_index']) > 1) {
                 ?>
-                <button class="btn btn-danger float-start mb-2"
-                        type="button"
-                        data-bs-toggle="offcanvas"
-                        href="#offcanvasAlbumButtonsDeleteAlbum">
-                    <i class="bi bi-trash me-1"></i>
-                    Delete Album
-                </button>
+                <div class="float-start">
+                    <button class="btn btn-danger mb-2"
+                            type="button"
+                            data-bs-toggle="offcanvas"
+                            href="#offcanvasAlbumButtonsDeleteAlbum">
+                        <i class="bi bi-trash me-1"></i>
+                        Delete Album
+                    </button>
+                </div>
                 <?php
             }
             ?>
@@ -169,7 +172,7 @@ if ($params['album'] !== '/album') {
                             type="button"
                             data-bs-toggle="offcanvas"
                             href="#offcanvasAlbumButtonsRenameAlbum">
-                        <i class="bi bi-plus-circle me-1"></i>
+                        <i class="bi bi-pencil"></i>
                         Rename Album
                     </button>
                     <?php

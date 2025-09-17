@@ -26,7 +26,7 @@ if (isset($params['images'])) {
                     ?>
                     <div class="col-12">
                         <div class="alert alert-warning">
-                            There are no images yet
+                            There are no images available
                         </div>
                     </div>
                     <?php

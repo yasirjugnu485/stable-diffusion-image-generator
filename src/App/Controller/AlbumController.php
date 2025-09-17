@@ -279,7 +279,7 @@ class AlbumController implements AlbumInterface
         } elseif (is_dir($slugPrefix . $directory) ||
             is_file($slugPrefix . $directory)) {
             new ErrorController(self::ERROR_ADD_SUB_ALBUM_EXISTS);
-            return;
+            new RedirectController();
         }
 
         mkdir($slugPrefix . $directory, 0777, true);

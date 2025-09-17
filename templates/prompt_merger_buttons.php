@@ -46,7 +46,7 @@
                 <button type="submit"
                         class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i>
-                    Add Prompt Merger Directory
+                    Add Directory
                 </button>
             </div>
         </form>
@@ -61,7 +61,7 @@
                     data-bs-toggle="offcanvas"
                     href="#offcanvasAddPromptMergerDirectory">
                 <i class="bi bi-plus-circle me-1"></i>
-                Add Prompt Merger Directory
+                Add Directory
             </button>
         </div>
     </div>
