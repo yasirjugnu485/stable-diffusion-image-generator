@@ -4,6 +4,7 @@ checkpoints.json
 config.app.php
 config.local.php
 dry_run.json
+loras.json
 options.json
 samplers.json
 upscalers.json

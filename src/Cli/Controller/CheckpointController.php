@@ -97,7 +97,7 @@ class CheckpointController implements CheckpointInterface
      *
      * @param bool $silent Echo progress in console
      * @return array
-     * @throws StableDiffusionServiceException
+     * @throws StableDiffusionServiceException|PromptImageGeneratorException
      */
     private function initCheckpoints(bool $silent = false): array
     {

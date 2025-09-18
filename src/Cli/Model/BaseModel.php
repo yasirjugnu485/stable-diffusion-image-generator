@@ -14,6 +14,7 @@ namespace Cli\Model;
 
 use Cli\Controller\CheckpointController;
 use Cli\Controller\ConfigController;
+use Cli\Controller\LoraController;
 use Cli\Controller\RefinerController;
 use Cli\Controller\SamplerController;
 use Cli\Exception\PromptImageGeneratorException;
@@ -241,6 +242,17 @@ class BaseModel
         } else {
             if (isset($this->overrideSettings['sd_model_checkpoint'])) {
                 unset($this->overrideSettings['sd_model_checkpoint']);
+            }
+        }
+
+        $loraController = new LoraController();
+        $loraController->setNextLora();
+        $currentLora = $loraController->getCurrentLora();
+        if ($currentLora) {
+            $this->overrideSettings['sd_lora'] = $currentLora;
+        } else {
+            if (isset($this->overrideSettings['sd_lora'])) {
+                unset($this->overrideSettings['sd_lora']);
             }
         }
     }

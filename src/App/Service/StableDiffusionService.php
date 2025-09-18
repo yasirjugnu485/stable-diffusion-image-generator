@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Controller\ConfigController;
+
 class StableDiffusionService
 {
     /**
@@ -37,10 +39,8 @@ class StableDiffusionService
                 'Connection: Keep-Alive'
             ],
         ]);
-
         $response = curl_exec($curl);
         curl_close($curl);
-
         $error = curl_error($curl);
         if ($error) {
             return false;
@@ -81,10 +81,8 @@ class StableDiffusionService
                 'Connection: Keep-Alive'
             ],
         ]);
-
         $response = curl_exec($curl);
         curl_close($curl);
-
         $error = curl_error($curl);
         if ($error) {
             return false;
@@ -100,50 +98,6 @@ class StableDiffusionService
         );
 
         return $samplers;
-    }
-
-    /**
-     * Get options
-     *
-     * @param string $host Host
-     * @return array|false
-     */
-    public function getOptions(string $host): array|false
-    {
-        $url = $host . '/sdapi/v1/options';
-
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => [
-                'content-type: application/json',
-                'Connection: Keep-Alive'
-            ],
-        ]);
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        $error = curl_error($curl);
-        if ($error) {
-            return false;
-        }
-
-        $options = json_decode($response, true);
-        if (file_exists(ROOT_DIR . '/options.json')) {
-            unlink(ROOT_DIR . '/options.json');
-        }
-        file_put_contents(
-            ROOT_DIR . '/options.json',
-            json_encode($options, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-        );
-
-        return $options;
     }
 
     /**
@@ -169,10 +123,8 @@ class StableDiffusionService
                 'Connection: Keep-Alive'
             ],
         ]);
-
         $response = curl_exec($curl);
         curl_close($curl);
-
         $error = curl_error($curl);
         if ($error) {
             return false;
@@ -188,6 +140,124 @@ class StableDiffusionService
         );
 
         return $upscalers;
+    }
+
+    /**
+     * Get loras
+     *
+     * @param string $host Host
+     * @return array|null
+     */
+    public function getLoras(string $host): array|false
+    {
+        $url = $host . '/sdapi/v1/loras';
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => [
+                'content-type: application/json',
+                'Connection: Keep-Alive'
+            ],
+        ]);
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $error = curl_error($curl);
+        if ($error) {
+            return false;
+        }
+
+        $loras = json_decode($response, true);
+        if (file_exists(ROOT_DIR . 'loras.json')) {
+            unlink(ROOT_DIR . '/loras.json');
+        }
+        file_put_contents(
+            ROOT_DIR . '/loras.json',
+            json_encode($loras, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+        );
+
+        return $loras;
+    }
+
+    /**
+     * Refresh loras
+     *
+     * @param string $host Host
+     * @return bool
+     */
+    public function refreshLoras(string $host): bool
+    {
+        $url = rtrim($host, '/') . '/sdapi/v1/refresh-loras';
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => '',
+            CURLOPT_HTTPHEADER => [
+                'content-type: application/json',
+                'Connection: Keep-Alive'
+            ],
+        ]);
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $error = curl_error($curl);
+        if ($error) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get options
+     *
+     * @param string $host Host
+     * @return array|false
+     */
+    public function getOptions(string $host): array|false
+    {
+        $url = $host . '/sdapi/v1/options';
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => [
+                'content-type: application/json',
+                'Connection: Keep-Alive'
+            ],
+        ]);
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $error = curl_error($curl);
+        if ($error) {
+            return false;
+        }
+
+        $options = json_decode($response, true);
+        if (file_exists(ROOT_DIR . '/options.json')) {
+            unlink(ROOT_DIR . '/options.json');
+        }
+        file_put_contents(
+            ROOT_DIR . '/options.json',
+            json_encode($options, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+        );
+
+        return $options;
     }
 
     /**
@@ -214,10 +284,8 @@ class StableDiffusionService
                 'Connection: Keep-Alive'
             ],
         ]);
-
         $response = curl_exec($curl);
         curl_close($curl);
-
         $error = curl_error($curl);
         if ($error) {
             return false;
@@ -249,10 +317,8 @@ class StableDiffusionService
                 'Connection: Keep-Alive'
             ],
         ]);
-
         $response = curl_exec($curl);
         curl_close($curl);
-
         $error = curl_error($curl);
         if ($error) {
             return false;
@@ -261,5 +327,45 @@ class StableDiffusionService
         $progress = json_decode($response, true);
 
         return $progress['progress'] ? $progress : false;
+    }
+
+    /**
+     * Interrupt
+     *
+     * @return bool
+     */
+    public function interrupt(): bool
+    {
+        $configController = new ConfigController();
+        $config = $configController->getConfig();
+
+        $url = rtrim($config['host'], '/') . '/sdapi/v1/interrupt';
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => '',
+            CURLOPT_HTTPHEADER => [
+                'content-type: application/json',
+                'Connection: Keep-Alive'
+            ],
+        ]);
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $error = curl_error($curl);
+        if ($error) {
+            return false;
+        }
+
+        $array = json_decode($response, true);
+
+        // TODO: Check results
+
+        return true;
     }
 }

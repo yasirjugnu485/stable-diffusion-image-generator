@@ -384,9 +384,9 @@ if (!isset($params['error']) || !$params['error']) {
                                         foreach ($params['refinerCheckpoints'] as $refinerCheckpoint) {
                                             ?>
                                             <option value="<?php echo $refinerCheckpoint['name']; ?>"
-                                                    <?php if ($refinerCheckpoint['selected']) {
-                                                        echo ' selected';
-                                                    } ?>>
+                                                <?php if ($refinerCheckpoint['selected']) {
+                                                    echo ' selected';
+                                                } ?>>
                                                 <?php echo $refinerCheckpoint['name']; ?>
                                             </option>
                                             <?php
@@ -396,7 +396,7 @@ if (!isset($params['error']) || !$params['error']) {
                                     <div class="form-text">
                                         Multiple Refiner Checkpoints (Models) can be selected, rotating with each new
                                         image
-                                        generation. If none are chosen, the refiner is disabled.
+                                        generation. If none are chosen, the Refiner is disabled.
                                     </div>
                                 </div>
 
@@ -413,6 +413,45 @@ if (!isset($params['error']) || !$params['error']) {
                                            max="100"
                                            value="<?php echo $params['config']['refinerSwitchAt']; ?>"
                                            onchange="generator.refinerSwitchAtOnchange()">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-dark text-light">
+                            <h4 class="mt-2">
+                                Lora
+                            </h4>
+                        </div>
+                        <div class="card-body text-dark">
+                            <div class="row">
+                                <div class="col-12 col-md-6 mb-4">
+                                    <label for="lora"
+                                           class="form-label">
+                                        Loras
+                                    </label>
+                                    <select name="lora[]"
+                                            id="lora"
+                                            multiple>
+                                        <?php
+                                        foreach ($params['loras'] as $lora) {
+                                            ?>
+                                            <option value="<?php echo $lora['name']; ?>"
+                                                    <?php if ($lora['selected']) {
+                                                        echo ' selected';
+                                                    } ?>>
+                                                <?php echo $lora['name']; ?>
+                                            </option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                    <div class="form-text">
+                                        Multiple Loras can be selected, rotating with each new image generation. If
+                                        none are chosen, the Lora is disabled.
+                                    </div>
                                 </div>
 
                             </div>
@@ -653,6 +692,14 @@ if (!isset($params['error']) || !$params['error']) {
                 maxSelection: 100,
                 required: false,
                 placeholder: 'Select Refiner Checkpoints (Models)',
+                onChange: function (selected) {
+                    console.log('Selection changed:', selected);
+                }
+            });
+            this.loraSelector = new MultiSelectTag('lora', {
+                maxSelection: 100,
+                required: false,
+                placeholder: 'Select Loras',
                 onChange: function (selected) {
                     console.log('Selection changed:', selected);
                 }

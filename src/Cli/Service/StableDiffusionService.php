@@ -45,10 +45,8 @@ class StableDiffusionService
                 'Connection: Keep-Alive'
             ],
         ]);
-
         $response = curl_exec($curl);
         curl_close($curl);
-
         $error = curl_error($curl);
         if ($error) {
             throw new StableDiffusionServiceException($error);
@@ -93,10 +91,8 @@ class StableDiffusionService
                 'Connection: Keep-Alive'
             ],
         ]);
-
         $response = curl_exec($curl);
         curl_close($curl);
-
         $error = curl_error($curl);
         if ($error) {
             throw new StableDiffusionServiceException($error);
@@ -112,6 +108,52 @@ class StableDiffusionService
         );
 
         return $samplers;
+    }
+
+    /**
+     * Get loras
+     *
+     * @return array|null
+     * @throws PromptImageGeneratorException
+     * @throws StableDiffusionServiceException
+     */
+    public function getLoras(): array|null
+    {
+        $configController = new ConfigController();
+        $config = $configController->getConfig();
+
+        $url = rtrim($config['host'], '/') . '/sdapi/v1/loras';
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => [
+                'content-type: application/json',
+                'Connection: Keep-Alive'
+            ],
+        ]);
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $error = curl_error($curl);
+        if ($error) {
+            throw new StableDiffusionServiceException($error);
+        }
+
+        $loras = json_decode($response, true);
+        if (file_exists(ROOT_DIR . '/loras.json')) {
+            unlink(ROOT_DIR . '/loras.json');
+        }
+        file_put_contents(
+            ROOT_DIR . '/loras.json',
+            json_encode($loras, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+        );
+
+        return $loras;
     }
 
     /**
@@ -141,10 +183,8 @@ class StableDiffusionService
                 'Connection: Keep-Alive'
             ],
         ]);
-
         $response = curl_exec($curl);
         curl_close($curl);
-
         $error = curl_error($curl);
         if ($error) {
             throw new StableDiffusionServiceException($error);
@@ -191,10 +231,8 @@ class StableDiffusionService
                 'Connection: Keep-Alive'
             ],
         ]);
-
         $response = curl_exec($curl);
         curl_close($curl);
-
         $error = curl_error($curl);
         if ($error) {
             throw new StableDiffusionServiceException($error);
@@ -235,10 +273,8 @@ class StableDiffusionService
         if (!$config['saveImages']) {
             curl_setopt($curl, CURLOPT_TIMEOUT, 1);
         }
-
         $response = curl_exec($curl);
         curl_close($curl);
-
         $error = curl_error($curl);
         if ($error) {
             if (!$config['saveImages']) {
@@ -290,7 +326,6 @@ class StableDiffusionService
 
         $response = curl_exec($curl);
         curl_close($curl);
-
         $error = curl_error($curl);
         if ($error) {
             if (!$config['saveImages']) {
@@ -329,10 +364,8 @@ class StableDiffusionService
                 'Connection: Keep-Alive'
             ],
         ]);
-
         $response = curl_exec($curl);
         curl_close($curl);
-
         $error = curl_error($curl);
         if ($error) {
             throw new StableDiffusionServiceException($error);

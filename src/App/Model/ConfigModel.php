@@ -120,6 +120,13 @@ class ConfigModel
     private float $refinerSwitchAt = 0.8;
 
     /**
+     * Lora
+     *
+     * @var string|array|false|null
+     */
+    private string|array|false|null $lora = false;
+
+    /**
      * Restore faces
      *
      * @var bool
@@ -355,6 +362,12 @@ class ConfigModel
                 if ($refinerSwitchAt > 1 && $refinerSwitchAt <= 100) {
                     $this->refinerSwitchAt = $refinerSwitchAt / 100;
                 }
+            }
+        }
+
+        if (isset($_POST['lora'])) {
+            if (is_string($_POST['lora']) || is_array($_POST['lora'])) {
+                $this->lora = $_POST['lora'];
             }
         }
 

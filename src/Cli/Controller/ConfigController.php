@@ -131,6 +131,13 @@ class ConfigController implements ConfigInterface
     private float $refinerSwitchAt = 0.8;
 
     /**
+     * Used loras
+     *
+     * @var string|array|false|null
+     */
+    private string|array|false|null $lora = false;
+
+    /**
      * Restore faces
      *
      * @var bool
@@ -226,6 +233,7 @@ class ConfigController implements ConfigInterface
         $this->initCheckpoints();
         $this->initSamplers();
         $this->initRefiner();
+        $this->initLora();
         $this->initInitImages();
 
         self::$initialized = true;
@@ -319,6 +327,16 @@ class ConfigController implements ConfigInterface
     private function initRefiner(): void
     {
         new RefinerController();
+    }
+
+    /**
+     * Initialize lora
+     *
+     * @return void
+     */
+    private function initLora(): void
+    {
+        new LoraController();
     }
 
     /**

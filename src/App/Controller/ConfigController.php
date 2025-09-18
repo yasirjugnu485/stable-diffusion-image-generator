@@ -64,6 +64,13 @@ class ConfigController
     private string|array|false|null $sampler = null;
 
     /**
+     * Used loras
+     *
+     * @var string|array|false|null
+     */
+    private string|array|false|null $lora = null;
+
+    /**
      * Used mode
      *
      * @var string

@@ -40,6 +40,13 @@ class GeneratorController implements GeneratorInterface
     private static array|null $prompts = null;
 
     /**
+     * Loras
+     *
+     * @var array|null
+     */
+    private static array|null $loras = null;
+
+    /**
      * Init images directories
      *
      * @var array|null
@@ -116,6 +123,7 @@ class GeneratorController implements GeneratorInterface
 
         $this->collectInitImages();
         $this->collectUpscalers($config['host']);
+        $this->collectLoras($config['host']);
 
         $this->handleAction();
     }
@@ -132,7 +140,6 @@ class GeneratorController implements GeneratorInterface
 
         $stableDiffusionService = new StableDiffusionService();
         $stableDiffusionService->getSdModels($host);
-
         if (!file_exists(ROOT_DIR . 'checkpoints.json')) {
             return false;
         }
@@ -157,7 +164,6 @@ class GeneratorController implements GeneratorInterface
 
         $stableDiffusionService = new StableDiffusionService();
         $stableDiffusionService->getSamplers($host);
-
         if (!file_exists(ROOT_DIR . 'samplers.json')) {
             return false;
         }
@@ -165,6 +171,30 @@ class GeneratorController implements GeneratorInterface
         $samplers = json_decode(file_get_contents(ROOT_DIR . 'samplers.json'), true);
         foreach ($samplers as $sampler) {
             self::$samplers[] = $sampler['name'];
+        }
+
+        return true;
+    }
+
+    /**
+     * Collect loras
+     *
+     * @var string $host Host
+     * @return bool
+     */
+    private function collectLoras(string $host): bool
+    {
+        self::$loras = [];
+
+        $stableDiffusionService = new StableDiffusionService();
+        $stableDiffusionService->getLoras($host);
+        if (!file_exists(ROOT_DIR . 'loras.json')) {
+            return false;
+        }
+
+        $loras = json_decode(file_get_contents(ROOT_DIR . 'loras.json'), true);
+        foreach ($loras as $lora) {
+            self::$loras[] = $lora['name'];
         }
 
         return true;
@@ -259,6 +289,7 @@ class GeneratorController implements GeneratorInterface
         $checkpoints = $this->getCheckpoints($configData);
         $samplers = $this->getSamplers($configData);
         $refinerCheckpoints = $this->getRefinerCheckpoints($configData);
+        $loras = $this->getLoras($configData);
         $prompts = $this->getPrompts($configData);
         $initImages = $this->getInitImages($configData);
         if (!count(self::$upscalers)) {
@@ -272,6 +303,7 @@ class GeneratorController implements GeneratorInterface
             'prompts' => $prompts,
             'initImages' => $initImages,
             'upscalers' => self::$upscalers,
+            'loras' => $loras,
             'samplers' => $samplers,
             'error' => self::$error,
         ];
@@ -362,6 +394,35 @@ class GeneratorController implements GeneratorInterface
         }
 
         return $refinerCheckpoints;
+    }
+
+    /**
+     * Get loras
+     *
+     * @param array $configData Config data
+     * @return array
+     */
+    private function getLoras(array $configData): array
+    {
+        $loras = [];
+        foreach (self::$loras as $lora) {
+            $selected = false;
+            if (is_string($configData['lora'])) {
+                if ($lora === $configData['lora']) {
+                    $selected = true;
+                }
+            } elseif (is_array($configData['lora'])) {
+                if (in_array($lora, $configData['lora'])) {
+                    $selected = true;
+                }
+            }
+            $loras[] = [
+                'name' => $lora,
+                'selected' => $selected,
+            ];
+        }
+
+        return $loras;
     }
 
     /**

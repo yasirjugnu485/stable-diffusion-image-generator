@@ -16,6 +16,7 @@ use Cli\Exception\PromptImageGeneratorException;
 use Cli\Exception\StableDiffusionServiceException;
 use Cli\Interface\BootstrapInterface;
 use DateTime;
+use Random\RandomException;
 use Throwable;
 
 include_once(ROOT_DIR . 'src/Cli/Interface/BootstrapInterface.php');
@@ -33,7 +34,7 @@ class BootstrapController implements BootstrapInterface
      * Constructor
      *
      * @return void
-     * @throws PromptImageGeneratorException|StableDiffusionServiceException
+     * @throws PromptImageGeneratorException|StableDiffusionServiceException|RandomException
      */
     public function __construct()
     {
@@ -196,7 +197,7 @@ class BootstrapController implements BootstrapInterface
      * Run CLI application
      *
      * @return void
-     * @throws PromptImageGeneratorException|StableDiffusionServiceException
+     * @throws PromptImageGeneratorException|StableDiffusionServiceException|RandomException
      */
     private function run(): void
     {
