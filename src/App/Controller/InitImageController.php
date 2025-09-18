@@ -279,7 +279,9 @@ class InitImageController implements InitImagesInterface
         $directory = $_POST['directory'];
         $name = $_POST['name'];
         $file = $_POST['file'];
-        foreach ($name as $value) {
+        foreach ($name as $index => $value) {
+            $value = str_replace(' ', '_', $value);
+            $name[$index] = $value;
             if (!preg_match('/^[a-zA-Z0-9_-]+$/', $value)) {
                 new ErrorController(self::ERROR_INIT_IMAGES_IMAGE_WRONG_NAME);
                 new RedirectController();
@@ -368,37 +370,6 @@ class InitImageController implements InitImagesInterface
     private function noDuplicates(array $array): bool
     {
         return count($array) === count(array_flip($array));
-    }
-
-    /**
-     * Redirect
-     *
-     * @param string|null $uri URI
-     * @return void
-     */
-    public function redirect(string|null $uri = null): void
-    {
-        if ($uri !== null) {
-            $location = $_SERVER['HTTP_REFERER'];
-            $split = explode('/initialize-images/', $location);
-            $uri = $split[0] . $uri;
-            header('Location: ' . $uri);
-            exit();
-        }
-
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
-        exit();
-    }
-
-    /**
-     * Initialize images directory exists
-     *
-     * @param string $initImageDirectory Initialize image directory
-     * @return bool
-     */
-    public function initImagesDirectoryExists(string $initImageDirectory): bool
-    {
-        return isset(self::$initImagesData[$initImageDirectory]);
     }
 
     /**

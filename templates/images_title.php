@@ -12,9 +12,9 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h3>
+            <h4>
                 <?php echo $params['images_title']; ?>
-            </h3>
+            </h4>
         </div>
     </div>
 </div>

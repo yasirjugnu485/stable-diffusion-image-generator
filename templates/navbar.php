@@ -238,7 +238,7 @@
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
                         <i class="bi bi-lightning-fill"></i>
-                        Generator
+                        Image Generator
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
@@ -262,7 +262,7 @@
                         <li>
                             <a class="dropdown-item text-dark" href="/generator">
                                 <i class="bi bi-lightning-fill"></i>
-                                Generator
+                                Image Generator
                             </a>
                         </li>
                     </ul>

@@ -427,6 +427,34 @@ class RenderController
     }
 
     /**
+     * Render settings
+     *
+     * @return void
+     */
+    public function renderSettings(): void
+    {
+        $params = $this->prepareParams();
+        $settingsController = new SettingsController();
+        $params = array_merge($params, $settingsController->getSettings());
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+            [
+                'title' => 'Settings',
+                'url' => '/settings',
+                'active' => false
+            ],
+        ];
+        $params['title'] = 'Settings';
+        $params['template'] = 'settings.php';
+
+        $this->render($params);
+    }
+
+    /**
      * Render generator
      *
      * @return void
@@ -435,6 +463,19 @@ class RenderController
     {
         $params = $this->prepareParams();
         $generatorController = new GeneratorController();
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+            [
+                'title' => 'Generator',
+                'url' => '/generator',
+                'active' => false
+            ],
+        ];
+        $params['title'] = 'Image Generator';
         if ($generatorController->getStartGeneration()) {
             $params['template'] = 'generate.php';
             $this->render($params);
@@ -446,16 +487,27 @@ class RenderController
     }
 
     /**
-     * Render settings
+     * Render contributors
      *
      * @return void
      */
-    public function renderSettings(): void
+    public function renderContributors(): void
     {
         $params = $this->prepareParams();
-        $settingsController = new SettingsController();
-        $params = array_merge($params, $settingsController->getSettings());
-        $params['template'] = 'settings.php';
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+            [
+                'title' => 'Contributors',
+                'url' => '/contributors',
+                'active' => false
+            ],
+        ];
+        $params['title'] = 'Contributors';
+        $params['template'] = 'contributors.php';
 
         $this->render($params);
     }

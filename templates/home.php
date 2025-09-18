@@ -16,6 +16,8 @@ include(ROOT_DIR . 'templates/image_delete.php');
 include(ROOT_DIR . 'templates/toast.php');
 include(ROOT_DIR . 'templates/used_modes.php');
 include(ROOT_DIR . 'templates/used_checkpoints.php');
-include(ROOT_DIR . 'templates/hr.php');
+if (count($params['used_checkpoints'])) {
+    include(ROOT_DIR . 'templates/hr.php');
+}
 include(ROOT_DIR . 'templates/images_title.php');
 include(ROOT_DIR . 'templates/images.php');

@@ -50,6 +50,8 @@ class UriController
             $renderController->renderInitImages();
         } elseif ($requestIndex[1] === 'initialize-images' && isset($requestIndex[2])) {
             $renderController->renderInitImagesEditor($requestIndex[2]);
+        }  elseif ($requestIndex[1] === 'settings' && !isset($requestIndex[2])) {
+            $renderController->renderSettings();
         } elseif ($requestIndex[1] === 'generator' && !isset($requestIndex[2])) {
             $renderController->renderGenerator();
         } elseif ($requestIndex[1] === 'generate' && !isset($requestIndex[2])) {
@@ -57,8 +59,8 @@ class UriController
             shell_exec('php ' . ROOT_DIR . 'run.php --config ' .
                 ROOT_DIR . 'config.app.php > /dev/null 2>/dev/null &');
             exit();
-        } elseif ($requestIndex[1] === 'settings' && !isset($requestIndex[2])) {
-            $renderController->renderSettings();
+        } elseif ($requestIndex[1] === 'contributors' && !isset($requestIndex[2])) {
+            $renderController->renderContributors();
         }
 
         $renderController->renderNotFound();

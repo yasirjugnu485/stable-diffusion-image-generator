@@ -48,4 +48,18 @@ interface GeneratorInterface
      * @var string
      */
     const string SUCCESS_SAVE_CONFIG_APP_PHP = 'The config.app.php has been saved successfully';
+
+    /**
+     * Error host not configured
+     *
+     * @var string
+     */
+    const string ERROR_HOST_NOT_CONFIGURED = 'The Stable Diffusion host is not configured. Check your settings and setup host.';
+
+    /**
+     * Error host not reachable
+     *
+     * @var string
+     */
+    const string ERROR_HOST_NOT_REACHABLE = 'The Stable Diffusion host is not reachable. Check your settings and setup host.';
 }

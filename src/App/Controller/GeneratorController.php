@@ -212,6 +212,7 @@ class GeneratorController implements GeneratorInterface
         $upscalers = $stableDiffusionService->getUpscalers($host);
         if (!$upscalers) {
             self::$upscalers = [];
+            return;
         }
 
         foreach ($upscalers as $upscaler) {
@@ -230,9 +231,20 @@ class GeneratorController implements GeneratorInterface
         $configData = $configController->getConfig();
         if (!$configData) {
             return [
-                'error' => self::$error ? self::$error : self::ERROR_ON_LOAD_CONFIG,
+                'error' => self::$error ?: self::ERROR_ON_LOAD_CONFIG,
             ];
         }
+        if (!isset($configData['host'])) {
+            new ErrorController(self::ERROR_HOST_NOT_CONFIGURED);
+            new RedirectController('/settings');
+        }
+        $stableDiffusionService = new StableDiffusionService();
+        $ping = $stableDiffusionService->ping($configData['host']);
+        if (!$ping) {
+            new ErrorController(sprintf(self::ERROR_HOST_NOT_REACHABLE, $configData['host']));
+            new RedirectController('/settings');
+        }
+
         if (isset($configData['refinerSwitchAt'])) {
             if (is_float($configData['refinerSwitchAt'])) {
                 $configData['refinerSwitchAt'] = $configData['refinerSwitchAt'] * 100;

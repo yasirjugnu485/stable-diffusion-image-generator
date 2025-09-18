@@ -13,3 +13,4 @@ include(ROOT_DIR . 'templates/title.php');
 include(ROOT_DIR . 'templates/breadcrumbs.php');
 include(ROOT_DIR . 'templates/hr.php');
 include(ROOT_DIR . 'templates/init_images_image_editor_buttons.php');
+include(ROOT_DIR . 'templates/init_images_image_editor_editor.php');

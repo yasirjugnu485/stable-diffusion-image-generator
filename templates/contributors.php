@@ -8,8 +8,7 @@
  * @license     GNU GENERAL PUBLIC LICENSE
  */
 
-include(ROOT_DIR . 'templates/toast.php');
 include(ROOT_DIR . 'templates/title.php');
 include(ROOT_DIR . 'templates/breadcrumbs.php');
 include(ROOT_DIR . 'templates/hr.php');
-include(ROOT_DIR . 'templates/generate_generate.php');
+include(ROOT_DIR . 'templates/contributors_contributors.php');
