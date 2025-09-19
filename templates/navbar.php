@@ -9,12 +9,29 @@
  */
 
 ?>
-<nav class="navbar navbar-expand-lg bg-body-tertiary bg-primary navbar-dark mb-5">
+<div class="container-fluid bg-light text-dark d-none d-xl-block py-2">
+    <a class="text-light text-decoration-none"
+       href="/">
+        <img class="float-start me-2 logo-header"
+             src="/out/img/logo.png">
+        <div class="float-start mt-1 mb-0">
+            <div class="brand-sm text-dark">
+                Stable Diffusion
+            </div>
+            <div class="brand-lg text-dark">
+                Image Generator
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </a>
+</div>
+
+<nav class="navbar navbar-expand-xl bg-body-tertiary bg-primary border-lg navbar-dark text-light mb-5">
     <div class="container-fluid">
-        <a class="navbar-brand text-light float-start"
+        <a class="navbar-brand float-start d-block d-xl-none"
            href="/">
-            <img class="float-start me-2 logo"
-                 src="/out/img/stable-diffusion.png">
+            <img class="float-start me-2 logo-brand"
+                 src="/out/img/logo.png">
             <div class="float-start">
                 <div class="brand-sm">
                     Stable Diffusion
@@ -44,7 +61,8 @@
                        role="button"
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
-                        txt2img
+                        <i class="bi bi-card-text"></i>
+                        Text 2 Image
                     </a>
                     <ul class="dropdown-menu<?php if (count($params['navbar']['types']['txt2img']) == 0) {
                         echo ' bg-warning';
@@ -84,7 +102,8 @@
                        role="button"
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
-                        img2img
+                        <i class="bi bi-card-image"></i>
+                        Image 2 Image
                     </a>
                     <ul class="dropdown-menu<?php if (count($params['navbar']['types']['img2img']) == 0) {
                         echo ' bg-warning';
@@ -124,7 +143,8 @@
                        role="button"
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
-                        loop
+                        <i class="bi bi-repeat"></i>
+                        Loop
                     </a>
                     <ul class="dropdown-menu<?php if (count($params['navbar']['types']['loop']) == 0) {
                         echo ' bg-warning';
@@ -164,7 +184,8 @@
                        role="button"
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
-                        checkpoints
+                        <i class="bi bi-stack"></i>
+                        Checkpoints
                     </a>
                     <ul class="dropdown-menu<?php if (count($params['navbar']['checkpoints']) == 0) {
                         echo ' bg-warning';
@@ -204,7 +225,8 @@
                        role="button"
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
-                        album
+                        <i class="bi bi-images"></i>
+                        Album
                     </a>
                     <ul class="dropdown-menu">
                         <li>
@@ -263,6 +285,44 @@
                             <a class="dropdown-item text-dark" href="/generator">
                                 <i class="bi bi-lightning-fill"></i>
                                 Image Generator
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-light"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <i class="bi bi-eye-fill"></i>
+                        Inspector
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item text-dark" href="/inspector">
+                                Overview
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-dark" href="/inspector/checkpoints">
+                                Checkpoints
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-dark" href="/inspector/samplers">
+                                Samplers
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-dark" href="/inspector/upscalers">
+                                Upscalers
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-dark" href="/inspector/loras">
+                                Loras
                             </a>
                         </li>
                     </ul>

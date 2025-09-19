@@ -8,6 +8,7 @@ $this->mode = ['mode'];
 $this->checkpoint = ['checkpoint'];
 $this->sampler = ['sampler'];
 $this->prompt = ['prompt'];
+$this->negativePrompt = ['negativePrompt'];
 $this->initImages = ['initImages'];
 $this->width = ['width'];
 $this->height = ['height'];

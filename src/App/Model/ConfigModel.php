@@ -71,18 +71,26 @@ class ConfigModel
     private string|array|false|null $sampler = false;
 
     /**
-     * String of prompt generator directory to merge prompt or set null to random select prompt directory
+     * String of prompt generator directory to merge prompt or set null to generate images with empty prompt
      *
      * @var string|null
      */
-    private string|null $prompt = 'test';
+    private string|null $prompt = 'Demo';
+
+    /**
+     * String of negative prompt generator directory to merge prompt or set null to generate images with empty negative
+     * prompt
+     *
+     * @var string|null
+     */
+    private string|null $negativePrompt = 'test';
 
     /**
      * String of img2img init image directory or set null to random select init image directory
      *
      * @var string|null
      */
-    private string|null $initImages = 'test';
+    private string|null $initImages = 'Demo';
 
     /**
      * Image width
@@ -198,21 +206,6 @@ class ConfigModel
     }
 
     /**
-     * Load config.local.php
-     *
-     * @return bool
-     */
-    public function loadConfigLocal(): bool
-    {
-        if (file_exists(ROOT_DIR . 'config.local.php')) {
-            include ROOT_DIR . 'config.local.php';
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Load config.app.php
      *
      * @return bool
@@ -236,10 +229,7 @@ class ConfigModel
     {
         $success = $this->loadConfigApp();
         if (!$success) {
-            $success = $this->loadConfigLocal();
-            if (!$success) {
-                $this->loadConfigInc();
-            }
+            $this->loadConfigInc();
         }
 
         $this->collectPostParameters();
@@ -301,6 +291,16 @@ class ConfigModel
             }
         } else {
             $this->prompt = null;
+        }
+
+        if (isset($_POST['negativePrompt'])) {
+            if ($_POST['negativePrompt']) {
+                $this->negativePrompt = $_POST['negativePrompt'];
+            } else {
+                $this->negativePrompt = null;
+            }
+        } else {
+            $this->negativePrompt = null;
         }
 
         if ($this->mode === 'img2img') {

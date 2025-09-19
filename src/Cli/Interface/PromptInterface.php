@@ -55,4 +55,11 @@ interface PromptInterface
      * @var string
      */
     const string ERROR_CONFIGURED_PROMPT_NOT_FOUND = 'Configured prompt not found';
+
+    /**
+     * Error configured negative prompt not found
+     *
+     * @var string
+     */
+    const string ERROR_CONFIGURED_NEGATIVE_PROMPT_NOT_FOUND = 'Configured negative prompt not found';
 }

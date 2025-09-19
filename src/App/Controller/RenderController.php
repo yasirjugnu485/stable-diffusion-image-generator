@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cli\Controller\CheckpointController;
+
 class RenderController
 {
     /**
@@ -482,6 +484,164 @@ class RenderController
         }
         $params = array_merge($params, $generatorController->getData());
         $params['template'] = 'generator.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render inspector
+     *
+     * @return void
+     */
+    public function renderInspector(): void
+    {
+        $params = $this->prepareParams();
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+            [
+                'title' => 'Inspector',
+                'url' => '/inspector',
+                'active' => false
+            ],
+        ];
+        $params['title'] = 'Inspector';
+        $params['template'] = 'inspector.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render inspector checkpoints
+     *
+     * @return void
+     */
+    public function renderInspectorCheckpoints(): void
+    {
+        $params = $this->prepareParams();
+        $inspectorController = new InspectorController();
+        $params['json'] = $inspectorController->getCheckpointsJson();
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+            [
+                'title' => 'Inspector',
+                'url' => '/inspector',
+                'active' => true
+            ],
+            [
+                'title' => 'Checkpoints',
+                'url' => '/inspector/checkpoints',
+                'active' => false
+            ],
+        ];
+        $params['title'] = 'Inspector';
+        $params['template'] = 'inspector_checkpoints.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render inspector samplers
+     *
+     * @return void
+     */
+    public function renderInspectorSamplers(): void
+    {
+        $params = $this->prepareParams();
+        $inspectorController = new InspectorController();
+        $params['json'] = $inspectorController->getSamplersJson();
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+            [
+                'title' => 'Inspector',
+                'url' => '/inspector',
+                'active' => true
+            ],
+            [
+                'title' => 'Samplers',
+                'url' => '/inspector/samplers',
+                'active' => false
+            ],
+        ];
+        $params['title'] = 'Samplers';
+        $params['template'] = 'inspector_samplers.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render inspector upscalers
+     *
+     * @return void
+     */
+    public function renderInspectorUpscalers(): void
+    {
+        $params = $this->prepareParams();
+        $inspectorController = new InspectorController();
+        $params['json'] = $inspectorController->getUpscalersJson();
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+            [
+                'title' => 'Inspector',
+                'url' => '/inspector',
+                'active' => true
+            ],
+            [
+                'title' => 'Upscalers',
+                'url' => '/inspector/upscalers',
+                'active' => false
+            ],
+        ];
+        $params['title'] = 'Upscalers';
+        $params['template'] = 'inspector_upscalers.php';
+
+        $this->render($params);
+    }
+
+    /**
+     * Render inspector loras
+     *
+     * @return void
+     */
+    public function renderInspectorLoras(): void
+    {
+        $params = $this->prepareParams();
+        $inspectorController = new InspectorController();
+        $params['json'] = $inspectorController->getLorasJson();
+        $params['breadcrumbs'] = [
+            [
+                'title' => 'Home',
+                'url' => '/',
+                'active' => true
+            ],
+            [
+                'title' => 'Inspector',
+                'url' => '/inspector',
+                'active' => true
+            ],
+            [
+                'title' => 'Loras',
+                'url' => '/inspector/loras',
+                'active' => false
+            ],
+        ];
+        $params['title'] = 'Loras';
+        $params['template'] = 'inspector_loras.php';
 
         $this->render($params);
     }

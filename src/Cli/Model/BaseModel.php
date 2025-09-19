@@ -244,17 +244,6 @@ class BaseModel
                 unset($this->overrideSettings['sd_model_checkpoint']);
             }
         }
-
-        $loraController = new LoraController();
-        $loraController->setNextLora();
-        $currentLora = $loraController->getCurrentLora();
-        if ($currentLora) {
-            $this->overrideSettings['sd_lora'] = $currentLora;
-        } else {
-            if (isset($this->overrideSettings['sd_lora'])) {
-                unset($this->overrideSettings['sd_lora']);
-            }
-        }
     }
 
     /**

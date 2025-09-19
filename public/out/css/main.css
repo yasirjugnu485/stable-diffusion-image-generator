@@ -29,7 +29,10 @@ body {
     max-width: 1600px !important;
 }
 
-.logo {
+.logo-header {
+    height: 2.75rem;
+}
+.logo-brand {
     height: 2.75rem;
     margin-top: -0.25rem;
 }

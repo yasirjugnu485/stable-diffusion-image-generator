@@ -29,23 +29,9 @@ class LoraController implements LoraInterface
     /**
      * Lora from config
      *
-     * @var array|false|string[]|null
+     * @var array|false|null
      */
-    private static array|false|null $lora = false;
-
-    /**
-     * Last used lora
-     *
-     * @var string|null
-     */
-    private static string|null $lastLora = null;
-
-    /**
-     * Current lora
-     *
-     * @var string|null
-     */
-    private static string|null $currentLora = null;
+    private static array|false|null $lora = null;
 
     /**
      * Constructor
@@ -64,18 +50,13 @@ class LoraController implements LoraInterface
             $configController = new ConfigController();
             $config = $configController->getConfig();
             $lora = $config['lora'];
+
             if ($lora !== false) {
                 if (is_array($lora)) {
                     self::$lora = $lora;
-                } elseif (is_string($lora)) {
+                } elseif (is_string($lora) && trim($lora)) {
                     self::$lora = [$lora];
-                } elseif (is_null($lora)) {
-                    self::$lora = [];
-                    foreach ($loras as $lora) {
-                        self::$lora[] = $lora['name'];
-                    }
                 }
-
                 if (is_array(self::$lora)) {
                     foreach (self::$lora as $loraName) {
                         foreach ($loras as $lora) {
@@ -119,42 +100,26 @@ class LoraController implements LoraInterface
     }
 
     /**
-     * Set next lora
+     * Get lora string
      *
-     * @return void
+     * @return string
      */
-    public function setNextLora(): void
+    public function getLoraString(): string
     {
-        if (is_array(self::$lora)) {
-            if (self::$currentLora === null) {
-                self::$currentLora = self::$lora[0];
-            } else {
-                self::$lastLora = self::$currentLora;
+        if (self::$lora === null) {
+            return '';
+        }
 
-                self::$currentLora = null;
-                $next = false;
-                foreach (self::$lora as $lora) {
-                    if ($next) {
-                        self::$currentLora = $lora;
-                        break;
-                    } elseif ($lora === self::$lastLora) {
-                        $next = true;
-                    }
-                }
-                if (self::$currentLora === null) {
-                    self::$currentLora = self::$lora[0];
+        $loraString = '';
+        foreach (self::$lora as $loraName) {
+            foreach (self::$loraData as $lora) {
+                if ($loraName === $lora['name']) {
+                    $loraString .= '<lora:' . $lora['alias'] . ':1>';
+                    continue 2;
                 }
             }
         }
-    }
 
-    /**
-     * Get current lora
-     *
-     * @return string|null
-     */
-    public function getCurrentLora(): string|null
-    {
-        return self::$currentLora;
+        return ' ' . $loraString;
     }
 }

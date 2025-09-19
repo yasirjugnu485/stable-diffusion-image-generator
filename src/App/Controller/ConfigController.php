@@ -85,6 +85,13 @@ class ConfigController
     private string|null $prompt = null;
 
     /**
+     * Used negative prompt
+     *
+     * @var string|null
+     */
+    private string|null $negativePrompt = null;
+
+    /**
      * Number of images to generate
      *
      * @var int|null

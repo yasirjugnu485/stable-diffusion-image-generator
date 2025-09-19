@@ -89,6 +89,13 @@ class ConfigController implements ConfigInterface
     private string|null $prompt = null;
 
     /**
+     * Used negative prompt merger
+     *
+     * @var string|null
+     */
+    private string|null $negativePrompt = null;
+
+    /**
      * Number of images to generate
      *
      * @var int|null
@@ -133,9 +140,9 @@ class ConfigController implements ConfigInterface
     /**
      * Used loras
      *
-     * @var string|array|false|null
+     * @var string|array|null
      */
-    private string|array|false|null $lora = false;
+    private string|array|null $lora = null;
 
     /**
      * Restore faces

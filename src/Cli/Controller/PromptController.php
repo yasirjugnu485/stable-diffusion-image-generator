@@ -29,7 +29,14 @@ class PromptController implements PromptInterface
      *
      * @var string|null
      */
-    private static string|null $currentPrompt;
+    private static string|null $currentPrompt = null;
+
+    /**
+     * Current negative prompt
+     *
+     * @var string|null
+     */
+    private static string|null $currentNegativePrompt = null;
 
     /**
      * Constructor
@@ -105,8 +112,13 @@ class PromptController implements PromptInterface
                 throw new PromptImageGeneratorException(self::ERROR_CONFIGURED_PROMPT_NOT_FOUND);
             }
             self::$currentPrompt = $config['prompt'];
-        } else {
-            self::$currentPrompt = array_key_first(self::$promptData);
+        }
+
+        if ($config['negativePrompt'] !== null) {
+            if (!array_key_exists($config['negativePrompt'], self::$promptData)) {
+                throw new PromptImageGeneratorException(self::ERROR_CONFIGURED_NEGATIVE_PROMPT_NOT_FOUND);
+            }
+            self::$currentNegativePrompt = $config['prompt'];
         }
 
         new EchoController(self::ECHO_END);
@@ -121,31 +133,41 @@ class PromptController implements PromptInterface
      */
     public function getNextPrompt(): string
     {
+        $configController = new ConfigController();
+        $config = $configController->getConfig();
+        if ($config['prompt'] === null) {
+            return '';
+        }
+
         $prompt = [];
         foreach (self::$promptData[self::$currentPrompt] as $promptData) {
             $rand = array_rand($promptData);
             $prompt[] = $promptData[$rand];
         }
 
+        return implode(' ', $prompt);
+    }
+
+    /**
+     * Get next negative prompt
+     *
+     * @return string
+     * @throws PromptImageGeneratorException
+     */
+    public function getNextNegativePrompt(): string
+    {
         $configController = new ConfigController();
         $config = $configController->getConfig();
-        if ($config['prompt'] === null) {
-            $currentPrompt = self::$currentPrompt;
-            self::$currentPrompt = null;
-            $next = false;
-            foreach (self::$promptData as $promptKey => $promptData) {
-                if ($next) {
-                    self::$currentPrompt = $promptKey;
-                    break;
-                } elseif ($currentPrompt === $promptKey) {
-                    $next = true;
-                }
-            }
-            if (self::$currentPrompt === null) {
-                self::$currentPrompt = array_key_first(self::$promptData);
-            }
+        if ($config['negativePrompt'] === null) {
+            return '';
         }
 
-        return implode(' ', $prompt);
+        $negativePrompt = [];
+        foreach (self::$promptData[self::$currentNegativePrompt] as $promptData) {
+            $rand = array_rand($promptData);
+            $negativePrompt[] = $promptData[$rand];
+        }
+
+        return implode(' ', $negativePrompt);
     }
 }

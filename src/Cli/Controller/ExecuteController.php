@@ -45,19 +45,25 @@ class ExecuteController implements ExecuteInterface
                 new EchoController(sprintf(self::ECHO_GENERATE_IMAGE, ($numberOfGeneratedImages + 1)));
             }
 
+            $promptController = new PromptController();
+            $nextPrompt = $promptController->getNextPrompt();
+            $nextNegativePrompt = $promptController->getNextNegativePrompt();
+            $loraController = new LoraController();
+            $loraString = $loraController->getLoraString();
             if (($config['mode'] === 'txt2img' && !$config['loop']) ||
                 ($config['mode'] === 'txt2img' && $config['loop'] && !$numberOfGeneratedImages)) {
-                $promptController = new PromptController();
-                $nextPrompt = $promptController->getNextPrompt();
-                $this->callTxt2img($nextPrompt, $numberOfGeneratedImages);
+                $this->callTxt2img($nextPrompt . $loraString, $nextNegativePrompt, $numberOfGeneratedImages);
             } elseif ($config['mode'] === 'img2img' || (
                     $config['mode'] === 'txt2img' && $config['loop'] && $numberOfGeneratedImages)) {
-                $promptController = new PromptController();
-                $nextPrompt = $promptController->getNextPrompt();
                 $initImagesController = new InitImagesController();
                 $nextInitImage = $initImagesController->getNextInitImage();
                 $currentInitImageFile = $initImagesController->getCurrentInitImageFile();
-                $this->callImg2img($nextPrompt, $nextInitImage, $currentInitImageFile, $numberOfGeneratedImages);
+                $this->callImg2img($nextPrompt,
+                    $nextNegativePrompt . $loraString,
+                    $nextInitImage,
+                    $currentInitImageFile,
+                    $numberOfGeneratedImages
+                );
             }
 
             new EchoController();
@@ -78,6 +84,7 @@ class ExecuteController implements ExecuteInterface
      * Generate txt2txt image
      *
      * @param string $prompt Prompt
+     * @param string $negativePrompt Negative prompt
      * @param int $numberOfGeneratedImages Number of generated images
      * @return void
      * @throws PromptImageGeneratorException
@@ -85,16 +92,18 @@ class ExecuteController implements ExecuteInterface
      */
     private function callTxt2img(
         string $prompt,
+        string $negativePrompt,
         int    $numberOfGeneratedImages
     ): void
     {
-        new EchoController(sprintf(self::ECHO_GENERATE_IMAGE_WITH_PROMPT, $prompt));
+        new EchoController(sprintf(self::ECHO_GENERATE_IMAGE_WITH_PROMPT, $prompt, $negativePrompt));
 
         $configController = new ConfigController();
         $config = $configController->getConfig();
 
         $txt2imgModel = new Txt2ImgModel();
         $txt2imgModel->setPrompt($prompt);
+        $txt2imgModel->setNegativePrompt($prompt);
         $payload = $txt2imgModel->toJson();
 
         $name = str_pad((string)$numberOfGeneratedImages, 10, '0', STR_PAD_LEFT);
@@ -127,7 +136,7 @@ class ExecuteController implements ExecuteInterface
                     new EchoController(sprintf(self::SUCCESS_SAVE_IMAGE, $file));
                 }
             } else {
-                new EchoController(sprintf(self::ERROR_GENERATE_IMAGE_WITH_PROMPT, $prompt));
+                new EchoController(sprintf(self::ERROR_GENERATE_IMAGE_WITH_PROMPT, $prompt, $negativePrompt));
             }
         } else {
             $this->addDataToDryRun($payload);
@@ -138,6 +147,7 @@ class ExecuteController implements ExecuteInterface
      * Generate img2img image
      *
      * @param string $prompt Prompt
+     * @param string $negativePrompt Negative prompt
      * @param string $nextInitImage Next initialize image
      * @param string $currentInitImageFile Current initialize image file
      * @param int $numberOfGeneratedImages Number of generated images
@@ -147,6 +157,7 @@ class ExecuteController implements ExecuteInterface
      */
     private function callImg2img(
         string $prompt,
+        string $negativePrompt,
         string $nextInitImage,
         string $currentInitImageFile,
         int    $numberOfGeneratedImages
@@ -155,6 +166,7 @@ class ExecuteController implements ExecuteInterface
         new EchoController(sprintf(
             self::ECHO_GENERATE_IMAGE_WITH_PROMPT_AND_IMAGE,
             $prompt,
+            $negativePrompt,
             $currentInitImageFile
         ));
 
@@ -163,6 +175,7 @@ class ExecuteController implements ExecuteInterface
 
         $img2imgModel = new Img2ImgModel();
         $img2imgModel->setPrompt($prompt);
+        $img2imgModel->setNegativePrompt($negativePrompt);
         $img2imgModel->setInitImages([$nextInitImage]);
         $payload = $img2imgModel->toJson();
 
@@ -199,6 +212,7 @@ class ExecuteController implements ExecuteInterface
                 new EchoController(sprintf(
                     self::ERROR_GENERATE_IMAGE_WITH_PROMPT_AND_IMAGE,
                     $prompt,
+                    $negativePrompt,
                     $currentInitImageFile
                 ));
             }

@@ -291,6 +291,7 @@ class GeneratorController implements GeneratorInterface
         $refinerCheckpoints = $this->getRefinerCheckpoints($configData);
         $loras = $this->getLoras($configData);
         $prompts = $this->getPrompts($configData);
+        $negativePrompts = $this->getNegativePrompts($configData);
         $initImages = $this->getInitImages($configData);
         if (!count(self::$upscalers)) {
             $configData['upscaler'] = null;
@@ -301,6 +302,7 @@ class GeneratorController implements GeneratorInterface
             'checkpoints' => $checkpoints,
             'refinerCheckpoints' => $refinerCheckpoints,
             'prompts' => $prompts,
+            'negative_prompts' => $negativePrompts,
             'initImages' => $initImages,
             'upscalers' => self::$upscalers,
             'loras' => $loras,
@@ -455,6 +457,35 @@ class GeneratorController implements GeneratorInterface
     }
 
     /**
+     * Get negative prompts
+     *
+     * @param array $configData Config data
+     * @return array
+     */
+    private function getNegativePrompts(array $configData): array
+    {
+        $negativePrompts = [];
+        foreach (self::$prompts as $prompt) {
+            $selected = false;
+            if (is_string($configData['negativePrompt'])) {
+                if ($prompt === $configData['negativePrompt']) {
+                    $selected = true;
+                }
+            } elseif (is_array($configData['negativePrompt'])) {
+                if (in_array($prompt, $configData['negativePrompt'])) {
+                    $selected = true;
+                }
+            }
+            $negativePrompts[] = [
+                'name' => $prompt,
+                'selected' => $selected,
+            ];
+        }
+
+        return $negativePrompts;
+    }
+
+    /**
      * Get initialize images
      *
      * @param array $configData Config data
@@ -523,7 +554,7 @@ class GeneratorController implements GeneratorInterface
     {
         $configModel = new ConfigModel();
         $configModel->create();
-        sleep(3);
+        sleep(5);
 
         new SuccessController(self::SUCCESS_SAVE_CONFIG_APP_PHP);
 

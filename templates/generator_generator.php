@@ -211,8 +211,38 @@ if (!isset($params['error']) || !$params['error']) {
                                         ?>
                                     </select>
                                     <div class="form-text">
-                                        If no Prompt Merger Directories are selected, then Prompt Merger Directories
-                                        are chosen randomly.
+                                        If no Prompt Merger Directories are selected, then the images will be generated
+                                        with empty prompt
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6 mb-4">
+                                    <label for="negativePrompt"
+                                           class="form-label">
+                                        Negative Prompt Merger Directory
+                                    </label>
+                                    <select class="form-select"
+                                            id="negativePrompt"
+                                            name="negativePrompt">
+                                        <option value="">
+                                            None
+                                        </option>
+                                        <?php
+                                        foreach ($params['negative_prompts'] as $prompt) {
+                                            ?>
+                                            <option value="<?php echo $prompt['name']; ?>"
+                                                <?php if ($params['config']['prompt'] === $prompt['name']) {
+                                                    echo 'selected';
+                                                } ?>>
+                                                <?php echo $prompt['name']; ?>
+                                            </option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                    <div class="form-text">
+                                        If no Negative Prompt Merger Directories are selected, then the images will be
+                                        generated with empty negative prompt
                                     </div>
                                 </div>
 
@@ -448,10 +478,12 @@ if (!isset($params['error']) || !$params['error']) {
                                         }
                                         ?>
                                     </select>
-                                    <div class="form-text">
-                                        Multiple Loras can be selected, rotating with each new image generation. If
-                                        none are chosen, the Lora is disabled.
-                                    </div>
+                                    <small>
+                                        If multiple Loras are selected, they will always be applied to all images.
+                                    </small><br>
+                                    <small class="text-warning">
+                                        Not all Loras are compatible with all checkpoints.
+                                    </small>
                                 </div>
 
                             </div>

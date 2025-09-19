@@ -22,8 +22,6 @@ class UriController
     public function __construct()
     {
         $renderController = new RenderController();
-        $promptController = new PromptController();
-        $initImagesController = new InitImageController();
 
         $requestUri = $_SERVER['REQUEST_URI'];
         $requestIndex = explode('/', rtrim($requestUri, '/'));
@@ -59,6 +57,16 @@ class UriController
             shell_exec('php ' . ROOT_DIR . 'run.php --config ' .
                 ROOT_DIR . 'config.app.php > /dev/null 2>/dev/null &');
             exit();
+        } elseif ($requestIndex[1] === 'inspector' && !isset($requestIndex[2])) {
+            $renderController->renderInspector();
+        } elseif ($requestIndex[1] === 'inspector' && isset($requestIndex[2]) && $requestIndex[2] === 'checkpoints') {
+            $renderController->renderInspectorCheckpoints();
+        } elseif ($requestIndex[1] === 'inspector' && isset($requestIndex[2]) && $requestIndex[2] === 'samplers') {
+            $renderController->renderInspectorSamplers();
+        } elseif ($requestIndex[1] === 'inspector' && isset($requestIndex[2]) && $requestIndex[2] === 'upscalers') {
+            $renderController->renderInspectorUpscalers();
+        } elseif ($requestIndex[1] === 'inspector' && isset($requestIndex[2]) && $requestIndex[2] === 'loras') {
+            $renderController->renderInspectorLoras();
         } elseif ($requestIndex[1] === 'contributors' && !isset($requestIndex[2])) {
             $renderController->renderContributors();
         }

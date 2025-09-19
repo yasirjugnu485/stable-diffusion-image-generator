@@ -73,14 +73,11 @@ class SettingsController implements SettingsInterface
         $configModel = new ConfigModel();
         $success = $configModel->loadConfigApp();
         if (!$success) {
-            $success = $configModel->loadConfigLocal();
-            if (!$success) {
-                $configModel->loadConfigInc();
-            }
+            $configModel->loadConfigInc();
         }
         $configModel->setHost($host);
         $configModel->buildConfigApp();
-        sleep(3);
+        sleep(5);
 
         new SuccessController(self::SUCCESS_SAVE_SETTINGS);
 

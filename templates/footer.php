@@ -12,7 +12,7 @@
 <div id="footer"
      class="footer container-fluid bg-dark text-light position-relative">
     <div class="row">
-        <div class="col-12 col-md-3 py-3">
+        <div class="col-12 col-md-6 col-lg-3 py-3">
             <small>Stable Diffusion</small>
             <h5 class="mb-0">
                 Image Generator
@@ -33,7 +33,7 @@
                 </a>
             </div>
         </div>
-        <div class="col-12 col-md-3 py-3">
+        <div class="col-12 col-md-6 col-lg-3 py-3">
             <div>
                 Links
             </div>
@@ -47,7 +47,7 @@
                 </a>
             </div>
         </div>
-        <div class="col-12 col-md-3 py-3">
+        <div class="col-12 col-md-6 col-lg-3 py-3">
             <div>
                 Donate
             </div>

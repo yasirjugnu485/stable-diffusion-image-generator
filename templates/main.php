@@ -18,8 +18,10 @@
     <link rel="stylesheet" href="/out/css/lightbox.css">
     <link rel="stylesheet" href="/out/css/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/out/css/multi-select-tag.min.css">
+    <link rel="stylesheet" href="/out/css/jsonviewer.css">
     <script src="/out/js/bootstrap.bundle.min.js"></script>
     <script src="/out/js/multi-select-tag.min.js"></script>
+    <script src="/out/js/jsonviewer.js"></script>
     <?php
     if (isset($params['title'])) {
         ?>
