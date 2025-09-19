@@ -58,8 +58,8 @@ class ExecuteController implements ExecuteInterface
                 $initImagesController = new InitImagesController();
                 $nextInitImage = $initImagesController->getNextInitImage();
                 $currentInitImageFile = $initImagesController->getCurrentInitImageFile();
-                $this->callImg2img($nextPrompt,
-                    $nextNegativePrompt . $loraString,
+                $this->callImg2img($nextPrompt . $loraString,
+                    $nextNegativePrompt,
                     $nextInitImage,
                     $currentInitImageFile,
                     $numberOfGeneratedImages
@@ -103,7 +103,7 @@ class ExecuteController implements ExecuteInterface
 
         $txt2imgModel = new Txt2ImgModel();
         $txt2imgModel->setPrompt($prompt);
-        $txt2imgModel->setNegativePrompt($prompt);
+        $txt2imgModel->setNegativePrompt($negativePrompt);
         $payload = $txt2imgModel->toJson();
 
         $name = str_pad((string)$numberOfGeneratedImages, 10, '0', STR_PAD_LEFT);
