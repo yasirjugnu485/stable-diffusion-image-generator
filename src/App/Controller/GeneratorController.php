@@ -425,6 +425,8 @@ class GeneratorController implements GeneratorInterface
      */
     public function getLoraKeywords(array $configData, bool $asJson = false): array|string
     {
+        $configLoraKeyword = is_string($configData['loraKeywords']) ? $configData['loraKeywords'] : '';
+
         $loraKeywords = [];
         foreach (self::$loras as $lora) {
             $addKeywords = [
@@ -438,7 +440,7 @@ class GeneratorController implements GeneratorInterface
                 ];
                 foreach ($keywords as $keyword => $trainingUnits) {
                     $selected = false;
-                    if (str_contains($configData['loraKeywords'], $keyword)) {
+                    if (str_contains($configLoraKeyword, $keyword)) {
                         $selected = true;
                     }
                     $addGroup['keywords'][] = [
