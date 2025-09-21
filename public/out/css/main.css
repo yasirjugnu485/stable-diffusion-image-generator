@@ -20,7 +20,7 @@ body {
 .toast {
     position: fixed;
     z-index: 10;
-    top: 69px;
+    top: 12px;
     right: 12px;
     max-width: 90% !important;
 }

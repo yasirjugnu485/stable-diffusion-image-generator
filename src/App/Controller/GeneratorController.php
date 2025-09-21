@@ -91,32 +91,13 @@ class GeneratorController implements GeneratorInterface
         if (!$config) {
             self::$error = self::ERROR_ON_LOAD_CONFIG;
             return;
-        }
-
-        $success = $this->collectCheckpoints($config['host']);
-        if (!$success) {
-            $configController->loadConfigLocal();
-            $config = $configController->getConfig();
-            $success = $this->collectCheckpoints($config['host']);
-            if (!$success) {
-                $configController->loadConfigInc();
-                $config = $configController->getConfig();
-                $success = $this->collectCheckpoints($config['host']);
-                if (!$success) {
-                    self::$error = self::ERROR_ON_LOAD_CHECKPOINTS;
-                    return;
-                }
-            }
-        }
-
-        $success = $this->collectSamplers($config['host']);
-        if (!$success) {
+        } elseif (!$this->collectCheckpoints($config['host'])) {
+            self::$error = self::ERROR_ON_LOAD_CHECKPOINTS;
+            return;
+        } elseif (!$this->collectSamplers($config['host'])) {
             self::$error = self::ERROR_ON_LOAD_SAMPLERS;
             return;
-        }
-
-        $success = $this->collectPrompts();
-        if (!$success) {
+        } elseif (!$this->collectPrompts()) {
             self::$error = self::ERROR_ON_LOAD_PROMPTS;
             return;
         }
@@ -179,25 +160,31 @@ class GeneratorController implements GeneratorInterface
     /**
      * Collect loras
      *
-     * @var string $host Host
-     * @return bool
+     * @return void
+     *@var string $host Host
      */
-    private function collectLoras(string $host): bool
+    private function collectLoras(string $host): void
     {
         self::$loras = [];
 
         $stableDiffusionService = new StableDiffusionService();
         $stableDiffusionService->getLoras($host);
         if (!file_exists(ROOT_DIR . 'loras.json')) {
-            return false;
+            return;
         }
 
         $loras = json_decode(file_get_contents(ROOT_DIR . 'loras.json'), true);
         foreach ($loras as $lora) {
-            self::$loras[] = $lora['name'];
+            $keywords = [];
+            if (isset($lora['metadata']['ss_tag_frequency']) && is_array($lora['metadata']['ss_tag_frequency'])) {
+                $keywords = $lora['metadata']['ss_tag_frequency'];
+            }
+            self::$loras[$lora['name']] = [
+                'name' => $lora['name'],
+                'alias' => $lora['alias'],
+                'keywords' => $keywords,
+            ];
         }
-
-        return true;
     }
 
     /**
@@ -290,6 +277,7 @@ class GeneratorController implements GeneratorInterface
         $samplers = $this->getSamplers($configData);
         $refinerCheckpoints = $this->getRefinerCheckpoints($configData);
         $loras = $this->getLoras($configData);
+        $loraKeywords = $this->getLoraKeywords($configData, true);
         $prompts = $this->getPrompts($configData);
         $negativePrompts = $this->getNegativePrompts($configData);
         $initImages = $this->getInitImages($configData);
@@ -300,7 +288,8 @@ class GeneratorController implements GeneratorInterface
         return [
             'config' => $configData,
             'checkpoints' => $checkpoints,
-            'refinerCheckpoints' => $refinerCheckpoints,
+            'refiner_checkpoints' => $refinerCheckpoints,
+            'lora_keywords' => $loraKeywords,
             'prompts' => $prompts,
             'negative_prompts' => $negativePrompts,
             'initImages' => $initImages,
@@ -410,21 +399,60 @@ class GeneratorController implements GeneratorInterface
         foreach (self::$loras as $lora) {
             $selected = false;
             if (is_string($configData['lora'])) {
-                if ($lora === $configData['lora']) {
+                if ($lora['alias'] === $configData['lora']) {
                     $selected = true;
                 }
             } elseif (is_array($configData['lora'])) {
-                if (in_array($lora, $configData['lora'])) {
+                if (in_array($lora['alias'], $configData['lora'])) {
                     $selected = true;
                 }
             }
             $loras[] = [
-                'name' => $lora,
+                'name' => $lora['alias'],
                 'selected' => $selected,
             ];
         }
 
         return $loras;
+    }
+
+    /**
+     * Get lora keywords
+     *
+     * @param array $configData Config data
+     * @param bool $asJson Return as JSON string
+     * @return array|string
+     */
+    public function getLoraKeywords(array $configData, bool $asJson = false): array|string
+    {
+        $loraKeywords = [];
+        foreach (self::$loras as $lora) {
+            $addKeywords = [
+                'alias' => $lora['alias'],
+                'groups' => [],
+            ];
+            foreach ($lora['keywords'] as $group => $keywords) {
+                $addGroup = [
+                    'name' => $group,
+                    'keywords' => [],
+                ];
+                foreach ($keywords as $keyword => $number) {
+                    $selected = false;
+                    if (str_contains($configData['loraKeywords'], $keyword)) {
+                        $selected = true;
+                    }
+                    $addGroup['keywords'][] = [
+                        'name' => $keyword,
+                        'selected' => $selected,
+                    ];
+                }
+                $addKeywords['groups'][] = $addGroup;
+            }
+
+            $loraKeywords[] = $addKeywords;
+        }
+
+       return $asJson ? json_encode($loraKeywords, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) : $loraKeywords;
     }
 
     /**
@@ -554,7 +582,6 @@ class GeneratorController implements GeneratorInterface
     {
         $configModel = new ConfigModel();
         $configModel->create();
-        sleep(5);
 
         new SuccessController(self::SUCCESS_SAVE_CONFIG_APP_PHP);
 

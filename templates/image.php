@@ -111,14 +111,26 @@
                         </p>
                         <?php
                     }
-                    if (isset($image['data']['prompt'])) {
+                    if (isset($image['data']['prompt']) && $image['data']['prompt']) {
                         ?>
                         <p>
                             <strong>
                                 Prompt:
                             </strong>
                             <?php
-                            echo $image['data']['prompt'];
+                            echo htmlentities($image['data']['prompt']);
+                            ?>
+                        </p>
+                        <?php
+                    }
+                    if (isset($image['data']['negativePrompt']) && $image['data']['negativePrompt']) {
+                        ?>
+                        <p>
+                            <strong>
+                                Negative Prompt:
+                            </strong>
+                            <?php
+                            echo htmlentities($image['data']['negativePrompt']);
                             ?>
                         </p>
                         <?php

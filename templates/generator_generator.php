@@ -228,13 +228,13 @@ if (!isset($params['error']) || !$params['error']) {
                                             None
                                         </option>
                                         <?php
-                                        foreach ($params['negative_prompts'] as $prompt) {
+                                        foreach ($params['negative_prompts'] as $negativePrompt) {
                                             ?>
-                                            <option value="<?php echo $prompt['name']; ?>"
-                                                <?php if ($params['config']['prompt'] === $prompt['name']) {
+                                            <option value="<?php echo $negativePrompt['name']; ?>"
+                                                <?php if ($params['config']['negativePrompt'] === $negativePrompt['name']) {
                                                     echo 'selected';
                                                 } ?>>
-                                                <?php echo $prompt['name']; ?>
+                                                <?php echo $negativePrompt['name']; ?>
                                             </option>
                                             <?php
                                         }
@@ -411,7 +411,7 @@ if (!isset($params['error']) || !$params['error']) {
                                             id="refinerCheckpoint"
                                             multiple>
                                         <?php
-                                        foreach ($params['refinerCheckpoints'] as $refinerCheckpoint) {
+                                        foreach ($params['refiner_checkpoints'] as $refinerCheckpoint) {
                                             ?>
                                             <option value="<?php echo $refinerCheckpoint['name']; ?>"
                                                 <?php if ($refinerCheckpoint['selected']) {
@@ -457,6 +457,7 @@ if (!isset($params['error']) || !$params['error']) {
                         </div>
                         <div class="card-body text-dark">
                             <div class="row">
+
                                 <div class="col-12 col-md-6 mb-4">
                                     <label for="lora"
                                            class="form-label">
@@ -484,6 +485,18 @@ if (!isset($params['error']) || !$params['error']) {
                                     <small class="text-warning">
                                         Not all Loras are compatible with all checkpoints.
                                     </small>
+                                </div>
+
+                                <div class="col-12 mb-4">
+                                    <label for="lora"
+                                           class="form-label">
+                                        Lora Keywords
+                                    </label>
+                                    <div id="loraKeywordsWarning"
+                                         class="alert alert-warning">
+                                        Select Loras to display keywords
+                                    </div>
+                                    <div id="loraKeywordsInput"></div>
                                 </div>
 
                             </div>
@@ -600,9 +613,9 @@ if (!isset($params['error']) || !$params['error']) {
                                                id="hrResizeY"
                                                name="hrResizeY"
                                                min="0"
-                                               max="8192
+                                               max="8192"
                                                value="<?php echo $params['config']['hrResizeY']; ?>"
-                                        onchange="generator.hrSizeOnchange()">
+                                               onchange="generator.hrSizeOnchange()">
                                         <div class="form-text">
                                             Height of the resized image. Only available if hires fix is enabled and hr
                                             scale is
@@ -704,6 +717,8 @@ if (!isset($params['error']) || !$params['error']) {
 <script>
     class Generator {
         constructor() {
+            this.loraKeywords = [];
+            this.lorasSelected = null;
             this.checkpointSelector = new MultiSelectTag('checkpoint', {
                 maxSelection: 100,
                 required: false,
@@ -734,20 +749,85 @@ if (!isset($params['error']) || !$params['error']) {
                 placeholder: 'Select Loras',
                 onChange: function (selected) {
                     console.log('Selection changed:', selected);
+                    generator.refreshLoraKeywords();
                 }
             });
         }
 
+        refreshLoraKeywords = () => {
+            let select = document.getElementById("lora");
+            let selectedLoras = [];
+            let options = select && select.options;
+            let opt;
+            for (let i = 0, iLen = options.length; i < iLen; i++) {
+                opt = options[i];
+                if (opt.selected) {
+                    selectedLoras.push(opt.value || opt.text);
+                }
+            }
+
+            let index = 0;
+            let html = '';
+            if (this.loraKeywords.length > 0) {
+                for (let ia = 0; ia < this.loraKeywords.length; ia++) {
+                    if (!selectedLoras.includes(this.loraKeywords[ia]["alias"])) {
+                        continue;
+                    } else if ( this.loraKeywords[ia].groups === "undefined") {
+                        continue;
+                    } else if ( this.loraKeywords[ia].groups.length == 0) {
+                        continue;
+                    }
+                    html += '<div><div><strong>Lora: </strong>' +  this.loraKeywords[ia].alias + '</div>';
+                    for (let ig = 0; ig <  this.loraKeywords[ia].groups.length; ig++) {
+                        if ( this.loraKeywords[ia].groups[ig].keywords == "undefined") {
+                            continue;
+                        } else if ( this.loraKeywords[ia].groups[ig].keywords.length == 0) {
+                            continue;
+                        }
+                        html += '<div class="ms-2 mt-2"><div><strong>Group: </strong>' +  this.loraKeywords[ia].groups[ig].name + '</div><div class="ms-2 pt-2">';
+                        for (let ik = 0; ik <  this.loraKeywords[ia].groups[ig].keywords.length; ik++) {
+                            html += '<div class="form-check float-start me-3 mb-3">' +
+                                '<input type="checkbox" class="form-check-input" name="loraKeywords[' + ia + '][' + ig + '][' + ik + ']" id="check' + index + '"';
+                                if (this.loraKeywords[ia].groups[ig].keywords[ik].selected) {
+                                    html += ' checked';
+                                }
+                                html += ' onchange="generator.loraKeywordOnchange(' + ia + ', ' + ig + ', ' + ik + ')">' +
+                                    '<label class="form-check-label" for="check' + index + '">' +  this.loraKeywords[ia].groups[ig].keywords[ik].name + '</label>' +
+                            '</div>';
+                            index++;
+                        }
+                        html += '<div class="clearfix"></div></div></div>';
+                    }
+                    html += '</div>';
+                }
+            }
+            if (index > 0) {
+                document.getElementById("loraKeywordsInput").innerHTML = html;
+                document.getElementById("loraKeywordsInput").classList.remove("d-none");
+                document.getElementById("loraKeywordsWarning").classList.add("d-none");
+            } else {
+                document.getElementById("loraKeywordsInput").innerHTML = "";
+                document.getElementById("loraKeywordsInput").classList.add("d-none");
+                document.getElementById("loraKeywordsWarning").classList.remove("d-none");
+            }
+        }
+
+        loraKeywordOnchange(ia, ig, ik) {
+            let qsString = '[name="loraKeywords[' + ia + '][' + ig + '][' + ik + ']"]';
+            let checked = document.querySelector(qsString).checked;
+            this.loraKeywords[ia].groups[ig].keywords[ik].selected = checked;
+        }
+
         numberOfImagesOnchange = () => {
-            if (document.getElementById('numberOfImages').value > 1000000) {
-                document.getElementById('numberOfImages').value = 1000000;
-            } else if (document.getElementById('numberOfImages').value == '') {
-                document.getElementById('numberOfImages').value = 0;
+            if (document.getElementById("numberOfImages").value > 1000000) {
+                document.getElementById("numberOfImages").value = 1000000;
+            } else if (document.getElementById("numberOfImages").value == "") {
+                document.getElementById("numberOfImages").value = 0;
             }
         }
 
         modeOnchange = () => {
-            if (document.getElementById('mode').value === 'img2img') {
+            if (document.getElementById("mode").value === "img2img") {
                 document.querySelector('[data-type="initImage"]').classList.remove("d-none");
             } else {
                 document.querySelector('[data-type="initImage"]').classList.add("d-none");
@@ -755,42 +835,42 @@ if (!isset($params['error']) || !$params['error']) {
         }
 
         widthOnchange = () => {
-            if (document.getElementById('width').value > 8192) {
-                document.getElementById('width').value = 8192;
-            } else if (document.getElementById('width').value < 10) {
-                document.getElementById('width').value = 10;
-            } else if (document.getElementById('width').value == "") {
-                document.getElementById('width').value = 512;
+            if (document.getElementById("width").value > 8192) {
+                document.getElementById("width").value = 8192;
+            } else if (document.getElementById("width").value < 10) {
+                document.getElementById("width").value = 10;
+            } else if (document.getElementById("width").value == "") {
+                document.getElementById("width").value = 512;
             }
         }
 
         heightOnchange = () => {
-            if (document.getElementById('height').value > 8192) {
-                document.getElementById('height').value = 8192;
-            } else if (document.getElementById('height').value < 10) {
-                document.getElementById('height').value = 10;
-            } else if (document.getElementById('height').value == "") {
-                document.getElementById('height').value = 512;
+            if (document.getElementById("height").value > 8192) {
+                document.getElementById("height").value = 8192;
+            } else if (document.getElementById("height").value < 10) {
+                document.getElementById("height").value = 10;
+            } else if (document.getElementById("height").value == "") {
+                document.getElementById("height").value = 512;
             }
         }
 
         stepsOnchange = () => {
-            if (document.getElementById('steps').value > 100) {
-                document.getElementById('steps').value = 100;
-            } else if (document.getElementById('steps').value < 1) {
-                document.getElementById('steps').value = 1;
-            } else if (document.getElementById('steps').value == "") {
-                document.getElementById('steps').value = 20;
+            if (document.getElementById("steps").value > 100) {
+                document.getElementById("steps").value = 100;
+            } else if (document.getElementById("steps").value < 1) {
+                document.getElementById("steps").value = 1;
+            } else if (document.getElementById("steps").value == "") {
+                document.getElementById("steps").value = 20;
             }
         }
 
         refinerSwitchAtOnchange = () => {
-            if (document.getElementById('refinerSwitchAt').value > 100) {
-                document.getElementById('refinerSwitchAt').value = 100;
-            } else if (document.getElementById('refinerSwitchAt').value < 1) {
-                document.getElementById('refinerSwitchAt').value = 1;
-            } else if (document.getElementById('refinerSwitchAt').value == "") {
-                document.getElementById('refinerSwitchAt').value = 70;
+            if (document.getElementById("refinerSwitchAt").value > 100) {
+                document.getElementById("refinerSwitchAt").value = 100;
+            } else if (document.getElementById("refinerSwitchAt").value < 1) {
+                document.getElementById("refinerSwitchAt").value = 1;
+            } else if (document.getElementById("refinerSwitchAt").value == "") {
+                document.getElementById("refinerSwitchAt").value = 70;
             }
         }
 
@@ -807,46 +887,49 @@ if (!isset($params['error']) || !$params['error']) {
         }
 
         hrSizeOnchange = () => {
-            if (document.getElementById('hrResizeY').value > 8192) {
-                document.getElementById('hrResizeY').value = 8192;
-            } else if (document.getElementById('hrResizeY').value < 512) {
-                document.getElementById('hrResizeY').value = 0;
-            } else if (document.getElementById('hrResizeY').value == "") {
-                document.getElementById('hrResizeY').value = 0;
+            if (document.getElementById("hrResizeY").value > 8192) {
+                document.getElementById("hrResizeY").value = 8192;
+            } else if (document.getElementById("hrResizeY").value < 512) {
+                document.getElementById("hrResizeY").value = 0;
+            } else if (document.getElementById("hrResizeY").value == "") {
+                document.getElementById("hrResizeY").value = 0;
             }
-            if (document.getElementById('hrResizeX').value > 8192) {
-                document.getElementById('hrResizeX').value = 8192;
-            } else if (document.getElementById('hrResizeX').value < 512) {
-                document.getElementById('hrResizeX').value = 0;
-            } else if (document.getElementById('hrResizeX').value == "") {
-                document.getElementById('hrResizeX').value = 0;
+            if (document.getElementById("hrResizeX").value > 8192) {
+                document.getElementById("hrResizeX").value = 8192;
+            } else if (document.getElementById("hrResizeX").value < 512) {
+                document.getElementById("hrResizeX").value = 0;
+            } else if (document.getElementById("hrResizeX").value == "") {
+                document.getElementById("hrResizeX").value = 0;
             }
 
-            if (document.getElementById('hrResizeY').value > 0 && document.getElementById('hrResizeX').value > 0) {
-                document.getElementById('hrScale').value = 0;
+            if (document.getElementById("hrResizeY").value > 0 && document.getElementById("hrResizeX").value > 0) {
+                document.getElementById("hrScale").value = 0;
             }
         }
 
         hrScaleOnchange = () => {
-            if (document.getElementById('hrScale').value > 4) {
-                document.getElementById('hrScale').value = 4;
-            } else if (document.getElementById('hrScale').value < 0) {
-                document.getElementById('hrScale').value = 0;
-            } else if (document.getElementById('hrScale').value == "") {
-                document.getElementById('hrScale').value = 0;
+            if (document.getElementById("hrScale").value > 4) {
+                document.getElementById("hrScale").value = 4;
+            } else if (document.getElementById("hrScale").value < 0) {
+                document.getElementById("hrScale").value = 0;
+            } else if (document.getElementById("hrScale").value == "") {
+                document.getElementById("hrScale").value = 0;
             }
 
-            if (document.getElementById('hrScale').value > 0) {
-                document.getElementById('hrResizeY').value = 0;
-                document.getElementById('hrResizeX').value = 0;
+            if (document.getElementById("hrScale").value > 0) {
+                document.getElementById("hrResizeY").value = 0;
+                document.getElementById("hrResizeX").value = 0;
             }
         }
 
         save = () => {
-            document.getElementById("action").value = 'save';
-            document.getElementById('form').submit();
+            document.getElementById("action").value = "save";
+            document.getElementById("form").submit();
         }
     }
 
     const generator = new Generator();
+    generator.loraKeywords = <?php echo $params['lora_keywords']; ?>;
+    generator.refreshLoraKeywords();
+    console.log(generator.loraKeywords);
 </script>

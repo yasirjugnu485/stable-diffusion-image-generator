@@ -77,7 +77,6 @@ class SettingsController implements SettingsInterface
         }
         $configModel->setHost($host);
         $configModel->buildConfigApp();
-        sleep(5);
 
         new SuccessController(self::SUCCESS_SAVE_SETTINGS);
 

@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Controller\ConfigController;
+use App\Controller\GeneratorController;
+
 class ConfigModel
 {
     /**
@@ -135,6 +138,13 @@ class ConfigModel
     private string|array|false|null $lora = false;
 
     /**
+     * Lora keywords
+     *
+     * @var string|null
+     */
+    private string|null $loraKeywords = null;
+
+    /**
      * Restore faces
      *
      * @var bool
@@ -243,6 +253,10 @@ class ConfigModel
      */
     private function collectPostParameters(): void
     {
+        $configController = new ConfigController();
+        $configData = $configController->getConfig();
+        $generatorController = new GeneratorController();
+
         if (isset($_POST['numberOfImages'])) {
             $numberOfImages = (int)$_POST['numberOfImages'];
             if ($numberOfImages > 1000000) {
@@ -281,6 +295,8 @@ class ConfigModel
             if (is_string($_POST['sampler']) || is_array($_POST['sampler'])) {
                 $this->sampler = $_POST['sampler'];
             }
+        } else {
+            $this->sampler = null;
         }
 
         if (isset($_POST['prompt'])) {
@@ -341,19 +357,31 @@ class ConfigModel
         if (isset($_POST['restoreFaces'])) {
             if ($_POST['restoreFaces'] === '1') {
                 $this->restoreFaces = true;
+            } else {
+                $this->restoreFaces = false;
             }
+        } else {
+            $this->restoreFaces = false;
         }
 
         if (isset($_POST['tiling'])) {
             if ($_POST['tiling'] === '1') {
                 $this->tiling = true;
+            } else {
+                $this->tiling = false;
             }
+        } else {
+            $this->tiling = false;
         }
 
         if (isset($_POST['refinerCheckpoint'])) {
             if (is_string($_POST['refinerCheckpoint']) || is_array($_POST['refinerCheckpoint'])) {
                 $this->refinerCheckpoint = $_POST['refinerCheckpoint'];
+            } else {
+                $this->refinerCheckpoint = null;
             }
+        } else {
+            $this->refinerCheckpoint = null;
         }
 
         if ($this->refinerSwitchAt) {
@@ -368,7 +396,37 @@ class ConfigModel
         if (isset($_POST['lora'])) {
             if (is_string($_POST['lora']) || is_array($_POST['lora'])) {
                 $this->lora = $_POST['lora'];
+            } else {
+                $this->lora = null;
             }
+        } else {
+            $this->lora = null;
+        }
+
+        if (isset($_POST['loraKeywords'])) {
+            $loraKeywords = ' ';
+            $allKeywords = $generatorController->getLoraKeywords($configData);
+            foreach ($_POST['loraKeywords'] as $loraIndex => $lora) {
+                foreach ($lora as $groupIndex => $group) {
+                    foreach ($group as $keywordIndex => $keyword) {
+                        if (isset($allKeywords[$loraIndex]['groups'][$groupIndex]['keywords'][$keywordIndex]['name'])) {
+                            if (!str_contains($loraKeywords,
+                                $allKeywords[$loraIndex]['groups'][$groupIndex]['keywords'][$keywordIndex]['name'])) {
+                                $loraKeywords .=
+                                    $allKeywords[$loraIndex]['groups'][$groupIndex]['keywords'][$keywordIndex]['name'] .
+                                    ' ';
+                            }
+                        }
+                    }
+                }
+            }
+            if (!trim($loraKeywords)) {
+                $this->loraKeywords = null;
+            } else {
+                $this->loraKeywords = $loraKeywords;
+            }
+        } else {
+            $this->loraKeywords = null;
         }
 
         if ($this->mode === 'txt2img') {
@@ -385,36 +443,53 @@ class ConfigModel
             if (isset($_POST['hrUpscaler'])) {
                 if ($_POST['hrUpscaler'] && $_POST['hrUpscaler'] !== 'None') {
                     $this->hrUpscaler = $_POST['hrUpscaler'];
+                } else {
+                    $this->hrUpscaler = null;
                 }
+            } else {
+                $this->hrUpscaler = null;
             }
 
             if (isset($_POST['hrResizeX'])) {
                 $hrResizeX = (int)$_POST['hrResizeX'];
                 if ($hrResizeX <= 8192 && $hrResizeX > 512) {
                     $this->hrResizeX = $hrResizeX;
+                } else {
+                    $this->hrResizeX = null;
                 }
+            } else {
+                $this->hrResizeX = null;
             }
 
             if (isset($_POST['hrResizeY'])) {
                 $hrResizeY = (int)$_POST['hrResizeY'];
                 if ($hrResizeY <= 8192 && $hrResizeY > 512) {
                     $this->hrResizeY = $hrResizeY;
+                } else {
+                    $this->hrResizeY = null;
                 }
+            } else {
+                $this->hrResizeY = null;
             }
 
             if (isset($_POST['hrScale'])) {
                 $hrScale = (int)$_POST['hrScale'];
                 if ($hrScale <= 4 && $hrScale > 0) {
                     $this->hrScale = $hrScale;
-                    $this->hrResizeX = 0;
-                    $this->hrResizeY = 0;
+                } else {
+                    $this->hrScale = null;
                 }
+            } else {
+                $this->hrScale = null;
             }
-
             if (isset($_POST['hrSamplerName'])) {
-                if (is_string($_POST['hrSamplerName']) || is_array($_POST['hrSamplerName'])) {
+                if ((is_string($_POST['hrSamplerName']) && $_POST['hrSamplerName'])) {
                     $this->hrSamplerName = $_POST['hrSamplerName'];
+                } else {
+                    $this->hrSamplerName = null;
                 }
+            } else {
+                $this->hrSamplerName = null;
             }
         }
     }
@@ -445,7 +520,6 @@ class ConfigModel
             } elseif (is_float($value) || is_double($value)) {
                 $this->buildFloatVariable($key, $value, $config);
             }
-
         }
 
         file_put_contents(ROOT_DIR . 'config.app.php', $config);

@@ -58,14 +58,14 @@ class LoraController implements LoraInterface
                     self::$lora = [$lora];
                 }
                 if (is_array(self::$lora)) {
-                    foreach (self::$lora as $loraName) {
+                    foreach (self::$lora as $loraAlias) {
                         foreach ($loras as $lora) {
-                            if ($loraName === $lora['name']) {
+                            if ($loraAlias === $lora['alias']) {
                                 continue 2;
                             }
                         }
                         throw new StableDiffusionServiceException(
-                            sprintf(self::ERROR_LORA_NOT_FOUND, $loraName)
+                            sprintf(self::ERROR_LORA_NOT_FOUND, $loraAlias)
                         );
                     }
                 }

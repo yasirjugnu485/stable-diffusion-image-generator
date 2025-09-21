@@ -1,0 +1,8 @@
+CLI:
+
+- Sampler: Remove false value
+- Sampler: null for default sampler Euler
+- Refiner Checkpoint: Remove false value
+- Refiner Checkpoint: null for default sampler Euler
+- HR: Manage resize numbers
+- Show lora training in generator

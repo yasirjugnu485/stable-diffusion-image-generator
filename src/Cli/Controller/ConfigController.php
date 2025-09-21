@@ -145,6 +145,13 @@ class ConfigController implements ConfigInterface
     private string|array|null $lora = null;
 
     /**
+     * Used lora keywords
+     *
+     * @var string|null
+     */
+    private string|null $loraKeywords = null;
+
+    /**
      * Restore faces
      *
      * @var bool

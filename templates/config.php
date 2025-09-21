@@ -24,3 +24,4 @@ $this->hrResizeY = ['hrResizeY'];
 $this->hrScale = ['hrScale'];
 $this->hrSamplerName = ['hrSamplerName'];
 $this->lora = ['lora'];
+$this->loraKeywords = ['loraKeywords'];

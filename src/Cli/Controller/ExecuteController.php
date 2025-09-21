@@ -48,22 +48,24 @@ class ExecuteController implements ExecuteInterface
             $promptController = new PromptController();
             $nextPrompt = $promptController->getNextPrompt();
             $nextNegativePrompt = $promptController->getNextNegativePrompt();
+            $loraKeywords = $config['loraKeywords'] ?? '';
             $loraController = new LoraController();
             $loraString = $loraController->getLoraString();
             if (($config['mode'] === 'txt2img' && !$config['loop']) ||
                 ($config['mode'] === 'txt2img' && $config['loop'] && !$numberOfGeneratedImages)) {
-                $this->callTxt2img($nextPrompt . $loraString, $nextNegativePrompt, $numberOfGeneratedImages);
+                $this->callTxt2img($nextPrompt . $loraKeywords . $loraString,
+                    $nextNegativePrompt,
+                    $numberOfGeneratedImages);
             } elseif ($config['mode'] === 'img2img' || (
                     $config['mode'] === 'txt2img' && $config['loop'] && $numberOfGeneratedImages)) {
                 $initImagesController = new InitImagesController();
                 $nextInitImage = $initImagesController->getNextInitImage();
                 $currentInitImageFile = $initImagesController->getCurrentInitImageFile();
-                $this->callImg2img($nextPrompt . $loraString,
+                $this->callImg2img($nextPrompt . $loraKeywords . $loraString,
                     $nextNegativePrompt,
                     $nextInitImage,
                     $currentInitImageFile,
-                    $numberOfGeneratedImages
-                );
+                    $numberOfGeneratedImages);
             }
 
             new EchoController();

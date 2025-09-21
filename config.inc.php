@@ -89,12 +89,11 @@ $this->checkpoint = null;
 /**
  * Sampler
  *
- * @description String of the sampler name, array from multiple samplers, null for all samplers are used in turn, false
- *              for default sampler (Euler).
+ * @description String of the sampler name, array from multiple samplers, null for default sampler (Euler).
  *
- * @var string|array|false|null
+ * @var string|array|null
  */
-$this->sampler = false;
+$this->sampler = null;
 
 /**
  * String of prompt generator directory to merge prompt or set null to random select prompt directory
@@ -158,12 +157,12 @@ $this->steps = 20;
 /**
  * Refiner checkpoint
  *
- * @description String of the refiner checkpoint name, array from multiple refiner checkpoints, null for all checkpoints
- *              are used in turn, false for deactivate refiner checkpoint.
+ * @description String of the refiner checkpoint name, array from multiple refiner checkpoints, null for deactivate
+ *              refiner checkpoint.
  *
- * @var string|array|false|null
+ * @var string|array|null
  */
-$this->refinerCheckpoint = false;
+$this->refinerCheckpoint = null;
 
 /**
  * Refiner switch at
@@ -205,6 +204,15 @@ $this->tiling = false;
  * @var string|array|null
  */
 $this->lora = null;
+
+/**
+ * Lora keywords
+ *
+ * @description Keywords to trigger special trained action of loras.
+ *
+ * @var string|null
+ */
+$this->loraKeywords = null;
 //----------------------------------------------------------------------------------------------------------------------
 
 

@@ -10,8 +10,8 @@
 
 ?>
 <div id=toast-success"
-     class="toast toast-success bg-success">
-    <div class="toast-header">
+     class="toast toast-success border border-success">
+    <div class="toast-header bg-success text-light">
         Success
         <button type="button"
                 class="btn-close"
@@ -23,9 +23,9 @@
 </div>
 
 <div id=toast-error"
-     class="toast toast-error bg-error">
-    <div class="toast-header">
-        Success
+     class="toast toast-error border border-danger">
+    <div class="toast-header bg-danger text-light">
+        Error
         <button type="button"
                 class="btn-close"
                 data-bs-dismiss="toast">

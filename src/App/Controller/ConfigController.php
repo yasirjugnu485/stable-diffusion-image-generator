@@ -71,6 +71,13 @@ class ConfigController
     private string|array|false|null $lora = null;
 
     /**
+     * Used lora keywords
+     *
+     * @var string|null
+     */
+    private string|null $loraKeywords = null;
+
+    /**
      * Used mode
      *
      * @var string
@@ -225,49 +232,11 @@ class ConfigController
     private function initConfigData(): void
     {
         if (!file_exists(ROOT_DIR . 'config.app.php')) {
-            if (file_exists(ROOT_DIR . 'config.local.php')) {
-                copy(ROOT_DIR . 'config.local.php', ROOT_DIR . 'config.app.php');
-            } else {
-                copy(ROOT_DIR . 'config.app.php', ROOT_DIR . 'config.inc.php');
-            }
+            copy(ROOT_DIR . 'config.inc.php', ROOT_DIR . 'config.app.php');
         }
 
         include ROOT_DIR . 'config.app.php';
         $this->generateConfigData();
-    }
-
-    /**
-     * Load config.local.php
-     *
-     * @return bool
-     */
-    public function loadConfigLocal(): bool
-    {
-        if (file_exists(ROOT_DIR . 'config.local.php')) {
-            copy(ROOT_DIR . 'config.local.php', ROOT_DIR . 'config.app.php');
-            include ROOT_DIR . 'config.app.php';
-            $this->generateConfigData();
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Load config.inc.php
-     *
-     * @return bool
-     */
-    public function loadConfigInc(): bool
-    {
-        if (file_exists(ROOT_DIR . 'config.inc.php')) {
-            copy(ROOT_DIR . 'config.inc.php', ROOT_DIR . 'config.app.php');
-            include ROOT_DIR . 'config.app.php';
-            $this->generateConfigData();
-            return true;
-        }
-
-        return false;
     }
 
     /**
