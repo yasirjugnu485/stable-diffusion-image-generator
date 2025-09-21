@@ -68,11 +68,6 @@ class RefinerController implements RefinerInterface
                     self::$checkpoint = $checkpoint;
                 } elseif (is_string($checkpoint)) {
                     self::$checkpoint = [$checkpoint];
-                } elseif (is_null($checkpoint)) {
-                    self::$checkpoint = [];
-                    foreach ($checkpoints as $checkpoint) {
-                        self::$checkpoint[] = $checkpoint['model_name'];
-                    }
                 }
 
                 if (is_array(self::$checkpoint)) {

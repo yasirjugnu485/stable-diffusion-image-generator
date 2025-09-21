@@ -156,7 +156,7 @@ class BaseModel
         $this->refinerSwitchAt = $config['refinerSwitchAt'];
         $this->restoreFaces = $config['restoreFaces'];
         $this->tiling = $config['tiling'];
-        if ($config['enableHr']) {
+        if ($config['enableHr'] && ($config['hrScale'] || ($config['hrResizeX'] && $config['hrResizeY']))) {
             if ($config['hrScale'] !== null) {
                 $this->enableHr = true;
                 $this->hrUpscaler = $config['hrUpscaler'] ?? 'Latent';

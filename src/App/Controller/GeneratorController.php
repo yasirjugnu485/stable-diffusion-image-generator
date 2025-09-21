@@ -436,7 +436,7 @@ class GeneratorController implements GeneratorInterface
                     'name' => $group,
                     'keywords' => [],
                 ];
-                foreach ($keywords as $keyword => $number) {
+                foreach ($keywords as $keyword => $trainingUnits) {
                     $selected = false;
                     if (str_contains($configData['loraKeywords'], $keyword)) {
                         $selected = true;
@@ -444,6 +444,7 @@ class GeneratorController implements GeneratorInterface
                     $addGroup['keywords'][] = [
                         'name' => $keyword,
                         'selected' => $selected,
+                        'training_units' => $trainingUnits
                     ];
                 }
                 $addKeywords['groups'][] = $addGroup;

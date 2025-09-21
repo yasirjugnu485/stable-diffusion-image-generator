@@ -69,24 +69,19 @@ class SamplerController implements SamplerInterface
                     self::$sampler = $sampler;
                 } elseif (is_string($sampler)) {
                     self::$sampler = [$sampler];
-                } elseif (is_null($sampler)) {
-                    self::$sampler = [];
-                    foreach ($samplers as $sampler) {
-                        self::$sampler[] = $sampler['name'];
-                    }
+                } else {
+                    self::$sampler = ['Euler'];
                 }
 
-                if (is_array(self::$sampler)) {
-                    foreach (self::$sampler as $samplerName) {
-                        foreach ($samplers as $sampler) {
-                            if ($samplerName === $sampler['name']) {
-                                continue 2;
-                            }
+                foreach (self::$sampler as $samplerName) {
+                    foreach ($samplers as $sampler) {
+                        if ($samplerName === $sampler['name']) {
+                            continue 2;
                         }
-                        throw new StableDiffusionServiceException(
-                            sprintf(self::ERROR_CONFIGURED_SAMPLER_NOT_FOUND, $samplerName)
-                        );
                     }
+                    throw new StableDiffusionServiceException(
+                        sprintf(self::ERROR_CONFIGURED_SAMPLER_NOT_FOUND, $samplerName)
+                    );
                 }
             }
         }

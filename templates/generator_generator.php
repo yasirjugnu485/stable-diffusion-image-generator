@@ -792,7 +792,7 @@ if (!isset($params['error']) || !$params['error']) {
                                     html += ' checked';
                                 }
                                 html += ' onchange="generator.loraKeywordOnchange(' + ia + ', ' + ig + ', ' + ik + ')">' +
-                                    '<label class="form-check-label" for="check' + index + '">' +  this.loraKeywords[ia].groups[ig].keywords[ik].name + '</label>' +
+                                    '<label class="form-check-label" for="check' + index + '">' +  this.loraKeywords[ia].groups[ig].keywords[ik].name + ' (' + this.loraKeywords[ia].groups[ig].keywords[ik].training_units + ')</label>' +
                             '</div>';
                             index++;
                         }
