@@ -113,7 +113,7 @@ class LoraController implements LoraInterface
         $loraString = '';
         foreach (self::$lora as $loraName) {
             foreach (self::$loraData as $lora) {
-                if ($loraName === $lora['name']) {
+                if ($loraName === $lora['alias']) {
                     $loraString .= '<lora:' . $lora['alias'] . ':1>';
                     continue 2;
                 }
