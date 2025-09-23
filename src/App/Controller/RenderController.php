@@ -28,8 +28,6 @@ class RenderController
         $errorController = new ErrorController();
         $error = $errorController->getError();
 
-        var_export($error);
-
         return [
             'navbar' => $navbar,
             'success' => $success,
