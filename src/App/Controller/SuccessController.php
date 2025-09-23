@@ -59,7 +59,7 @@ class SuccessController
         if (isset($_SESSION['SuccessController'])) {
             $error = $_SESSION['SuccessController'];
             unset($_SESSION['SuccessController']);
-            return $error;
+            return htmlentities($error);
         }
 
         return null;

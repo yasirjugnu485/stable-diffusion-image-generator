@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Cli\Controller\CheckpointController;
-
 class RenderController
 {
     /**
@@ -29,6 +27,8 @@ class RenderController
         $success = $successController->getSuccess();
         $errorController = new ErrorController();
         $error = $errorController->getError();
+
+        var_export($error);
 
         return [
             'navbar' => $navbar,

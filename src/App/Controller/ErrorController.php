@@ -59,7 +59,7 @@ class ErrorController
         if (isset($_SESSION['ErrorController'])) {
             $error = $_SESSION['ErrorController'];
             unset($_SESSION['ErrorController']);
-            return $error;
+            return htmlentities($error);
         }
 
         return null;
