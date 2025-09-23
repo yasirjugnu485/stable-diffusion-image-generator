@@ -197,7 +197,7 @@ $this->tiling = false;
 // Lora
 //----------------------------------------------------------------------------------------------------------------------
 /**
- * Sampler
+ * Lora
  *
  * @description String of the lora name, array from multiple loras, null for disable lora.
  *
