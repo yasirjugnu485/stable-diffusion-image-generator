@@ -257,6 +257,7 @@ class GeneratorController implements GeneratorInterface
         }
         $stableDiffusionService = new StableDiffusionService();
         $ping = $stableDiffusionService->ping($configData['host']);
+        var_export($configData['host']);
         if (!$ping) {
             new ErrorController(sprintf(self::ERROR_HOST_NOT_REACHABLE, $configData['host']));
             new RedirectController('/settings');

@@ -61,5 +61,5 @@ interface GeneratorInterface
      *
      * @var string
      */
-    const string ERROR_HOST_NOT_REACHABLE = 'The Stable Diffusion host "%$1s" is not reachable. Check your settings and setup host.';
+    const string ERROR_HOST_NOT_REACHABLE = 'The Stable Diffusion host "%1$s" is not reachable. Check your settings and setup host.';
 }
