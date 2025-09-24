@@ -1,6 +1,9 @@
 # Stable Diffusion Image Creator
+<div style="color:lightgray">A GNU Project by xtrose® Media Studio</div>  
+
 ### Web GUI and CLI API Mass Image Generator, Prompt Merger, Initialize Images Merger, Lora Handler, Text 2 Image Mode, Image 2 Image Mode, Loop Mode, Images Albums, Stable Diffusion Data Inspector
 ***
+
 
 
 ## Description
@@ -8,58 +11,91 @@
 Stable Diffusion Image Creator is a web-based GUI paired with a command-line application designed for high-volume image 
 generation via Stable Diffusion APIs.
 
-#### Prompt Merger
+### Prompt Merger
 A built-in Prompt Merger enables the generation of random prompts by combining entries from multiple text files. It 
 supports an unlimited number of combinations, is fully configurable via the web GUI, and can be used for both prompts 
 and negative prompts.  
 
 ![Prompt Merger](./.readme/prompt_merger.jpg "Prompt Merger")
-#### Initialize Images
+
+### Initialize Images
 For the Image2Image mode, you can create initialization directories that hold multiple input images for generation. 
 These images are then processed one by one in sequence for Image2Image tasks.  
 
 ![Initialize Images](./.readme/init_images.jpg "Initialize Images")
-#### Loop Mode
+
+### Loop Mode
 The experimental Loop mode generates the first image using either Text2Image or Image2Image, combined with the Prompt 
 Merger and an optional initialization image. For all subsequent generations, the last recently generated image is used 
 as the new initialization image in Image2Image mode.
-#### Checkpoint Cycle
+
+### Checkpoint Cycle
 The web-based GUI's generator supports configuring multiple checkpoints (models), which are cycled through automatically 
 during batch generation. This enables a wide range of stylistic variation and offers a deeper understanding of each 
 model's strengths and output characteristics.  
 
-#### Sampler Cycle
+![Checkpoint Cycle](./.readme/checkpoints.jpg "Checkpoint Cycle")
+
+### Sampler Cycle
 The web-based GUI's generator supports configuring multiple samplers (methods), which are cycled through automatically 
 during batch generation. This feature provides a quick way to evaluate the behavior of different samplers. Please note 
 that not all checkpoints (models) are compatible with every sampler. In some cases, an incompatible combination may 
 produce a blank image.  
 
 ![Sampler Cycle](./.readme/sampler_cycle.jpg "Sampler Cycle")
-#### Lora Handler
+
+### Lora Handler
 The Stable Diffusion Image Creator’s web-based GUI gives you full control over Loras. It detects all available Loras in 
 your Stable Diffusion setup, lets you activate them with a click, and provides a complete list of associated keywords 
 with adjustable weights. Keyword hunting is no longer necessary. The tool automatically injects the configured Lora 
 settings into your prompt.
-#### Refiner
+
+![Lora Handler](./.readme/lora.jpg "Lora Handler")
+
+### Refiner Cycle
 The web-based GUI's generator allows you to define multiple refiner checkpoints (models), which are automatically 
 rotated on each image generation. You can also set the weights for the refiners to control their impact on the final 
 output.
-#### Upscaler
+
+![Refiner](./.readme/refiner.jpg "Refiner")
+
+### Upscaler
 The web-based GUI's generator allows you to define a fixed height resolution for upscaling your generated images. You 
 can configure the upscaler, sampler, and output image size directly within the interface. However, since the upscaling 
 process is resource-intensive and time-consuming, we recommend using external tools like Upscayl for enlarging images. 
 These tools are significantly faster and more energy-efficient.  
 
 ![Upscaler](./.readme/upscaler.jpg "Upscaler")
-#### Images Album
+
+### Images Album
 In addition, the web-based GUI features a fully customizable image gallery where you can store, copy, and manage your 
 generated images with ease. Each image is saved along with all relevant metadata, including the checkpoint (model), 
 prompt, refiner, and other generation parameters — allowing you to fully trace and reproduce the generation process at 
 any time.  
-#### Stable Diffusion Data Inspector
+
+### Stable Diffusion Data Inspector
 The Stable Diffusion Data Inspector is a web-based GUI that allows you to inspect the data of a Stable Diffusion 
 checkpoints (models), samplers, upscalers and loras.
 ***
+
+
+
+## Dependencies
+- Stable Diffusion Instance with API access (local or remote)
+- PHP >= 8.3
+***
+
+
+
+## Setup
+### Stable deiffusion
+
+### Web Application
+
+### CLI
+
+***
+
 
 
 ## Config
