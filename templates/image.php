@@ -44,9 +44,11 @@
                     <?php
                     if (file_exists(ROOT_DIR . $image['file'])) {
                         ?>
-                        <a class="photoswipe-children" href="/image.php?image=<?php echo urlencode($image['file']); ?>">
+                        <a class="photoswipe-children"
+                           href="/image.php?image=<?php echo urlencode($image['file']); ?>"
+                           data-pswp-width="<?php echo $image['data']['width'] * 1000; ?>"
+                           data-pswp-height="<?php echo $image['data']['width'] * 1000; ?>">
                             <img class="w-100 border rounded"
-                                 style="cursor: pointer;"
                                  src="/image.php?image=<?php echo urlencode($image['file']); ?>">
                         </a>
                         <?php
