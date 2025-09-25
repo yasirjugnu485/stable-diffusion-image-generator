@@ -44,10 +44,11 @@
                     <?php
                     if (file_exists(ROOT_DIR . $image['file'])) {
                         ?>
-                        <img class="w-100 border rounded"
-                             style="cursor: pointer;"
-                             src="/image.php?image=<?php echo urlencode($image['file']); ?>"
-                             onclick="openModal(); currentSlide(<?php echo $index; ?>)">
+                        <a class="photoswipe-children" href="/image.php?image=<?php echo urlencode($image['file']); ?>">
+                            <img class="w-100 border rounded"
+                                 style="cursor: pointer;"
+                                 src="/image.php?image=<?php echo urlencode($image['file']); ?>">
+                        </a>
                         <?php
                     } else {
                         $index--;

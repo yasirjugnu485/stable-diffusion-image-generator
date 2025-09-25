@@ -9,12 +9,13 @@
  */
 
 if (isset($params['images'])) {
-    include(ROOT_DIR . 'templates/images_lightbox.php');
+    include(ROOT_DIR . 'templates/images_photoswipe.php');
 
     ?>
     <div class="container mb-5">
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 pswp-gallery pswp-gallery--single-column"
+                 id="photoswipe-gallery">
                 <?php
                 if (count($params['images'])) {
                     $index = 1;
