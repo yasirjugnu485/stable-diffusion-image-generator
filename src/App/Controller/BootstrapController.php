@@ -61,6 +61,7 @@ class BootstrapController
      */
     public function run(): void
     {
+        new ViewController();
         new FileController();
         new AlbumController();
         new PromptController();

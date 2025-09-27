@@ -13,27 +13,29 @@ if (isset($params['images'])) {
 
     ?>
     <div class="container mb-5">
-        <div class="row">
-            <div class="col-12 pswp-gallery pswp-gallery--single-column"
-                 id="photoswipe-gallery">
-                <?php
-                if (count($params['images'])) {
-                    $index = 1;
-                    foreach ($params['images'] as $image) {
-                        include(ROOT_DIR . 'templates/image.php');
-                        $index++;
+        <div id="photoswipe-gallery"
+             class="row pswp-gallery pswp-gallery--single-column">
+            <?php
+            if (count($params['images'])) {
+                $index = 1;
+                foreach ($params['images'] as $image) {
+                    if ($params['view'] === 'thumbnails') {
+                        include(ROOT_DIR . 'templates/image_thumbnails.php');
+                    } else {
+                        include(ROOT_DIR . 'templates/image_list.php');
                     }
-                } else {
-                    ?>
-                    <div class="col-12">
-                        <div class="alert alert-warning">
-                            There are no images available
-                        </div>
-                    </div>
-                    <?php
+                    $index++;
                 }
+            } else {
                 ?>
-            </div>
+                <div class="col-12">
+                    <div class="alert alert-warning">
+                        There are no images available
+                    </div>
+                </div>
+                <?php
+            }
+            ?>
         </div>
     </div>
     <?php

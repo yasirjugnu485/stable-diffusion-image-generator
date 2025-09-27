@@ -22,16 +22,15 @@ class RenderController
     private function prepareParams(): array
     {
         $navbarController = new NavbarController();
-        $navbar = $navbarController->getData();
         $successController = new SuccessController();
-        $success = $successController->getSuccess();
         $errorController = new ErrorController();
-        $error = $errorController->getError();
+        $viewController = new ViewController();
 
         return [
-            'navbar' => $navbar,
-            'success' => $success,
-            'error' => $error,
+            'navbar' => $navbarController->getData(),
+            'success' => $successController->getSuccess(),
+            'error' => $errorController->getError(),
+            'view' => $viewController->getView(),
         ];
     }
 
