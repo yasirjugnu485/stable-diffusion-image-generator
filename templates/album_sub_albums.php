@@ -21,7 +21,7 @@ if (isset($params['album_sub_albums']) && count($params['album_sub_albums']) &&
                     foreach ($params['album_sub_albums'] as $subAlbum) {
                         ?>
                         <a href="<?php echo $subAlbum['link']; ?>" style="text-decoration: none">
-                            <button class="btn btn-outline-secondary mb-2"
+                            <button class="btn btn-outline-secondary mb-2 btn-pill"
                                     type="button">
                                 <?php echo $subAlbum['name']; ?>
                             </button>

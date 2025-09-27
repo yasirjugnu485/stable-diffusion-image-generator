@@ -21,7 +21,7 @@ if (isset($params['type']) && isset($params['type_directories']) && count($param
                     ?>
                     <a class="text-decoration-none"
                        href="/<?php echo $params['type']; ?>/<?php echo $directory; ?>">
-                        <button class="btn btn-outline-secondary mb-2">
+                        <button class="btn btn-outline-secondary mb-2 btn-pill">
                             <?php echo $directory; ?>
                         </button>
                     </a>

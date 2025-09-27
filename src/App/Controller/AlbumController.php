@@ -341,19 +341,17 @@ class AlbumController implements AlbumInterface
             ]);
         }
 
-        $rootDir = str_replace('/public/../', '/', ROOT_DIR);
-
         $sourceData = json_decode(file_get_contents($sourceFile), true);
         $destinationData = json_decode(file_get_contents($destinationFile), true);
         $entry = null;
         foreach ($sourceData as $index => $item) {
-            $itemFile = str_replace($rootDir, '', $item['file']);
+            $itemFile = str_replace(ROOT_DIR, '', $item['file']);
             if ($itemFile === $source) {
                 $entry = $item;
                 break;
             }
         }
-        if (!file_exists($entry['file'])) {
+        if (!file_exists(ROOT_DIR . $entry['file'])) {
             new JsonResponseController([
                 'success' => false,
                 'message' => self::ERROR_COPY_ENTRY
@@ -382,12 +380,12 @@ class AlbumController implements AlbumInterface
             if (file_exists(ROOT_DIR . $destination . '/' . $newName)) {
                 $index++;
             } else {
-                copy($entry['file'], $rootDir . $destination . '/' . $newName);
+                copy(ROOT_DIR . $entry['file'], ROOT_DIR . $destination . '/' . $newName);
                 break;
             }
         }
 
-        $entry['file'] = $rootDir . $destination . '/' . $newName;
+        $entry['file'] = $destination . '/' . $newName;
         $destinationData[] = $entry;
         file_put_contents($destinationFile,
             json_encode($destinationData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));

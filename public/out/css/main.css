@@ -46,6 +46,11 @@ body {
     margin-top: -0.25rem;
 }
 
+.btn-pill {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 .text-decoration-none {
     text-decoration: none !important;
 }

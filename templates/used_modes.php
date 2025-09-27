@@ -21,7 +21,7 @@ if (isset($params['used_modes']) && count($params['used_modes'])) {
                     ?>
                     <a class="text-decoration-none"
                        href="/<?php echo $mode; ?>">
-                        <button class="btn btn-outline-secondary mb-2">
+                        <button class="btn btn-outline-secondary mb-2 btn-pill">
                             <?php echo $mode; ?>
                         </button>
                     </a>

@@ -24,7 +24,7 @@ if (isset($params['init_images_directories'])) {
                         ?>
                         <a class="text-decoration-none"
                            href="/initialize-images/<?php echo $directory; ?>">
-                            <button class="btn btn-outline-secondary mb-2">
+                            <button class="btn btn-outline-secondary mb-2 btn-pill">
                                 <?php echo str_replace('_', ' ', $directory); ?>
                             </button>
                         </a>

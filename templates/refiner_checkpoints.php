@@ -21,7 +21,7 @@ if (isset($params['refiner_checkpoints']) && count($params['refiner_checkpoints'
                     ?>
                     <a class="text-decoration-none"
                        href="/checkpoints/<?php echo $checkpoint; ?>">
-                        <button class="btn btn-outline-secondary mb-2">
+                        <button class="btn btn-outline-secondary mb-2 btn-pill">
                             <?php echo $checkpoint; ?>
                         </button>
                     </a>

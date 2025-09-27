@@ -16,7 +16,7 @@ if (isset($params['copy'])) {
             if (is_array($value)) {
                 ?>
                 <div style="margin-left: <?php echo $marginLeft; ?>px;">
-                    <div class="btn btn-outline-primary w-100 text-start p-2 mb-1"
+                    <div class="btn btn-outline-primary w-100 text-start p-2 mb-1 btn-pill"
                          onclick="imageCopy.execute('<?php echo $slug . '/' . $key; ?>');">
                         <?php echo str_replace('_', ' ', $key); ?>
                     </div>

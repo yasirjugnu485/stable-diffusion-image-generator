@@ -24,7 +24,7 @@ if (isset($params['prompt_merger_directories'])) {
                         ?>
                         <a class="text-decoration-none"
                            href="/prompt-merger/<?php echo $directory; ?>">
-                            <button class="btn btn-outline-secondary mb-2">
+                            <button class="btn btn-outline-secondary mb-2 btn-pill">
                                 <?php echo str_replace('_', ' ', $directory); ?>
                             </button>
                         </a>
