@@ -1,4 +1,4 @@
-# Stable Diffusion Image Creator
+# Stable Diffusion Image Generator
 <div style="color:lightgray">A GNU Project by xtrose® Media Studio</div>  
 
 ### Web GUI and CLI API Mass Image Generator, Prompt Merger, Initialize Images Merger, Lora Handler, Text 2 Image Mode, Image 2 Image Mode, Loop Mode, Images Albums, Stable Diffusion Data Inspector
@@ -7,8 +7,8 @@
 
 
 ## Description
-### Welcome to Stable Diffusion Image Creator!
-Stable Diffusion Image Creator is a web-based GUI paired with a command-line application designed for high-volume image 
+### Welcome to Stable Diffusion Image Generator!
+Stable Diffusion Image Generator is a web-based GUI paired with a command-line application designed for high-volume image 
 generation via Stable Diffusion APIs.
 
 ### Prompt Merger
@@ -45,7 +45,7 @@ produce a blank image.
 ![Sampler Cycle](./.readme/sampler_cycle.jpg "Sampler Cycle")
 
 ### Lora Handler
-The Stable Diffusion Image Creator’s web-based GUI gives you full control over Loras. It detects all available Loras in 
+The Stable Diffusion Image Generator’s web-based GUI gives you full control over Loras. It detects all available Loras in 
 your Stable Diffusion setup, lets you activate them with a click, and provides a complete list of associated keywords 
 with adjustable weights. Keyword hunting is no longer necessary. The tool automatically injects the configured Lora 
 settings into your prompt.
@@ -88,12 +88,51 @@ checkpoints (models), samplers, upscalers and loras.
 
 
 ## Setup
-### Stable deiffusion
+### General
+- Clone or download GIT Repository  
+  $ git clone https://github.com/xtrose/stable-diffusion-image-generator.git
 
 ### Web Application
+- Navigate to root directory of your local Instance
+- Start Web-Application  
+  $ php start-web-application.php
+- Open Web Application in Browser
+  http://localhost:8000
+- Select Menü <b>Image Generator</b> -> <b>Settings</b>
+- Set up your Stable Diffusion host
+- Select Menü <b>Image Generator</b> -> <b>Prompt Merger</b>
+- Set up your Prompt Merger Files
+- Select Menü <b>Image Generator</b> -> <b>Image Generator</b>
+- Set up Generator
+- Have fun with mass image generation
 
 ### CLI
+While the command-line application offers features not available in the web version, it can be difficult to configure. 
+For most users, we strongly recommend using the web application.
+- Navigate to root directory of your local Instance
+- Copy <b>config.inc.php</b> to config.local.php
+- Set your Stable Diffusion Host and Port to <b>$this->host</b>
+- Set <b>$this->dryRun</b> to <i>true</i>
+- Run CLI Application to get the file <b>checkpoints.json</b>, <b>loras.json</b>, <b>options.json</b>, 
+<b>samplers.json</b> and <b>upscalers.json</b>
+- Use the Stable Diffusion files to configure the config.local.php file. Configuration information can be found below in 
+the Config section.
+- Set <b>$this->dryRun</b> to <i>false</i>
+- Run CLI Application  
+  $ php run.php 
+***
 
+
+
+### CLI options
+
+- --help: Help  
+- -h: Help  
+- --start-web-application: Start Build-In-Server with web application only on http://localhost:8000  
+- --kill: Kill all silent applications in background  
+- -k: Kill all silent applications in background  
+- --config [file]: Run with custom config file in the root directory  
+- -c [file]: Run with custom config file in the root directory
 ***
 
 
