@@ -77,15 +77,15 @@ if (!isset($params['error']) || !$params['error']) {
                                             id="loop"
                                             name="loop">
                                         <option value="0"
-                                                <?php if (!$params['config']['loop']) {
-                                                    echo 'selected';
-                                                } ?>>
+                                            <?php if (!$params['config']['loop']) {
+                                                echo 'selected';
+                                            } ?>>
                                             false
                                         </option>
                                         <option value="1"
-                                                <?php if ($params['config']['loop']) {
-                                                    echo 'selected';
-                                                } ?>>
+                                            <?php if ($params['config']['loop']) {
+                                                echo 'selected';
+                                            } ?>>
                                             true
                                         </option>
                                     </select>
@@ -108,15 +108,15 @@ if (!isset($params['error']) || !$params['error']) {
                                             name="mode"
                                             onchange="generator.modeOnchange();">
                                         <option value="txt2img"
-                                                <?php if ($params['config']['mode'] === 'txt2img') {
-                                                    echo 'selected';
-                                                } ?>>
+                                            <?php if ($params['config']['mode'] === 'txt2img') {
+                                                echo 'selected';
+                                            } ?>>
                                             txt2img
                                         </option>
                                         <option value="img2img"
-                                                <?php if ($params['config']['mode'] === 'img2img') {
-                                                    echo 'selected';
-                                                } ?>>
+                                            <?php if ($params['config']['mode'] === 'img2img') {
+                                                echo 'selected';
+                                            } ?>>
                                             img2img
                                         </option>
                                     </select>
@@ -140,9 +140,9 @@ if (!isset($params['error']) || !$params['error']) {
                                         foreach ($params['checkpoints'] as $checkpoint) {
                                             ?>
                                             <option value="<?php echo $checkpoint['name']; ?>"
-                                                    <?php if ($checkpoint['selected']) {
-                                                        echo ' selected';
-                                                    } ?>>
+                                                <?php if ($checkpoint['selected']) {
+                                                    echo ' selected';
+                                                } ?>>
                                                 <?php echo $checkpoint['name']; ?>
                                             </option>
                                             <?php
@@ -168,9 +168,9 @@ if (!isset($params['error']) || !$params['error']) {
                                         foreach ($params['samplers'] as $sampler) {
                                             ?>
                                             <option value="<?php echo $sampler['name']; ?>"
-                                                    <?php if ($sampler['selected']) {
-                                                        echo ' selected';
-                                                    } ?>>
+                                                <?php if ($sampler['selected']) {
+                                                    echo ' selected';
+                                                } ?>>
                                                 <?php echo $sampler['name']; ?>
                                             </option>
                                             <?php
@@ -201,9 +201,9 @@ if (!isset($params['error']) || !$params['error']) {
                                         foreach ($params['prompts'] as $prompt) {
                                             ?>
                                             <option value="<?php echo $prompt['name']; ?>"
-                                                    <?php if ($params['config']['prompt'] === $prompt['name']) {
-                                                        echo 'selected';
-                                                    } ?>>
+                                                <?php if ($params['config']['prompt'] === $prompt['name']) {
+                                                    echo 'selected';
+                                                } ?>>
                                                 <?php echo str_replace('_', ' ', $prompt['name']); ?>
                                             </option>
                                             <?php
@@ -264,9 +264,9 @@ if (!isset($params['error']) || !$params['error']) {
                                         foreach ($params['initImages'] as $initImage) {
                                             ?>
                                             <option value="<?php echo $initImage['name']; ?>"
-                                                    <?php if ($params['config']['initImages'] === $initImage['name']) {
-                                                        echo 'selected';
-                                                    } ?>>
+                                                <?php if ($params['config']['initImages'] === $initImage['name']) {
+                                                    echo 'selected';
+                                                } ?>>
                                                 <?php echo $initImage['name']; ?>
                                             </option>
                                             <?php
@@ -347,15 +347,15 @@ if (!isset($params['error']) || !$params['error']) {
                                             id="restoreFaces"
                                             name="restoreFaces">
                                         <option value="0"
-                                                <?php if (!$params['config']['restoreFaces']) {
-                                                    echo 'selected';
-                                                } ?>>
+                                            <?php if (!$params['config']['restoreFaces']) {
+                                                echo 'selected';
+                                            } ?>>
                                             false
                                         </option>
                                         <option value="1"
-                                                <?php if ($params['config']['restoreFaces']) {
-                                                    echo 'selected';
-                                                } ?>>
+                                            <?php if ($params['config']['restoreFaces']) {
+                                                echo 'selected';
+                                            } ?>>
                                             true
                                         </option>
                                     </select>
@@ -373,15 +373,15 @@ if (!isset($params['error']) || !$params['error']) {
                                             id="tiling"
                                             name="tiling">
                                         <option value="0"
-                                                <?php if (!$params['config']['tiling']) {
-                                                    echo 'selected';
-                                                } ?>>
+                                            <?php if (!$params['config']['tiling']) {
+                                                echo 'selected';
+                                            } ?>>
                                             false
                                         </option>
                                         <option value="1"
-                                                <?php if ($params['config']['tiling']) {
-                                                    echo 'selected';
-                                                } ?>>
+                                            <?php if ($params['config']['tiling']) {
+                                                echo 'selected';
+                                            } ?>>
                                             true
                                         </option>
                                     </select>
@@ -470,9 +470,9 @@ if (!isset($params['error']) || !$params['error']) {
                                         foreach ($params['loras'] as $lora) {
                                             ?>
                                             <option value="<?php echo $lora['name']; ?>"
-                                                    <?php if ($lora['selected']) {
-                                                        echo ' selected';
-                                                    } ?>>
+                                                <?php if ($lora['selected']) {
+                                                    echo ' selected';
+                                                } ?>>
                                                 <?php echo $lora['name']; ?>
                                             </option>
                                             <?php
@@ -525,15 +525,15 @@ if (!isset($params['error']) || !$params['error']) {
                                                 name="enableHr"
                                                 onchange="generator.enableHrOnchange()">
                                             <option value="0"
-                                                    <?php if (!$params['config']['enableHr']) {
-                                                        echo 'selected';
-                                                    } ?>>
+                                                <?php if (!$params['config']['enableHr']) {
+                                                    echo 'selected';
+                                                } ?>>
                                                 false
                                             </option>
                                             <option value="1"
-                                                    <?php if ($params['config']['enableHr']) {
-                                                        echo 'selected';
-                                                    } ?>>
+                                                <?php if ($params['config']['enableHr']) {
+                                                    echo 'selected';
+                                                } ?>>
                                                 true
                                             </option>
                                         </select>
@@ -563,9 +563,9 @@ if (!isset($params['error']) || !$params['error']) {
                                             foreach ($params['upscalers'] as $upscaler) {
                                                 ?>
                                                 <option value="<?php echo $upscaler; ?>"
-                                                        <?php if ($params['config']['hrUpscaler'] === $upscaler) {
-                                                            echo 'selected';
-                                                        } ?>>
+                                                    <?php if ($params['config']['hrUpscaler'] === $upscaler) {
+                                                        echo 'selected';
+                                                    } ?>>
                                                     <?php echo $upscaler; ?>
                                                 </option>
                                                 <?php
@@ -664,9 +664,9 @@ if (!isset($params['error']) || !$params['error']) {
                                             foreach ($params['samplers'] as $sampler) {
                                                 ?>
                                                 <option value="<?php echo $sampler['name']; ?>"
-                                                        <?php if ($params['config']['hrSamplerName'] === $sampler['name']) {
-                                                            echo 'selected';
-                                                        } ?>>
+                                                    <?php if ($params['config']['hrSamplerName'] === $sampler['name']) {
+                                                        echo 'selected';
+                                                    } ?>>
                                                     <?php echo $sampler['name']; ?>
                                                 </option>
                                                 <?php
@@ -772,28 +772,28 @@ if (!isset($params['error']) || !$params['error']) {
                 for (let ia = 0; ia < this.loraKeywords.length; ia++) {
                     if (!selectedLoras.includes(this.loraKeywords[ia]["alias"])) {
                         continue;
-                    } else if ( this.loraKeywords[ia].groups === "undefined") {
+                    } else if (this.loraKeywords[ia].groups === "undefined") {
                         continue;
-                    } else if ( this.loraKeywords[ia].groups.length == 0) {
+                    } else if (this.loraKeywords[ia].groups.length == 0) {
                         continue;
                     }
-                    html += '<div><div><strong>Lora: </strong>' +  this.loraKeywords[ia].alias + '</div>';
-                    for (let ig = 0; ig <  this.loraKeywords[ia].groups.length; ig++) {
-                        if ( this.loraKeywords[ia].groups[ig].keywords == "undefined") {
+                    html += '<div><div><strong>Lora: </strong>' + this.loraKeywords[ia].alias + '</div>';
+                    for (let ig = 0; ig < this.loraKeywords[ia].groups.length; ig++) {
+                        if (this.loraKeywords[ia].groups[ig].keywords == "undefined") {
                             continue;
-                        } else if ( this.loraKeywords[ia].groups[ig].keywords.length == 0) {
+                        } else if (this.loraKeywords[ia].groups[ig].keywords.length == 0) {
                             continue;
                         }
-                        html += '<div class="ms-2 mt-2"><div><strong>Group: </strong>' +  this.loraKeywords[ia].groups[ig].name + '</div><div class="ms-2 pt-2">';
-                        for (let ik = 0; ik <  this.loraKeywords[ia].groups[ig].keywords.length; ik++) {
+                        html += '<div class="ms-2 mt-2"><div><strong>Group: </strong>' + this.loraKeywords[ia].groups[ig].name + '</div><div class="ms-2 pt-2">';
+                        for (let ik = 0; ik < this.loraKeywords[ia].groups[ig].keywords.length; ik++) {
                             html += '<div class="form-check float-start me-3 mb-3">' +
                                 '<input type="checkbox" class="form-check-input" name="loraKeywords[' + ia + '][' + ig + '][' + ik + ']" id="check' + index + '"';
-                                if (this.loraKeywords[ia].groups[ig].keywords[ik].selected) {
-                                    html += ' checked';
-                                }
-                                html += ' onchange="generator.loraKeywordOnchange(' + ia + ', ' + ig + ', ' + ik + ')">' +
-                                    '<label class="form-check-label" for="check' + index + '">' +  this.loraKeywords[ia].groups[ig].keywords[ik].name + ' (' + this.loraKeywords[ia].groups[ig].keywords[ik].training_units + ')</label>' +
-                            '</div>';
+                            if (this.loraKeywords[ia].groups[ig].keywords[ik].selected) {
+                                html += ' checked';
+                            }
+                            html += ' onchange="generator.loraKeywordOnchange(' + ia + ', ' + ig + ', ' + ik + ')">' +
+                                '<label class="form-check-label" for="check' + index + '">' + this.loraKeywords[ia].groups[ig].keywords[ik].name + ' (' + this.loraKeywords[ia].groups[ig].keywords[ik].training_units + ')</label>' +
+                                '</div>';
                             index++;
                         }
                         html += '<div class="clearfix"></div></div></div>';
