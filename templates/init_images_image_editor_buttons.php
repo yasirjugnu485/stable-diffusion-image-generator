@@ -162,7 +162,7 @@ if ($params['init_images_directory'] !== 'Demo') {
         if ($params['init_images_directory'] === 'Demo') {
             ?>
             <div class="col-12">
-                <div class="alert alert-warning mb-5">
+                <div class="alert alert-warning text-white mb-5">
                     The demo Initialize Images Directory is part of the GIT repository and cannot be changed or deleted.
                 </div>
             </div>

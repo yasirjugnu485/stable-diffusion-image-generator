@@ -143,7 +143,7 @@
         } else {
             ?>
             <div class="col-12">
-                <div class="alert alert-warning">
+                <div class="alert alert-warning text-white">
                     No Initialize Images available
                 </div>
             </div>

@@ -148,7 +148,7 @@ if ($params['prompt_merger_directory'] !== 'Demo') {
         } else {
             ?>
             <div class="col-12">
-                <div class="alert alert-warning">
+                <div class="alert alert-warning text-white">
                     No Prompt Merger Files available
                 </div>
             </div>

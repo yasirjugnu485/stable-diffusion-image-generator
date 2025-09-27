@@ -87,7 +87,7 @@
                             }
                         } else {
                             ?>
-                            <div class="dropdown-item bg-warning text-dark">
+                            <div class="dropdown-item bg-warning text-white">
                                 No txt2img images available
                             </div>
                             <?php
@@ -128,7 +128,7 @@
                             }
                         } else {
                             ?>
-                            <div class="dropdown-item bg-warning text-dark">
+                            <div class="dropdown-item bg-warning text-white">
                                 No img2img images available
                             </div>
                             <?php
@@ -169,7 +169,7 @@
                             }
                         } else {
                             ?>
-                            <div class="dropdown-item bg-warning text-dark">
+                            <div class="dropdown-item bg-warning text-white">
                                 No loop images available
                             </div>
                             <?php
@@ -210,7 +210,7 @@
                             }
                         } else {
                             ?>
-                            <div class="dropdown-item bg-warning text-dark">
+                            <div class="dropdown-item bg-warning text-white">
                                 No checkpoints available
                             </div>
                             <?php

@@ -493,7 +493,7 @@ if (!isset($params['error']) || !$params['error']) {
                                         Lora Keywords
                                     </label>
                                     <div id="loraKeywordsWarning"
-                                         class="alert alert-warning">
+                                         class="alert alert-warning text-white">
                                         Select Loras to display keywords
                                     </div>
                                     <div id="loraKeywordsInput"></div>

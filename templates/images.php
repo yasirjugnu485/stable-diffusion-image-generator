@@ -29,7 +29,7 @@ if (isset($params['images'])) {
             } else {
                 ?>
                 <div class="col-12">
-                    <div class="alert alert-warning">
+                    <div class="alert alert-warning text-white">
                         There are no images available
                     </div>
                 </div>

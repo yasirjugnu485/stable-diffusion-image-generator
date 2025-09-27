@@ -39,7 +39,7 @@ if (isset($params['init_images_directories'])) {
                     <h4>
                         Initialize Images Directories
                     </h4>
-                    <div class="alert alert-warning">
+                    <div class="alert alert-warning text-white">
                         There are no Initialize Images Directories available
                     </div>
                 </div>

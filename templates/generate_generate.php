@@ -12,7 +12,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div class="alert alert-success">
+            <div class="alert alert-success text-white">
                 Image generation has started
             </div>
         </div>

@@ -30,7 +30,7 @@ if (isset($params['album_sub_albums']) && count($params['album_sub_albums']) &&
                     }
                 } else {
                     ?>
-                    <div class="alert alert-warning mt-1">
+                    <div class="alert alert-warning text-white mt-1">
                         There are no Sub-Albums available
                     </div>
                     <?php

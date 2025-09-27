@@ -150,7 +150,7 @@ if ($params['prompt_merger_directory'] !== 'Demo') {
         if ($params['prompt_merger_directory'] === 'Demo') {
             ?>
             <div class="col-12 mb-5">
-                <div class="alert alert-warning">
+                <div class="alert alert-warning text-white">
                     The demo Prompt Merger Directory is part of the GIT repository and cannot be changed or deleted.
                 </div>
             </div>

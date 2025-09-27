@@ -39,7 +39,7 @@ if (isset($params['prompt_merger_directories'])) {
                     <h4>
                         Prompt Merger Directories
                     </h4>
-                    <div class="alert alert-warning">
+                    <div class="alert alert-warning text-white">
                         There are no Prompt Merger Directories available
                     </div>
                 </div>

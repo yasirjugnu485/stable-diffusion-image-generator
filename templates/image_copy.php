@@ -56,7 +56,7 @@ if (isset($params['copy'])) {
                     create_entries($slug, $marginLeft, $params['copy']['albums']);
                 } else {
                     ?>
-                    <div class="alert alert-warning">
+                    <div class="alert alert-warning text-white">
                         There are no Albums available
                     </div>
                     <?php
@@ -75,7 +75,7 @@ if (isset($params['copy'])) {
                     create_entries($slug, $marginLeft, $params['copy']['init_images']);
                 } else {
                     ?>
-                    <div class="alert alert-warning">
+                    <div class="alert alert-warning text-white">
                         There are no Initialize Images Directories available
                     </div>
                     <?php
