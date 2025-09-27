@@ -53,7 +53,7 @@ class ExecuteController implements ExecuteInterface
             $loraString = $loraController->getLoraString();
             if (($config['mode'] === 'txt2img' && !$config['loop']) ||
                 ($config['mode'] === 'txt2img' && $config['loop'] && !$numberOfGeneratedImages)) {
-                $this->callTxt2img($nextPrompt . $loraKeywords . $loraString,
+                $this->callTxt2img($nextPrompt . $loraString . $loraKeywords,
                     $nextNegativePrompt,
                     $numberOfGeneratedImages);
             } elseif ($config['mode'] === 'img2img' || (
@@ -61,7 +61,7 @@ class ExecuteController implements ExecuteInterface
                 $initImagesController = new InitImagesController();
                 $nextInitImage = $initImagesController->getNextInitImage();
                 $currentInitImageFile = $initImagesController->getCurrentInitImageFile();
-                $this->callImg2img($nextPrompt . $loraKeywords . $loraString,
+                $this->callImg2img($nextPrompt . $loraString . $loraKeywords,
                     $nextNegativePrompt,
                     $nextInitImage,
                     $currentInitImageFile,

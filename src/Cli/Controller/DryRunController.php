@@ -49,10 +49,8 @@ class DryRunController
     public function exit(): void
     {
         if (self::$data) {
-            file_put_contents(
-                ROOT_DIR . 'dry_run.json',
-                json_encode(self::$data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
-            );
+            file_put_contents(ROOT_DIR . 'dry_run.json',
+                json_encode(self::$data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
     }
 }

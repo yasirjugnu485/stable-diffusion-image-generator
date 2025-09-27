@@ -19,5 +19,6 @@ include(ROOT_DIR . 'templates/used_checkpoints.php');
 if (count($params['used_checkpoints'])) {
     include(ROOT_DIR . 'templates/hr.php');
 }
+include(ROOT_DIR . 'templates/home_buttons.php');
 include(ROOT_DIR . 'templates/images_title.php');
 include(ROOT_DIR . 'templates/images.php');

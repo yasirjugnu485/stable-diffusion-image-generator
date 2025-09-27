@@ -56,10 +56,8 @@ class StableDiffusionService
         if (file_exists(ROOT_DIR . '/checkpoints.json')) {
             unlink(ROOT_DIR . '/checkpoints.json');
         }
-        file_put_contents(
-            ROOT_DIR . '/checkpoints.json',
-            json_encode($models, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-        );
+        file_put_contents(ROOT_DIR . '/checkpoints.json',
+            json_encode($models, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
         return $models;
     }
@@ -102,10 +100,8 @@ class StableDiffusionService
         if (file_exists(ROOT_DIR . '/samplers.json')) {
             unlink(ROOT_DIR . '/samplers.json');
         }
-        file_put_contents(
-            ROOT_DIR . '/samplers.json',
-            json_encode($samplers, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-        );
+        file_put_contents(ROOT_DIR . '/samplers.json',
+            json_encode($samplers, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
         return $samplers;
     }
@@ -148,10 +144,8 @@ class StableDiffusionService
         if (file_exists(ROOT_DIR . '/loras.json')) {
             unlink(ROOT_DIR . '/loras.json');
         }
-        file_put_contents(
-            ROOT_DIR . '/loras.json',
-            json_encode($loras, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-        );
+        file_put_contents(ROOT_DIR . '/loras.json',
+            json_encode($loras, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
         return $loras;
     }
@@ -194,10 +188,8 @@ class StableDiffusionService
         if (file_exists(ROOT_DIR . '/options.json')) {
             unlink(ROOT_DIR . '/options.json');
         }
-        file_put_contents(
-            ROOT_DIR . '/options.json',
-            json_encode($options, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-        );
+        file_put_contents(ROOT_DIR . '/options.json',
+            json_encode($options, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
         return $options;
     }

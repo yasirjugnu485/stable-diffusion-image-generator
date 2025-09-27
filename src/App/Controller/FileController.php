@@ -182,11 +182,6 @@ class FileController implements FileInterface
 
         $images = [];
         foreach (self::$dataFiles[$type] as $dataFile) {
-                $dataFile['file'] = str_replace(ROOT_DIR, '/', $dataFile['file']);
-                if (isset($dataFile['data']['init_images'])) {
-                    $dataFile['data']['init_images'] =
-                        str_replace(ROOT_DIR, '/', $dataFile['data']['init_images']);
-                }
                 $images[] = $dataFile;
                 if (count($images) >= $limit) {
                     break;
@@ -233,11 +228,6 @@ class FileController implements FileInterface
                     if (count($checkpoints[$checkpoint]) >= $limit) {
                         continue;
                     }
-                    $image['file'] = str_replace(ROOT_DIR, '/', $image['file']);
-                    if (isset($image['data']['init_images'])) {
-                        $images['data']['init_images'] =
-                            str_replace(ROOT_DIR, '/', $image['data']['init_images']);
-                    }
                     $checkpoints[$checkpoint][] = $image;
                 }
             }
@@ -263,22 +253,12 @@ class FileController implements FileInterface
                         (isset($image['data']['refiner_checkpoint']) &&
                         $image['data']['refiner_checkpoint'] === $checkpoint))
                 {
-                    $image['file'] = str_replace(ROOT_DIR, '/', $image['file']);
-                    if (isset($image['data']['init_images'])) {
-                        $image['data']['init_images'] =
-                            str_replace(ROOT_DIR, '/', $image['data']['init_images']);
-                    }
                     $images[] = $image;
                     if (count($images) >= $limit) {
                         break 2;
                     }
                 } elseif (isset($image['data']['refiner_checkpoint']) &&
                     $image['data']['refiner_checkpoint'] === $checkpoint) {
-                    $image['file'] = str_replace(ROOT_DIR, '/', $image['file']);
-                    if (isset($image['data']['init_images'])) {
-                        $image['data']['init_images'] =
-                            str_replace(ROOT_DIR, '/', $image['data']['init_images']);
-                    }
                     $images[] = $image;
                 }
             }
@@ -421,7 +401,7 @@ class FileController implements FileInterface
         foreach ($data as $index => $entry) {
             if (str_replace(ROOT_DIR, '', $entry['file']) === $image) {
                 unset($data[$index]);
-                file_put_contents($dataFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                file_put_contents($dataFile, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
                 if (file_exists(ROOT_DIR . $image)) {
                     unlink(ROOT_DIR . $image);
                 }

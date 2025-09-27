@@ -285,10 +285,8 @@ class PromptController implements PromptInterface
         foreach (self::$promptData[$directory] as $file) {
             if (isset($name[$file])) {
                 unlink(ROOT_DIR . 'prompt/' . $directory . '/' . $file);
-                file_put_contents(
-                    ROOT_DIR . 'prompt/' . $directory . '/' . $name[$file],
-                    preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $content[$file])
-                );
+                file_put_contents(ROOT_DIR . 'prompt/' . $directory . '/' . $name[$file],
+                    preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $content[$file]));
             }
         }
 

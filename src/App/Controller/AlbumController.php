@@ -79,7 +79,7 @@ class AlbumController implements AlbumInterface
     }
 
     /**
-     * Collect data files TODO: Check
+     * Collect data files
      *
      * @return void
      */
@@ -171,18 +171,7 @@ class AlbumController implements AlbumInterface
             }
         }
 
-        $images = [];
-        $dataFiles = json_decode(file_get_contents($dataFile), true);
-        foreach ($dataFiles as $dataFile) {
-            $dataFile['file'] = str_replace(ROOT_DIR, '/', $dataFile['file']);
-            if (isset($dataFile['data']['init_images'])) {
-                $dataFile['data']['init_images'] =
-                    str_replace(ROOT_DIR, '/', $dataFile['data']['init_images']);
-            }
-            $images[] = $dataFile;
-        }
-
-        return $images;
+        return json_decode(file_get_contents($dataFile), true);
     }
 
     /**
@@ -203,8 +192,8 @@ class AlbumController implements AlbumInterface
             new ErrorController(self::ERROR_RENAME_ALBUM);
             new RedirectController();
         }
-        $currentDirectory = ROOT_DIR . implode('/', $requestIndex);
-        if (!is_dir($currentDirectory)) {
+        $currentDirectory = implode('/', $requestIndex);
+        if (!is_dir(ROOT_DIR . $currentDirectory)) {
             new ErrorController(self::ERROR_RENAME_ALBUM);
             new RedirectController();
         }
@@ -228,13 +217,18 @@ class AlbumController implements AlbumInterface
             new RedirectController();
         }
 
-        $entries = json_decode(file_get_contents($currentDirectory . '/data.json'), true);
-        foreach ($entries as $index => $entry) {
-            $entries[$index]['file'] = str_replace($currentDirectory, $newDirectory, $entry['file']);
+        $toolController = new ToolController();
+        $files = $toolController->collectDataFiles(ROOT_DIR . $currentDirectory, false);
+        foreach ($files as $file) {
+            $entries = json_decode(file_get_contents(ROOT_DIR . $currentDirectory . $file), true);
+            foreach ($entries as $index => $entry) {
+                $entries[$index]['file'] = str_replace($currentDirectory, $newDirectory, $entry['file']);
+            }
+            file_put_contents(ROOT_DIR . $currentDirectory . $file,
+                json_encode($entries), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         }
-        file_put_contents($currentDirectory . '/data.json', json_encode($entries));
 
-        rename($currentDirectory, $newDirectory);
+        rename(ROOT_DIR . $currentDirectory, ROOT_DIR . $newDirectory);
 
         array_pop($requestIndex);
         $requestIndex[] = $newName;
@@ -243,6 +237,8 @@ class AlbumController implements AlbumInterface
         new SuccessController(self::SUCCESS_RENAME_ALBUM);
         new RedirectController($newUri);
     }
+
+
 
     /**
      * Add album
@@ -393,10 +389,8 @@ class AlbumController implements AlbumInterface
 
         $entry['file'] = $rootDir . $destination . '/' . $newName;
         $destinationData[] = $entry;
-        file_put_contents(
-            $destinationFile,
-            json_encode($destinationData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-        );
+        file_put_contents($destinationFile,
+            json_encode($destinationData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
         new JsonResponseController([
             'success' => true,

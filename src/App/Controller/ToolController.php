@@ -86,9 +86,10 @@ class ToolController
      * Collect data.json files from directory
      *
      * @param string $directory Directory
+     * @param bool $asRecursiveArray Return as recursive array
      * @return array
      */
-    public function collectDataFiles(string $directory): array
+    public function collectDataFiles(string $directory, bool $asRecursiveArray = true): array
     {
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
@@ -106,7 +107,7 @@ class ToolController
             }
         }
 
-        return $this->parseDataFiles($result);
+        return $asRecursiveArray ? $this->parseDataFiles($result) : $result;
     }
 
     /**
@@ -173,18 +174,7 @@ class ToolController
             return [];
         }
 
-        $images = json_decode(file_get_contents($dataFile), true);
-        foreach ($images as $index => $image) {
-            if (isset($image['file'])) {
-                $images[$index]['file'] = str_replace(ROOT_DIR, '/', $image['file']);
-            }
-            if (isset($image['data']['init_images'])) {
-                $images[$index]['data']['init_images'] =
-                    str_replace(ROOT_DIR, '/', $image['data']['init_images']);
-            }
-        }
-
-        return $images;
+        return json_decode(file_get_contents($dataFile), true);
     }
 
     /**

@@ -16,5 +16,6 @@ include(ROOT_DIR . 'templates/breadcrumbs.php');
 include(ROOT_DIR . 'templates/hr.php');
 include(ROOT_DIR . 'templates/type_directories.php');
 include(ROOT_DIR . 'templates/hr.php');
+include(ROOT_DIR . 'templates/images_by_type_buttons.php');
 include(ROOT_DIR . 'templates/images_title.php');
 include(ROOT_DIR . 'templates/images.php');

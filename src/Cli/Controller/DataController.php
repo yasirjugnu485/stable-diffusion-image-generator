@@ -44,7 +44,7 @@ class DataController
         }
 
         self::$data[] = [
-            'file' => $file,
+            'file' => str_replace(ROOT_DIR, '', $file),
             'mode' => $mode,
             'data' => $data,
         ];;
@@ -77,6 +77,6 @@ class DataController
 
         $file = $directory . '/data.json';
 
-        file_put_contents($file, json_encode(self::$data, JSON_PRETTY_PRINT));
+        file_put_contents($file, json_encode(self::$data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
 }
