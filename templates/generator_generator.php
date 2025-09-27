@@ -204,7 +204,7 @@ if (!isset($params['error']) || !$params['error']) {
                                                     <?php if ($params['config']['prompt'] === $prompt['name']) {
                                                         echo 'selected';
                                                     } ?>>
-                                                <?php echo $prompt['name']; ?>
+                                                <?php echo str_replace('_', ' ', $prompt['name']); ?>
                                             </option>
                                             <?php
                                         }
@@ -234,7 +234,7 @@ if (!isset($params['error']) || !$params['error']) {
                                                 <?php if ($params['config']['negativePrompt'] === $negativePrompt['name']) {
                                                     echo 'selected';
                                                 } ?>>
-                                                <?php echo $negativePrompt['name']; ?>
+                                                <?php echo str_replace('_', ' ', $negativePrompt['name']); ?>
                                             </option>
                                             <?php
                                         }
