@@ -18,5 +18,4 @@
         pswpModule: () => import('/out/js/photoswipe/dist/photoswipe.esm.js')
     });
     lightbox.init();
-    console.log(lightbox);
 </script>

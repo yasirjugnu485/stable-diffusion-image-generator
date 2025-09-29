@@ -11,7 +11,7 @@
 ?>
 <div class="container">
     <div class="row">
-        <div class="col-12">
+        <div class="col-12 images-title">
             <h4>
                 <?php echo $params['images_title']; ?>
             </h4>

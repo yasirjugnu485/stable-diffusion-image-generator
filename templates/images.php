@@ -14,7 +14,7 @@ if (isset($params['images'])) {
     ?>
     <div class="container mb-5">
         <div id="photoswipe-gallery"
-             class="row pswp-gallery pswp-gallery--single-column">
+             class="row pswp-gallery">
             <?php
             if (count($params['images'])) {
                 $index = 1;

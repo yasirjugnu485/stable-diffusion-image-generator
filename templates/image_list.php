@@ -46,8 +46,8 @@
                         ?>
                         <a class="photoswipe-children"
                            href="/image.php?image=<?php echo urlencode($image['file']); ?>"
-                           data-pswp-width="<?php echo $image['data']['width'] * 1000; ?>"
-                           data-pswp-height="<?php echo $image['data']['width'] * 1000; ?>">
+                           data-pswp-width="<?php echo $image['data']['width'] * 100; ?>"
+                           data-pswp-height="<?php echo $image['data']['height'] * 100; ?>">
                             <img class="w-100 border rounded"
                                  src="/image.php?image=<?php echo urlencode($image['file']); ?>">
                         </a>

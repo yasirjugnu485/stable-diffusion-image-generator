@@ -50,6 +50,14 @@ body {
     max-width: 100%;
     overflow-x: hidden;
 }
+.breadcrumbs {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+.images-title {
+    max-width: 100%;
+    overflow-x: hidden;
+}
 
 .text-decoration-none {
     text-decoration: none !important;
