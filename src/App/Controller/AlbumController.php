@@ -389,7 +389,7 @@ class AlbumController implements AlbumInterface
         }
 
         $entry['file'] = $destination . '/' . $newName;
-        $destinationData[] = $entry;
+        array_unshift($destinationData, $entry);
         file_put_contents($destinationFile,
             json_encode($destinationData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
