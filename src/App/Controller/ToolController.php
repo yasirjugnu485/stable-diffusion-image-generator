@@ -83,6 +83,24 @@ class ToolController
     }
 
     /**
+     * Sort multidimensional array by keys
+     *
+     * @param array $array
+     * @return array
+     */
+    public function multiKeySort(array $array): array
+    {
+        ksort($array);
+        foreach ($array as $index => $item) {
+            if (is_array($item)) {
+                $array[$index] = $this->multiKeySort($item);
+            }
+        }
+
+        return $array;
+    }
+
+    /**
      * Collect data.json files from directory
      *
      * @param string $directory Directory

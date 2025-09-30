@@ -109,6 +109,8 @@ class AlbumController implements AlbumInterface
             $rootDirectories[] = $value;
         }
 
+        sort($rootDirectories);
+
         return $rootDirectories;
     }
 
@@ -139,6 +141,7 @@ class AlbumController implements AlbumInterface
         }
 
         $toolController = new ToolController();
+        $albumDirectories = $toolController->multiKeySort($albumDirectories);
         $url = $toolController->getCurrentUrl();
 
         $subDirectories = [];
@@ -403,6 +406,9 @@ class AlbumController implements AlbumInterface
      */
     public function getAlbumData(): array|null
     {
-        return self::$fileData;
+        $toolController = new ToolController();
+
+        $fileData = self::$fileData;
+        return $toolController->multiKeySort($fileData);
     }
 }

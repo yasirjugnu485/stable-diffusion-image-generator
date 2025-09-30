@@ -10,19 +10,24 @@
 
 if (isset($params['copy'])) {
 
-    function create_entries(string $slug, int $marginLeft, array $entry)
+    function create_entries(string $slug, int $marginLeft, array $entry, $button)
     {
         foreach ($entry as $key => $value) {
             if (is_array($value)) {
                 ?>
                 <div style="margin-left: <?php echo $marginLeft; ?>px;">
-                    <div class="btn btn-outline-primary w-100 text-start p-2 mb-1 btn-pill"
+                    <div class="btn <?php echo $button; ?> w-100 text-start p-2 mb-1 btn-pill"
                          onclick="imageCopy.execute('<?php echo $slug . '/' . $key; ?>');">
                         <?php echo str_replace('_', ' ', $key); ?>
                     </div>
                 </div>
                 <?php
-                create_entries($slug . '/' . $key, $marginLeft + 20, $value);
+                if ($button === 'btn-primary') {
+                    $nextButton = 'btn-outline-primary';
+                } else {
+                    $nextButton = 'btn-primary';
+                }
+                create_entries($slug . '/' . $key, $marginLeft + 20, $value, $nextButton);
             }
         }
     }
@@ -53,7 +58,7 @@ if (isset($params['copy'])) {
                 if (count($params['copy']['albums'])) {
                     $slug = '/album';
                     $marginLeft = 0;
-                    create_entries($slug, $marginLeft, $params['copy']['albums']);
+                    create_entries($slug, $marginLeft, $params['copy']['albums'], 'btn-primary');
                 } else {
                     ?>
                     <div class="alert alert-warning text-white">
@@ -72,7 +77,7 @@ if (isset($params['copy'])) {
                 if (count($params['copy']['init_images'])) {
                     $slug = '/init_images';
                     $marginLeft = 0;
-                    create_entries($slug, $marginLeft, $params['copy']['init_images']);
+                    create_entries($slug, $marginLeft, $params['copy']['init_images'], 'btn-secondary');
                 } else {
                     ?>
                     <div class="alert alert-warning text-white">
