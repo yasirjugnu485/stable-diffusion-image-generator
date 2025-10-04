@@ -128,7 +128,7 @@ class FileController implements FileInterface
             if (!$toolsController->containsDataFiles(self::$fileData['txt2img'][$key])) {
                 continue;
             }
-            $time = strtotime($key);
+            $time = strtotime(str_replace('-', ' ', $key));
             if ($time > $newest) {
                 $targetType = 'txt2img';
                 $targetKey = $key;
@@ -139,7 +139,7 @@ class FileController implements FileInterface
             if (!$toolsController->containsDataFiles(self::$fileData['img2img'][$key])) {
                 continue;
             }
-            $time = strtotime($key);
+            $time = strtotime(str_replace('-', ' ', $key));
             if ($time > $newest) {
                 $targetType = 'img2img';
                 $targetKey = $key;
@@ -150,7 +150,7 @@ class FileController implements FileInterface
             if (!$toolsController->containsDataFiles(self::$fileData['loop'][$key])) {
                 continue;
             }
-            $time = strtotime($key);
+            $time = strtotime(str_replace('-', ' ', $key));
             if ($time > $newest) {
                 $targetType = 'loop';
                 $targetKey = $key;
