@@ -78,7 +78,7 @@ class InitImageController implements InitImagesInterface
             if (count($initImagesData)) {
                 foreach ($initImagesData as $directory => $files) {
                     if (count($files)) {
-                        sort($initImagesData[$directory]);
+                        usort($initImagesData[$directory], 'strnatcasecmp');
                     }
                 }
                 self::$initImagesData = $initImagesData;
@@ -468,7 +468,9 @@ class InitImageController implements InitImagesInterface
      */
     public function getInitImagesDirectories(): array
     {
-        return array_keys(self::$initImagesData);
+        $directories = array_keys(self::$initImagesData);
+        usort($directories, 'strnatcasecmp');
+        return $directories;
     }
 
     /**

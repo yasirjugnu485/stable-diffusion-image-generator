@@ -73,7 +73,7 @@ class PromptController implements PromptInterface
             if (count($promptData)) {
                 foreach ($promptData as $prompt => $files) {
                     if (count($files)) {
-                        sort($promptData[$prompt]);
+                        usort($promptData[$prompt], 'strnatcasecmp');
                     } else {
                         unset($promptData[$prompt]);
                     }
@@ -365,7 +365,9 @@ class PromptController implements PromptInterface
      */
     public function getPromptDirectories(): array
     {
-        return array_keys(self::$promptData);
+        $directories = array_keys(self::$promptData);
+        usort($directories, 'strnatcasecmp');
+        return $directories;
     }
 
     /**

@@ -24,7 +24,7 @@ class DataController
     private static array $data = [];
 
     /**
-     * Add to data
+     * Add data
      *
      * @param string $file File
      * @param string $mode Mode
@@ -48,6 +48,27 @@ class DataController
             'mode' => $mode,
             'data' => $data,
         ];;
+
+        $this->save();
+    }
+
+    /**
+     * Add data to last element
+     *
+     * @param array $data Data to add
+     * @return void
+     * @throws PromptImageGeneratorException
+     */
+    public function addDataLastElement(array $data): void
+    {
+        if (!count(self::$data) || !isset(self::$data[count(self::$data) - 1]['data'])) {
+            return;
+        } elseif (!isset(self::$data[count(self::$data) - 1]['data'])) {
+            return;
+        }
+
+        self::$data[count(self::$data) - 1]['data'] =
+            array_merge(self::$data[count(self::$data) - 1]['data'], $data);
 
         $this->save();
     }

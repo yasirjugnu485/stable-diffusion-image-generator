@@ -106,7 +106,7 @@ class AlbumController implements AlbumInterface
             $rootDirectories[] = $value;
         }
 
-        sort($rootDirectories);
+        usort($rootDirectories, 'strnatcasecmp');
 
         return $rootDirectories;
     }

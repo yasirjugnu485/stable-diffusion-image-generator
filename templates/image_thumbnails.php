@@ -9,7 +9,7 @@
  */
 
 ?>
-<div class="col-4 col-lg-3 mb-4"
+<div class="col-6 col-md-4 col-lg-3 mb-4"
      id="image-<?php echo $index; ?>">
     <?php
     if (file_exists(ROOT_DIR . $image['file'])) {

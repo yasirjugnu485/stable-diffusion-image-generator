@@ -8,6 +8,38 @@
  * @license     GNU GENERAL PUBLIC LICENSE
  */
 
+if (!function_exists('parse_creation_time')) {
+    function parse_creation_time(float $creationTime): string
+    {
+        $parsed = '';
+        $creationTime = round($creationTime);
+        $hours = floor($creationTime / 3600);
+        if ($hours) {
+            if ($hours > 1) {
+                $parsed .= $hours . ' Hours ';
+            } else {
+                $parsed .= $hours . ' Hour ';
+            }
+            $creationTime = $creationTime - ($hours * 3600);
+        }
+        $minutes = floor($creationTime / 60);
+        if ($minutes) {
+            if ($minutes > 1) {
+                $parsed .= $minutes . ' Minutes ';
+            } else {
+                $parsed .= $minutes . ' Minute ';
+            }
+            $creationTime = $creationTime - ($minutes * 60);
+        }
+        if ($creationTime === 0 || $creationTime > 1) {
+            $parsed .= $creationTime . ' Seconds';
+        } else {
+            $parsed .= $creationTime . ' Second';
+        }
+        return $parsed;
+    }
+}
+
 ?>
 <div class="col-12 mb-4"
      id="image-<?php echo $index; ?>">
@@ -38,9 +70,9 @@
         <div class="card-footer bg-white">
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
-                    <h4>
+                    <h5>
                         Created image
-                    </h4>
+                    </h5>
                     <?php
                     if (file_exists(ROOT_DIR . $image['file'])) {
                         ?>
@@ -69,9 +101,9 @@
                     <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0 d-block<?php if (!isset($image['data']['init_images']) || !file_exists(ROOT_DIR . $image['data']['init_images'])) {
                         echo ' d-none';
                     } ?>">
-                        <h4>
+                        <h5>
                             Initial image
-                        </h4>
+                        </h5>
                         <img class="w-100 border rounded"
                              src="/image.php?image=<?php echo urlencode($image['data']['init_images']); ?>">
                     </div>
@@ -79,15 +111,16 @@
                 }
                 ?>
                 <div class="col-12 col-lg-4">
-                    <h4>
+                    <h5>
                         Data
-                    </h4>
-                    <strong>
-                        File:
-                    </strong>
-                    <?php
-                    echo $image['file'];
-                    ?>
+                    </h5>
+                    <p>
+                        <strong>
+                            File:
+                        </strong>
+                        <?php
+                        echo $image['file'];
+                        ?>
                     </p>
                     <?php
                     if (isset($image['mode'])) {
@@ -114,6 +147,18 @@
                         </p>
                         <?php
                     }
+                    if (isset($image['data']['creation_time'])) {
+                        ?>
+                        <p>
+                            <strong>
+                                Creation time:
+                            </strong>
+                            <?php
+                            echo parse_creation_time($image['data']['creation_time']);
+                            ?>
+                        </p>
+                        <?php
+                    }
                     if (isset($image['data']['prompt']) && $image['data']['prompt']) {
                         ?>
                         <p>
@@ -126,14 +171,14 @@
                         </p>
                         <?php
                     }
-                    if (isset($image['data']['negativePrompt']) && $image['data']['negativePrompt']) {
+                    if (isset($image['data']['negative_prompt']) && $image['data']['negative_prompt']) {
                         ?>
                         <p>
                             <strong>
                                 Negative Prompt:
                             </strong>
                             <?php
-                            echo htmlentities($image['data']['negativePrompt']);
+                            echo htmlentities($image['data']['negative_prompt']);
                             ?>
                         </p>
                         <?php

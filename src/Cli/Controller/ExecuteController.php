@@ -125,7 +125,10 @@ class ExecuteController implements ExecuteInterface
 
         if (!$config['dryRun']) {
             $stableDiffusionService = new StableDiffusionService();
+            $microtimeStart = microtime(true);
             $response = $stableDiffusionService->callTxt2img($payload);
+            $creationTime = microtime(true) - $microtimeStart;
+            $dataController->addDataLastElement(['creation_time' => $creationTime]);
             if ($config['saveImages'] && $response) {
                 $data = json_decode($response, true);
                 if (isset($data['images'][0])) {
@@ -198,7 +201,10 @@ class ExecuteController implements ExecuteInterface
 
         if (!$config['dryRun']) {
             $stableDiffusionService = new StableDiffusionService();
+            $microtimeStart = microtime(true);
             $response = $stableDiffusionService->callImg2img($payload);
+            $creationTime = microtime(true) - $microtimeStart;
+            $dataController->addDataLastElement(['creation_time' => $creationTime]);
             if ($config['saveImages'] && $response) {
                 $data = json_decode($response, true);
                 if (isset($data['images'][0])) {
