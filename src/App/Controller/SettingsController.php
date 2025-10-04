@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Interface\Interface\SettingsInterface;
+use App\Interface\SettingsInterface;
 use App\Model\ConfigModel;
 use App\Service\StableDiffusionService;
 

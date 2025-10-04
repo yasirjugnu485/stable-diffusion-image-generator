@@ -12,10 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Interface\Interface\AlbumInterface;
-use FilesystemIterator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
+use App\Interface\AlbumInterface;
 
 class AlbumController implements AlbumInterface
 {

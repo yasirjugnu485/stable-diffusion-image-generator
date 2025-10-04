@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Interface\Interface\InitImagesInterface;
+use App\Interface\InitImagesInterface;
 use FilesystemIterator;
 use Random\RandomException;
 use RecursiveDirectoryIterator;

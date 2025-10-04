@@ -14,7 +14,6 @@ namespace Cli\Model;
 
 use Cli\Controller\CheckpointController;
 use Cli\Controller\ConfigController;
-use Cli\Controller\LoraController;
 use Cli\Controller\RefinerController;
 use Cli\Controller\SamplerController;
 use Cli\Exception\PromptImageGeneratorException;

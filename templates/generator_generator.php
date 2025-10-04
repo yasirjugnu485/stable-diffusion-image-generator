@@ -267,7 +267,7 @@ if (!isset($params['error']) || !$params['error']) {
                                                 <?php if ($params['config']['initImages'] === $initImage['name']) {
                                                     echo 'selected';
                                                 } ?>>
-                                                <?php echo $initImage['name']; ?>
+                                                <?php echo str_replace('_', ' ', $initImage['name']); ?>
                                             </option>
                                             <?php
                                         }

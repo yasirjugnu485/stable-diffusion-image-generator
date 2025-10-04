@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Interface\Interface\FileInterface;
+use App\Interface\FileInterface;
 
 class FileController implements FileInterface
 {

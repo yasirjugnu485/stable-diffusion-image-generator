@@ -40,7 +40,7 @@ class DataController
             unset($data['init_images']);
         }
         if (null !== $img2imgFile) {
-            $data['init_images'] = $img2imgFile;
+            $data['init_images'] = str_replace(ROOT_DIR, '', $img2imgFile);
         }
 
         self::$data[] = [

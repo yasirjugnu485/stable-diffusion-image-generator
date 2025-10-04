@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Interface\Interface\GeneratorInterface;
+use App\Interface\GeneratorInterface;
 use App\Model\ConfigModel;
 use App\Service\StableDiffusionService;
 
